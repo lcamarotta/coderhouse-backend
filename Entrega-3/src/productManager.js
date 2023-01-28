@@ -1,8 +1,7 @@
 import fs from 'fs';
 
-const path = './data/data.json'
 export default class ProductManager {
-	constructor() {
+	constructor(path) {
 		this.path = path
 		this.products = []
 	}
@@ -10,7 +9,7 @@ export default class ProductManager {
 	writeFile = async() => {
 		const dataToWrite = JSON.stringify(this.products)
 		try {		
-			await fs.promises.writeFile(path, dataToWrite)
+			await fs.promises.writeFile(this.path, dataToWrite)
 			console.log('Success\n')
 		} catch (error) {
 			throw new Error(error)
@@ -18,9 +17,9 @@ export default class ProductManager {
 	}	
 
 	getProducts = async() => {
-		if(fs.existsSync(path)){
+		if(fs.existsSync(this.path)){
 			try {
-				const fileData = await fs.promises.readFile(path, 'utf-8')
+				const fileData = await fs.promises.readFile(this.path, 'utf-8')
 				this.products = JSON.parse(fileData)
 				return this.products
 			} catch (error) {

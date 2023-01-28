@@ -1,11 +1,16 @@
 import express from 'express';
-import ProductManager from "./productManager.js";
+import ProductManager from './productManager.js';
+import path from  'path';
+import { fileURLToPath } from 'url';
 
 const app = express();
-const productsManager = new ProductManager();
+
+const filename = fileURLToPath(import.meta.url);
+const dirname = path.dirname(filename);
+
+const productsManager = new ProductManager(path.join(dirname, '..', '/data/data.json'));
 
 app.use(express.urlencoded({extended:true}))
-
 app.get('/products', async(req, res) => {
   let limit = req.query;
   limit = Number(limit.limit)
