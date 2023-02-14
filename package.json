@@ -1,0 +1,24 @@
+{
+  "dependencies": {
+    "express": "^4.18.2"
+  },
+  "name": "coderhouse-backend",
+  "description": "En la rama main de este repositorio estaré subiendo las preentregas del proyecto final para el curso 'programación backend' de coderhouse.",
+  "version": "1.0.0",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lcamarotta/coderhouse-backend.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/lcamarotta/coderhouse-backend/issues"
+  },
+  "homepage": "https://github.com/lcamarotta/coderhouse-backend#readme"
+}
