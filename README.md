@@ -1,2 +1,2 @@
 # Entregas coderhouse-backend
-En este repositorio estaré subiendo las distintas entregas para el curso 'programación backend' de coderhouse
+En esta rama del repositorio estaré subiendo los distintos desafios para el curso 'programación backend' de coderhouse
