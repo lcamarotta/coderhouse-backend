@@ -1,2 +1,11 @@
+/node_modules
+/package-lock.json
+
+/Desafio-1/node_modules
+/Desafio-1/package-lock.json
+
+/Desafio-2/node_modules
+/Desafio-2/package-lock.json
+
 /Desafio-3/node_modules
 /Desafio-3/package-lock.json
