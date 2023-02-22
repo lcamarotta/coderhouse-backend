@@ -1,6 +1,8 @@
 {
   "dependencies": {
-    "express": "^4.18.2"
+    "express": "^4.18.2",
+    "express-handlebars": "^6.0.7",
+    "socket.io": "^4.6.1"
   },
   "name": "coderhouse-backend",
   "description": "My project for the 'backend' course of coderhouse.",
@@ -8,7 +10,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "nodemon src/app.js",
     "start": "node src/app.js"
   },
   "repository": {

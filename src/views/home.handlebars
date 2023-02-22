@@ -1,0 +1,18 @@
+<div>
+    <p>Hello world! Static product list:</p>
+    {{#each products}}
+    <ul>
+        <p>*--------PRODUCT ID {{this.id}}--------*</p>
+        <li>Code: {{this.code}}</li>
+        <li>Title: {{this.title}}</li>
+        <li>Categpry: {{this.category}}</li>
+        <li>Description:{{this.description}}</li>
+        <li>Price: {{this.price}}</li>
+        <li>Stock: {{this.stock}}</li>
+        <li>Thumbnail: {{this.thumbnail}}</li>
+    </ul>
+    <br>
+    {{/each}}
+    <p>{{test}}</p>
+</div>
+<script src="/js/home.js"></script>

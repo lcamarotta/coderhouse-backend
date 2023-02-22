@@ -1,4 +1,5 @@
 import fs from 'fs';
+import { io } from '../app.js';
 import __error from './__error.js';
 
 export default class ProductManager {
@@ -77,6 +78,7 @@ export default class ProductManager {
 		} catch (e) {
 			throw new __error(500, `${e}`)
 		}
+		io.emit('productEvent', this.products)
 	}
 
 	updateProduct = async(id, updateData) => {
@@ -138,6 +140,7 @@ export default class ProductManager {
 		} catch (e) {
 			throw new __error(500, `${e}`)
 		}
+		io.emit('productEvent', this.products)
 	}
 
 	deleteProduct = async(id) => {
