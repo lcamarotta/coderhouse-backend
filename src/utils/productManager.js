@@ -153,5 +153,6 @@ export default class ProductManager {
 		} catch (e) {
 			throw new __error(500, `${e}`)
 		}
+		io.emit('productEvent', this.products)
 	}
 }
