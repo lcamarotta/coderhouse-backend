@@ -1,9 +1,9 @@
 import { Router } from "express";
-import __path from "../utils/__path.js";
-import CartManager from "../utils/cartManager.js";
+import __path from "../../utils/__path.js";
+import CartManager from "../../manager/cartManager.js";
 
 const router = Router();
-const cartManager = new CartManager(__path('/data/carts.json'));
+const cartManager = new CartManager(__path('/files/carts.json'));
 
 router.post('/', async(req, res) => {
 	try {

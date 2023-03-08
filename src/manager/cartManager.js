@@ -1,6 +1,6 @@
 import fs from 'fs';
-import __path from './__path.js';
-import __error from './__error.js'
+import __path from '../utils/__path.js';
+import __error from '../utils/__error.js'
 import ProductManager from './productManager.js';
 
 export default class CartManager {
@@ -56,7 +56,7 @@ export default class CartManager {
     }
 
     addProductToCart = async(cid, pid) => {
-		const productManager = new ProductManager(__path('/data/products.json'))       
+		const productManager = new ProductManager(__path('/files/products.json'))       
 		await this.getCarts();
 		await productManager.getProducts();
 

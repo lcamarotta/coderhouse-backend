@@ -1,9 +1,9 @@
 import express from 'express';
-import __path from '../utils/__path.js';
-import ProductManager from '../utils/productManager.js';
-import __error from '../utils/__error.js';
+import __path from '../../utils/__path.js';
+import ProductManager from '../../manager/productManager.js';
+import __error from '../../utils/__error.js';
 const router = express.Router();
-const productManager = new ProductManager(__path('/data/products.json'));
+const productManager = new ProductManager(__path('/files/products.json'));
 
 router.get('/', async(req, res) => {
     try {

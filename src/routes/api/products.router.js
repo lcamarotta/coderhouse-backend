@@ -1,9 +1,9 @@
 import { Router } from 'express';
-import __path from '../utils/__path.js';
-import ProductManager from '../utils/productManager.js';
+import __path from '../../utils/__path.js';
+import ProductManager from '../../manager/productManager.js';
 
 const router = Router();
-const productsManager = new ProductManager(__path('/data/products.json'));
+const productsManager = new ProductManager(__path('/files/products.json'));
 
 router.get('/', async(req, res) => {
 	const limit = Number(req.query.limit);
@@ -38,7 +38,7 @@ router.post('/', async(req, res) => {
 	const product = req.body;
 	try {
 		await productsManager.addProduct(product);
-		res.send({status: 'success'});
+		res.status(200).send({status: 'success'});
 	} catch (e) {
 		res.status(e.httpStatusCode).send({status: `Error ${e.httpStatusCode}`, error: `${e.msg}`});
 	}

@@ -1,6 +1,6 @@
 import fs from 'fs';
-import { io } from '../app.js';
-import __error from './__error.js';
+import { app } from '../app.js';
+import __error from '../utils/__error.js';
 
 export default class ProductManager {
 	constructor(pathToProductsFile) {
@@ -39,7 +39,7 @@ export default class ProductManager {
 	}
 	
 	addProduct = async(productToAdd) => {
-		if(productToAdd.thumbnail === undefined){
+		if(!productToAdd.thumbnail){
 			productToAdd.thumbnail = []
 		}else if (!(Array.isArray(productToAdd.thumbnail))){
 			throw new __error(400, 'Type of thumbnail must be array');
@@ -56,7 +56,7 @@ export default class ProductManager {
 			throw new __error(400, 'Price and Stock must be numbers');
 		}
 		
-		if(category === undefined || code === undefined || code === '' || description === undefined || title === undefined) {
+		if(!category || !code || !description || !title) {
 			throw new __error(400, 'One or more fields missing');
 		}
 				
@@ -75,10 +75,11 @@ export default class ProductManager {
 		this.products.push(productToAddWithID);
 		try {		
 			await fs.promises.writeFile(this.pathToProductsFile, JSON.stringify(this.products));
+			const io = app.get('socketio');
+			io.emit('productEvent', this.products)
 		} catch (e) {
 			throw new __error(500, `${e}`)
 		}
-		io.emit('productEvent', this.products)
 	}
 
 	updateProduct = async(id, updateData) => {
@@ -91,7 +92,7 @@ export default class ProductManager {
 		productObjKeys.forEach(key => {
 			const data = keysToUpdate.find( keyToUpdate => keyToUpdate === key)		
 			
-			if(data === undefined) return;
+			if(!data) return;
 
 			if(data === 'thumbnail'){
 				if(!(Array.isArray(updateData.thumbnail))){
@@ -116,7 +117,7 @@ export default class ProductManager {
 			}
 			
 			if(data === 'code'){
-				if(updateData.code === ''){
+				if(!updateData.code){
 					throw new __error(400, 'Code can not be empty');
 				}
 				
@@ -137,10 +138,11 @@ export default class ProductManager {
 
 		try {		
 			await fs.promises.writeFile(this.pathToProductsFile, JSON.stringify(this.products));
+			const io = app.get('socketio');
+			io.emit('productEvent', this.products)
 		} catch (e) {
 			throw new __error(500, `${e}`)
 		}
-		io.emit('productEvent', this.products)
 	}
 
 	deleteProduct = async(id) => {
@@ -150,9 +152,10 @@ export default class ProductManager {
 		this.products.splice(prodIndex, 1)
 		try {		
 			await fs.promises.writeFile(this.pathToProductsFile, JSON.stringify(this.products));
+			const io = app.get('socketio');
+			io.emit('productEvent', this.products)
 		} catch (e) {
 			throw new __error(500, `${e}`)
 		}
-		io.emit('productEvent', this.products)
 	}
 }
