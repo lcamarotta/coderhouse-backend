@@ -1,7 +1,6 @@
 import fs from 'fs';
-import __path from '../utils/__path.js';
-import __error from '../utils/__error.js'
 import ProductManager from './productManager.js';
+import { errorHandler, rootDir } from '../../utils.js';
 
 export default class CartManager {
 	constructor(pathToCartsFile) {
@@ -20,14 +19,14 @@ export default class CartManager {
 				}
 				return;
 			} catch (e) {
-				throw new __error(500, `${e}`);
+				throw new errorHandler(500, `${e}`);
 			}
 		} else {
 			try {		
 				this.carts = [];
 				await fs.promises.writeFile(this.pathToCartsFile, JSON.stringify(this.carts));
 			} catch (e) {
-				throw new __error(500, `${e}`);
+				throw new errorHandler(500, `${e}`);
 			}
 		}
 	}
@@ -35,7 +34,7 @@ export default class CartManager {
     getCartById = async(id) => {
 		await this.getCarts();
 		const cartIndex = this.carts.findIndex(cart => cart.id === id);
-		if (cartIndex === -1) throw new __error(400, 'Cart ID not found');
+		if (cartIndex === -1) throw new errorHandler(400, 'Cart ID not found');
 		return this.carts[cartIndex];
 	}
 
@@ -51,20 +50,20 @@ export default class CartManager {
 			await fs.promises.writeFile(this.pathToCartsFile, JSON.stringify(this.carts));
 			return id;
 		} catch (e) {
-			throw new __error(500, `${e}`)
+			throw new errorHandler(500, `${e}`)
 		}
     }
 
     addProductToCart = async(cid, pid) => {
-		const productManager = new ProductManager(__path('/files/products.json'))       
+		const productManager = new ProductManager(rootDir('/files/products.json'))       
 		await this.getCarts();
 		await productManager.getProducts();
 
 		const prodIndex = productManager.products.findIndex(product => product.id === pid);
-		if(!(prodIndex !== -1)) throw new __error(400, 'Product ID not found');
+		if(!(prodIndex !== -1)) throw new errorHandler(400, 'Product ID not found');
 		
 		const cartIndex = this.carts.findIndex(cart => cart.id === cid);
-		if(!(cartIndex !== -1)) throw new __error(400, 'Cart ID not found');
+		if(!(cartIndex !== -1)) throw new errorHandler(400, 'Cart ID not found');
 
 		// if product exists in cart add quantity. Else add product to cart
 		const productInCartIndex = this.carts[cartIndex].products.findIndex(product => product.product === pid)
@@ -80,7 +79,7 @@ export default class CartManager {
 		try {		
 			await fs.promises.writeFile(this.pathToCartsFile, JSON.stringify(this.carts));
 		} catch (e) {
-			throw new __error(500, `${e}`)
+			throw new errorHandler(500, `${e}`)
 		}
     }
 }

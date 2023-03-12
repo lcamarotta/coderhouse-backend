@@ -1,9 +1,9 @@
 import { Router } from 'express';
-import __path from '../../utils/__path.js';
-import ProductManager from '../../manager/productManager.js';
+import { rootDir } from '../../utils.js';
+import ProductManager from '../../dao/fileManagers/productManager.js';
 
 const router = Router();
-const productsManager = new ProductManager(__path('/files/products.json'));
+const productsManager = new ProductManager(rootDir('/files/products.json'));
 
 router.get('/', async(req, res) => {
 	const limit = Number(req.query.limit);
