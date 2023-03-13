@@ -1,19 +1,22 @@
-import { messagesModel } from "../models/messages.js";
+import { productModel } from "../models/products.js";
 
-export default class Messages {
-  constructor() {
-    console.log('Messages constructor')
-  }
-  getAll = async () => {
-    const messages = await messagesModel.find();
-    return messages.map(message => message.toObject());
-  }
-  save = async (message) => {
-    const result = await messagesModel.create(message);
-    return result;
-  }
-  update = async (id, message) => {
-    const result = await messagesModel.updateOne({_id: id}, message);
-    return result;
-  }
+export default class Product {
+	constructor() {
+		console.log('DB Manager - PRODUCTS')
+	}
+
+	getAll = async () => {
+		const products = await productModel.find();
+		return products.map(product => product.toObject());
+	}
+
+	save = async (product) => {
+		const result = await productModel.create(product);
+		return result;
+	}
+
+	update = async (id, product) => {
+		const result = await productModel.updateOne({_id: id}, product);
+		return result;
+	}
 }

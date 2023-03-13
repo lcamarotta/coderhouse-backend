@@ -31,30 +31,30 @@ export default class CartManager {
 		}
 	}
 
-    getCartById = async(id) => {
+	getCartById = async(id) => {
 		await this.getCarts();
 		const cartIndex = this.carts.findIndex(cart => cart.id === id);
 		if (cartIndex === -1) throw new errorHandler(400, 'Cart ID not found');
 		return this.carts[cartIndex];
 	}
 
-    addCart = async() => {
-        await this.getCarts();
-        const id = this.carts.length === 0 ? 1 : this.carts[this.carts.length - 1].id + 1;
+	addCart = async() => {
+		await this.getCarts();
+		const id = this.carts.length === 0 ? 1 : this.carts[this.carts.length - 1].id + 1;
 		const newCart = {
 			id,
 			products: []
 		}
-        this.carts.push(newCart);
+		this.carts.push(newCart);
 		try {		
 			await fs.promises.writeFile(this.pathToCartsFile, JSON.stringify(this.carts));
 			return id;
 		} catch (e) {
 			throw new errorHandler(500, `${e}`)
 		}
-    }
+	}
 
-    addProductToCart = async(cid, pid) => {
+	addProductToCart = async(cid, pid) => {
 		const productManager = new ProductManager(rootDir('/files/products.json'))       
 		await this.getCarts();
 		await productManager.getProducts();
@@ -81,5 +81,5 @@ export default class CartManager {
 		} catch (e) {
 			throw new errorHandler(500, `${e}`)
 		}
-    }
+	}
 }

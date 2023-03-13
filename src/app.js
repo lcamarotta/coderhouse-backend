@@ -26,11 +26,11 @@ app.use('/api/carts', cartsRouter);
 app.use('/api/products', productsRouter);
 
 io.on('connection', socket => {
-    console.log('New client')
+	console.log('New client')
 });
 
 try {
-    await mongoose.connect('mongodb+srv://lcamarotta:CcrmSx6UvtaZpKZo@codercluster.9ibjsd5.mongodb.net/?retryWrites=true&w=majority')
+	await mongoose.connect('mongodb+srv://lcamarotta:CcrmSx6UvtaZpKZo@codercluster.9ibjsd5.mongodb.net/?retryWrites=true&w=majority')
 } catch (e) {
-    console.error('MongoDB connection error', e)
+	console.error('MongoDB connection error', e)
 }

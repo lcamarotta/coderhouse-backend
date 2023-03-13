@@ -1,19 +1,19 @@
-import { messagesModel } from "../models/messages.js";
+import { cartModel } from "../models/carts.js";
 
-export default class Messages {
-  constructor() {
-    console.log('Messages constructor')
-  }
-  getAll = async () => {
-    const messages = await messagesModel.find();
-    return messages.map(message => message.toObject());
-  }
-  save = async (message) => {
-    const result = await messagesModel.create(message);
-    return result;
-  }
-  update = async (id, message) => {
-    const result = await messagesModel.updateOne({_id: id}, message);
-    return result;
-  }
+export default class Cart {
+	constructor() {
+		console.log('DB Manager - CARTS')
+	}
+	getAll = async () => {
+		const carts = await cartModel.find();
+		return carts.map(cart => cart.toObject());
+	}
+	save = async (cart) => {
+		const result = await cartModel.create(cart);
+		return result;
+	}
+	update = async (id, cart) => {
+		const result = await cartModel.updateOne({_id: id}, cart);
+		return result;
+	}
 }

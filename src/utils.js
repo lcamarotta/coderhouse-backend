@@ -9,8 +9,8 @@ export const rootDir = (string) => path.join(filename_dir, '..',string);
 
 // --error handler--
 export class errorHandler {
-  constructor(httpStatusCode, msg) {
-      this.httpStatusCode = httpStatusCode;
-      this.msg = msg;
-  }
+	constructor(httpStatusCode, msg) {
+			this.httpStatusCode = httpStatusCode;
+			this.msg = msg;
+	}
 }
