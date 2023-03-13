@@ -1,19 +1,37 @@
+import { errorHandler } from "../../utils.js";
 import { cartModel } from "../models/carts.js";
 
 export default class Cart {
 	constructor() {
 		console.log('DB Manager - CARTS')
 	}
-	getAll = async () => {
-		const carts = await cartModel.find();
-		return carts.map(cart => cart.toObject());
+	getById = async (id) => {
+		try {
+			const cart = await cartModel.find({_id: id});
+			return cart;
+		} catch (error) {
+			throw new errorHandler(500, `${error}`)
+		}
 	}
-	save = async (cart) => {
-		const result = await cartModel.create(cart);
-		return result;
+	create = async () => {
+		try {
+			const result = await cartModel.create({
+				products: []
+			});
+			return result;
+		} catch (error) {
+			throw new errorHandler(500, `${error}`)
+		}
 	}
-	update = async (id, cart) => {
-		const result = await cartModel.updateOne({_id: id}, cart);
-		return result;
+	update = async (cid, pid) => {
+		try {
+			const result = await cartModel.updateOne(
+				{_id: cid},
+				{$push: { products: pid }}
+			);
+			return result;
+		} catch (error) {
+			throw new errorHandler(500, `${error}`)
+		}
 	}
 }

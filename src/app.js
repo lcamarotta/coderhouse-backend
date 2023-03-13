@@ -2,13 +2,13 @@ import express from 'express';
 import mongoose from 'mongoose';
 import { Server } from 'socket.io';
 import handlebars from 'express-handlebars';
-import { rootDir } from '../../utils.js';
+import { rootDir } from './utils.js';
 import viewsRouter from './routes/web/views.router.js';
 import cartsRouter from './routes/api/carts.router.js';
 import productsRouter from './routes/api/products.router.js';
 
 export const app = express();
-const httpServer = app.listen(8080, () => console.log('Server listening on port 8080'));
+const httpServer = app.listen(8000, () => console.log('Server listening on port 8000'));
 
 const io = new Server(httpServer);
 

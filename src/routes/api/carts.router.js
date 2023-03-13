@@ -1,50 +1,58 @@
 import { Router } from "express";
 import { rootDir } from '../../utils.js';
 import CartManager from "../../dao/fileManagers/cartManager.js";
+import Cart from "../../dao/dbManagers/carts.js";
 
 const router = Router();
 const useDB = true;
-const cartManager = new CartManager(rootDir('/files/carts.json'));
+const cartFileManager = new CartManager(rootDir('/files/carts.json'));
+const cartDB = new Cart;
 
 router.post('/', async(req, res) => {
 	try {
 		if (useDB) {
-			
+			const result = await cartDB.create();
+			res.send({status: 'Success', msg:`Empty cart with ID ${result._id} created`});
 		} else {
-			const result = await cartManager.addCart()
+			const result = await cartFileManager.addCart()
 			res.send({status: 'Success', msg:`Empty cart with ID ${result} created`});
 		}
-	} catch (e) {
-		res.status(e.httpStatusCode).send({status: `Error ${e.httpStatusCode}`, error: `${e.msg}`});
+	} catch (error) {
+		res.status(error.httpStatusCode).send({status: `Error ${error.httpStatusCode}`, error: `${error.msg}`});
 	}
 });
 
 router.post('/:cid/product/:pid', async(req, res) => {
-	const cid = Number(req.params.cid);
-	const pid = Number(req.params.pid);
 	try {
 		if (useDB) {
-			
+			const cid = req.params.cid;
+			const pid = req.params.pid;
+			const result = await cartDB.update(cid, pid)
+			res.send({status: 'Success', payload: result});
 		} else {
-			await cartManager.addProductToCart(cid, pid)
+			const cid = Number(req.params.cid);
+			const pid = Number(req.params.pid);
+			await cartFileManager.addProductToCart(cid, pid)
 			res.send({status: 'Success'});
 		}
-	} catch (e) {
-		res.status(e.httpStatusCode).send({status: `Error ${e.httpStatusCode}`, error: `${e.msg}`});
+	} catch (error) {
+		res.status(error.httpStatusCode).send({status: `Error ${error.httpStatusCode}`, error: `${error.msg}`});
 	}
 });
 
 router.get('/:cid', async(req,res) => {
-	const cid = Number(req.params.cid);
 	try {
 		if (useDB) {
-			
+			const cid = req.params.cid
+			const cart = await cartDB.getById(cid)
+			res.send(cart)
 		} else {
-			const cart = await cartManager.getCartById(cid)
+			const cid = Number(req.params.cid);
+			const cart = await cartFileManager.getCartById(cid)
 			res.send(cart.products)
 		}
-	} catch (e) {
-		res.status(e.httpStatusCode).send({status: `Error ${e.httpStatusCode}`, error: `${e.msg}`});
+	} catch (error) {
+		res.status(error.httpStatusCode).send({status: `Error ${error.httpStatusCode}`, error: `${error.msg}`});
 	}
 });
 
