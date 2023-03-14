@@ -25,11 +25,9 @@ export default class Cart {
 	}
 	update = async (cid, pid) => {
 		try {
-			const result = await cartModel.updateOne(
-				{_id: cid},
-				{$push: { products: pid }}
-			);
-			return result;
+			const cart = await cartModel.findOne({ _id: cid })
+			cart.products.push({ product: pid })
+			return await cartModel.updateOne({_id: cid}, cart);
 		} catch (error) {
 			throw new errorHandler(500, `${error}`)
 		}
