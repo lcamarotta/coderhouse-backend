@@ -2,11 +2,13 @@ import { Router } from "express";
 import { rootDir } from '../../utils.js';
 import CartManager from "../../dao/fileManagers/cartManager.js";
 import Cart from "../../dao/dbManagers/carts.js";
+import Product from '../../dao/dbManagers/products.js';
 
 const router = Router();
 const useDB = true;
 const cartFileManager = new CartManager(rootDir('/files/carts.json'));
 const cartDB = new Cart;
+const productDB = new Product;
 
 router.post('/', async(req, res) => {
 	try {

@@ -8,7 +8,8 @@ import cartsRouter from './routes/api/carts.router.js';
 import productsRouter from './routes/api/products.router.js';
 
 export const app = express();
-const httpServer = app.listen(8000, () => console.log('Server listening on port 8000'));
+const port = 8080;
+const httpServer = app.listen(port, () => console.log(`Server listening on port ${port}`));
 
 const io = new Server(httpServer);
 

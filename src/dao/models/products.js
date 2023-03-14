@@ -13,7 +13,10 @@ const productSchema = new mongoose.Schema({
 	stock: Number,
 	description: String,
 	thumbnail: Array,
-	status: Boolean
+	status: {
+		type: Boolean,
+		default: true
+	}
 });
 
 export const productModel = mongoose.model(productCollection, productSchema);
