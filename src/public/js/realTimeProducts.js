@@ -5,7 +5,7 @@ socket.on('productEvent', data => {
     data.forEach(product => {
         prodList.innerHTML += `
         <ul>
-            <p>*--------PRODUCT ID ${product.id}--------*</p>
+            <p>*--------PRODUCT ID ${product._id}--------*</p>
             <li>Code: ${product.code}</li>
             <li>Title: ${product.title}</li>
             <li>Category: ${product.category}</li>

@@ -15,10 +15,10 @@ const io = new Server(httpServer);
 
 app.engine('handlebars', handlebars.engine()); 
 app.set('socketio', io)
-app.set('views', rootDir('/views'));
+app.set('views', rootDir('/src/views'));
 app.set('view engine', 'handlebars');
 
-app.use(express.static(rootDir('/public')));
+app.use(express.static(rootDir('/src/public')));
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 
