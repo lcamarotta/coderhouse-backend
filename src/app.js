@@ -6,6 +6,7 @@ import { rootDir } from './utils.js';
 import viewsRouter from './routes/web/views.router.js';
 import cartsRouter from './routes/api/carts.router.js';
 import productsRouter from './routes/api/products.router.js';
+import Message from './dao/dbManagers/messages.js';
 
 export const app = express();
 const port = 8080;
@@ -26,8 +27,22 @@ app.use('/', viewsRouter);
 app.use('/api/carts', cartsRouter);
 app.use('/api/products', productsRouter);
 
-io.on('connection', socket => {
+io.on('connection', async socket => {
 	console.log('New client')
+
+	const messageDB = new Message;
+	const messages = await messageDB.getAll();
+	socket.emit('messagesLog', messages)
+
+	socket.on('newMessage', async data =>{
+		io.emit('messagesLog', [data])
+	try {
+		await messageDB.save(data)
+	} catch (error) {
+		throw new errorHandler(500, 'save message err'. error)
+	}
+
+	});
 });
 
 try {

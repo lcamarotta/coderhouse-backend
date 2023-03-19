@@ -2,6 +2,7 @@ import express from 'express';
 import { errorHandler, rootDir } from '../../utils.js';
 import ProductManager from '../../dao/fileManagers/productManager.js';
 import Product from '../../dao/dbManagers/products.js';
+import Message from '../../dao/dbManagers/messages.js';
 
 const router = express.Router();
 const useDB = true;
@@ -23,8 +24,8 @@ router.get('/', async(req, res) => {
 				products: productManager.products
 			});
 		}
-	} catch (e) {
-		res.status(e.httpStatusCode).send({status: `Error ${e.httpStatusCode}`, error: `${e.msg}`});
+	} catch (error) {
+		res.status(error.httpStatusCode).send({status: `Error ${error.httpStatusCode}`, error: `${error.msg}`});
 	}
 });
 
@@ -44,8 +45,16 @@ router.get('/realtimeproducts', async(req, res) => {
 				products: productManager.products
 			});
 		}
-	} catch (e) {
-		res.status(e.httpStatusCode).send({status: `Error ${e.httpStatusCode}`, error: `${e.msg}`});
+	} catch (error) {
+		res.status(error.httpStatusCode).send({status: `Error ${error.httpStatusCode}`, error: `${error.msg}`});
+	}
+});
+
+router.get('/chat', async(req, res) => {
+	try {
+		res.render('chat')
+	} catch (error) {
+		res.status(error.httpStatusCode).send({status: `Error ${error.httpStatusCode}`, error: `${error.msg}`});
 	}
 });
 
