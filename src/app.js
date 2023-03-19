@@ -39,7 +39,7 @@ io.on('connection', async socket => {
 	try {
 		await messageDB.save(data)
 	} catch (error) {
-		throw new errorHandler(500, 'save message err'. error)
+		throw new errorHandler(500, `${error}`)
 	}
 
 	});
