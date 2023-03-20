@@ -1,7 +1,10 @@
+//dependencies
 import express from 'express';
 import mongoose from 'mongoose';
 import { Server } from 'socket.io';
 import handlebars from 'express-handlebars';
+
+//files
 import { rootDir } from './utils.js';
 import viewsRouter from './routes/web/views.router.js';
 import cartsRouter from './routes/api/carts.router.js';
@@ -27,26 +30,30 @@ app.use('/', viewsRouter);
 app.use('/api/carts', cartsRouter);
 app.use('/api/products', productsRouter);
 
-io.on('connection', async socket => {
-	console.log('New client')
+try {
+	await mongoose.connect('mongodb+srv://lcamarotta:CcrmSx6UvtaZpKZo@codercluster.9ibjsd5.mongodb.net/?retryWrites=true&w=majority')
+} catch (error) {
+	console.error('MongoDB connection error', error)
+}
 
+io.on('connection', async socket => {
+	const address = socket.handshake.address;
+	console.log(`New client from ${address}`)
+	
 	const messageDB = new Message;
-	const messages = await messageDB.getAll();
-	socket.emit('messagesLog', messages)
+
+	socket.on('authenticated', async () => {
+		const messages = await messageDB.getAll();
+		socket.emit('messagesLog', messages)
+	});
 
 	socket.on('newMessage', async data =>{
 		io.emit('messagesLog', [data])
-	try {
-		await messageDB.save(data)
-	} catch (error) {
-		throw new errorHandler(500, `${error}`)
-	}
+		try {
+			await messageDB.save(data)
+		} catch (error) {
+			throw new errorHandler(500, `${error}`)
+		}
 
 	});
 });
-
-try {
-	await mongoose.connect('mongodb+srv://lcamarotta:CcrmSx6UvtaZpKZo@codercluster.9ibjsd5.mongodb.net/?retryWrites=true&w=majority')
-} catch (e) {
-	console.error('MongoDB connection error', e)
-}

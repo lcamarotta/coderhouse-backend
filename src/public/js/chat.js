@@ -2,18 +2,19 @@ const socket = io();
 
 let user;
 const inputBox = document.getElementById('inputBox');
-const messagesLog = document.getElementById('messagesLog');
+const messagesBox = document.getElementById('messagesBox');
 
 Swal.fire({
-    title: 'Identificate',
+    title: 'Authenticate',
     input: 'text',
-    text: 'Ingresa el usuario para identificarte en el chat',
+    text: 'Input your email',
     inputValidator: (value) => {
-        return !value && "Necesitas escribir un nombre de usuario";
+        return !value && "You need to authenticate with a valid email";
     },
     allowOutsideClick: false
 }).then(result => {
     user = result.value;
+    socket.emit('authenticated', user);
 });
 
 inputBox.addEventListener('keyup', evt => {
@@ -30,6 +31,6 @@ inputBox.addEventListener('keyup', evt => {
 
 socket.on('messagesLog', data => {
     data.forEach(message => {
-        messagesLog.innerHTML += `<p>${message.user} says: ${message.message}</p>`
+        messagesBox.innerHTML += `<p><b>${message.user}</b> says: ${message.message}</p>`
     });
 });

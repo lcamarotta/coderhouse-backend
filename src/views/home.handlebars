@@ -1,8 +1,9 @@
 <div>
-    <p>Hello world! Static product list:</p>
+    <h1>Hello world! Static product list:</h1>
+    <br>
     {{#each products}}
     <ul>
-        <p>*--------PRODUCT ID {{this._id}}--------*</p>
+        <p><b>*--------PRODUCT ID {{this._id}}--------*</b></p>
         <li>Code: {{this.code}}</li>
         <li>Title: {{this.title}}</li>
         <li>Categpry: {{this.category}}</li>
@@ -13,6 +14,9 @@
     </ul>
     <br>
     {{/each}}
-    <p>{{test}}</p>
+</div>
+<div id="buttonsDiv">
+    <button id="prevPage-btn" disabled>Previus Page</button>
+    <button id="nextPage-btn" disabled>Next Page</button>
 </div>
 <script src="./js/home.js"></script>

@@ -8,7 +8,7 @@
   "name": "coderhouse-backend",
   "description": "My project for the 'backend' course of coderhouse.",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "app.js",
   "type": "module",
   "scripts": {
     "test": "nodemon src/app.js",

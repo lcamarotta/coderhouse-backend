@@ -1,11 +1,11 @@
 const socket = io();
 socket.on('productEvent', data => {
     const prodList = document.getElementById("prodList");
-    prodList.innerHTML = '<p>Hello world! Dynamic product list:</p>'
+    prodList.innerHTML = '<h1>Hello world! Dynamic product list:</h1> <br>'
     data.forEach(product => {
         prodList.innerHTML += `
         <ul>
-            <p>*--------PRODUCT ID ${product._id}--------*</p>
+            <p><b>*--------PRODUCT ID ${product._id}--------*</b></p>
             <li>Code: ${product.code}</li>
             <li>Title: ${product.title}</li>
             <li>Category: ${product.category}</li>
