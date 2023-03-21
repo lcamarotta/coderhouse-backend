@@ -16,7 +16,16 @@
     {{/each}}
 </div>
 <div id="buttonsDiv">
-    <button id="prevPage-btn" disabled>Previus Page</button>
-    <button id="nextPage-btn" disabled>Next Page</button>
+    {{#if hasPrevPage}}
+    <a href="/realtimeproducts?page={{prevPage}}&limit={{limit}}"><button type="button">Previus Page</button></a>
+    {{else}}
+    <button type="button" disabled="true">Previus Page</button>
+    {{/if}}
+
+    {{#if hasNextPage}}
+    <a href="/realtimeproducts?page={{nextPage}}&limit={{limit}}"><button type="button">Next Page</button></a>
+    {{else}}
+    <button type="button" disabled="true">Next Page</button>
+    {{/if}}
 </div>
 <script src="./js/home.js"></script>

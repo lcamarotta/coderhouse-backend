@@ -15,10 +15,10 @@ router.get('/:cid', async(req,res) => {
 			});
 	} catch (error) {
 		res
-			.status(error.httpStatusCode)
+			.status(error.httpStatusCode || 500)
 			.send({
-				status: `Error ${error.httpStatusCode}`,
-				payload: `${error.msg}`
+				status: `Error ${error.httpStatusCode || 500}`,
+				payload: `${error.msg || error} `
 			});
 	}
 });
@@ -33,10 +33,10 @@ router.post('/', async(req, res) => {
 			});
 	} catch (error) {
 		res
-			.status(error.httpStatusCode)
+			.status(error.httpStatusCode || 500)
 			.send({
-				status: `Error ${error.httpStatusCode}`,
-				payload: `${error.msg}`
+				status: `Error ${error.httpStatusCode || 500}`,
+				payload: `${error.msg || error} `
 			});
 	}
 });
@@ -53,10 +53,10 @@ router.post('/:cid/product/:pid', async(req, res) => {
 			});
 	} catch (error) {
 		res
-			.status(error.httpStatusCode)
+			.status(error.httpStatusCode || 500)
 			.send({
-				status: `Error ${error.httpStatusCode}`,
-				payload: `${error.msg}`
+				status: `Error ${error.httpStatusCode || 500}`,
+				payload: `${error.msg || error} `
 			});
 	}
 });

@@ -7,10 +7,11 @@ export default class Product {
 		console.log('DB Manager - PRODUCTS')
 	}
 
-	get = async (limit) => {
+	get = async (options) => {
 		try {
-			const products = limit ? await productModel.find().limit(limit) : await productModel.find();
-			return products.map(product => product.toObject());
+			const result = await productModel.paginate({}, {...options, lean: true}); //paginate({sort}, {options})
+			if(result.docs.length === 0) throw new errorHandler(400, 'There are no products');
+			return result
 		} catch (error) {
 			throw new errorHandler(500, `${error}`)
 		}
