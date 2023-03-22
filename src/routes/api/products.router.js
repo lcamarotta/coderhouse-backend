@@ -5,14 +5,21 @@ import Product from '../../dao/dbManagers/products.js';
 const router = Router();
 const product = new Product;
 
-router.get('/', async(req, res) => { 
-	const limit = Number(req.query.limit);
+router.get('/', async(req, res) => {
+	const { page = 1, limit = 10, sort, query} = req.query;
+
+	const options = {
+		page,
+		limit,
+		...(sort && { sort: { price: sort } })
+	}
+
 	try {
-		const result = await product.get(limit)
+		const result = await product.get(query, options);
 		res
 			.send({ 
 				status: 'success',
-				payload: result
+				...result
 			})
 	} catch (error) {
 		res

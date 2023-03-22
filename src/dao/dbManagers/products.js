@@ -7,11 +7,42 @@ export default class Product {
 		console.log('DB Manager - PRODUCTS')
 	}
 
-	get = async (options) => {
+	get = async (queryString, options) => {
+		
+		const queryObject = {}
+		if (queryString) {
+			const queryArray = queryString.split(':');
+			if(queryArray[0] == 'stock'){
+				queryObject['stock'] = { $gte: queryArray[1] };
+			} else {
+				queryObject[queryArray[0]] = queryArray[1];
+			}
+		}
+		
+		options = {
+			...options,
+			lean: true,
+			customLabels: {
+				docs: 'payload'
+			}
+		}
+
 		try {
-			const result = await productModel.paginate({}, {...options, lean: true}); //paginate({sort}, {options})
-			if(result.docs.length === 0) throw new errorHandler(400, 'There are no products');
-			return result
+			const result = await productModel.paginate(queryObject, options);
+			let link = `?limit=${options.limit}`;
+			if(options.sort) link = `${link}&sort=${options.sort.price}`;
+			if(queryString) link = `${link}&query=${queryString}`;
+
+			let prevLink = link;
+			let nextLink = link;
+			prevLink = result.hasPrevPage ? `${link}&page=${result.prevPage}` : null;
+			nextLink = result.hasNextPage ? `${link}&page=${result.nextPage}` : null;
+			
+			return {
+				...result,
+				prevLink,
+				nextLink
+			};
 		} catch (error) {
 			throw new errorHandler(500, `${error}`)
 		}

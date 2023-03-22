@@ -1,7 +1,7 @@
 <div id="prodList">
     <h1>Hello world! Dynamic product list:</h1>
     <br>
-    {{#each products}}
+    {{#each payload}}
     <ul>
         <p><b>*--------PRODUCT ID {{this._id}}--------*</b></p>
         <li>Code: {{this.code}}</li>
@@ -17,13 +17,13 @@
 </div>
 <div id="buttonsDiv">
     {{#if hasPrevPage}}
-    <a href="/realtimeproducts?page={{prevPage}}&limit={{limit}}"><button type="button">Previus Page</button></a>
+    <a href="/realtimeproducts{{prevLink}}"><button type="button">Previus Page</button></a>
     {{else}}
     <button type="button" disabled="true">Previus Page</button>
     {{/if}}
 
     {{#if hasNextPage}}
-    <a href="/realtimeproducts?page={{nextPage}}&limit={{limit}}"><button type="button">Next Page</button></a>
+    <a href="/realtimeproducts{{nextLink}}"><button type="button">Next Page</button></a>
     {{else}}
     <button type="button" disabled="true">Next Page</button>
     {{/if}}
