@@ -43,11 +43,91 @@ router.post('/', async(req, res) => {
 });
 
 router.post('/:cid/product/:pid', async(req, res) => {
-	const cid = req.params.cid;
-	const pid = req.params.pid;
-	const qty = 1;
+	const { cid, pid } = req.params;
 	try {
-		const result = await cart.update(cid, pid, qty);
+		const result = await cart.update(cid, pid);
+		res
+			.send({
+				status: 'Success',
+				payload: result
+			});
+	} catch (error) {
+		res
+			.status(error.httpStatusCode || 500)
+			.send({
+				status: `Error ${error.httpStatusCode || 500}`,
+				payload: `${error.msg || error}`
+			});
+	}
+});
+
+router.put('/:cid', async(req,res) => {
+	const { cid } = req.params;
+	const arrayOfProductsToUpdate = req.body;
+	const result = []
+	try {
+		for (const object of arrayOfProductsToUpdate) {
+			result.push(await cart.update(cid, object.productId, object.quantity));
+		  }
+		res
+			.send({
+				status: 'Success',
+				payload: result
+			});
+	} catch (error) {
+		res
+			.status(error.httpStatusCode || 500)
+			.send({
+				status: `Error ${error.httpStatusCode || 500}`,
+				payload: `${error.msg || error}`
+			});
+	}
+});
+
+router.put('/:cid/products/:pid', async(req, res) => {
+	const { cid, pid } = req.params;
+	const quantity = req.body;
+	try {
+		if(await cart.isProductInCart(cid, pid) == -1) throw new errorHandler(400, 'Can not update product quantity because it has not been added to cart');
+		const result = await cart.update(cid, pid, quantity.quantity);
+		res
+			.send({
+				status: 'Success',
+				payload: result
+			});
+	} catch (error) {
+		res
+			.status(error.httpStatusCode || 500)
+			.send({
+				status: `Error ${error.httpStatusCode || 500}`,
+				payload: `${error.msg || error}`
+			});
+	}
+});
+
+router.delete('/:cid/products/:pid', async(req, res) => {
+	const { cid, pid } = req.params;
+	try {
+		const result = await cart.deleteById(cid, pid);
+		res
+			.send({
+				status: 'Success',
+				payload: result
+			});
+	} catch (error) {
+		res
+			.status(error.httpStatusCode || 500)
+			.send({
+				status: `Error ${error.httpStatusCode || 500}`,
+				payload: `${error.msg || error}`
+			});
+	}
+});
+
+router.delete('/:cid', async(req,res) => {
+	const { cid } = req.params;
+	try {
+		const result = await cart.deleteAll(cid);
 		res
 			.send({
 				status: 'Success',
