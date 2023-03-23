@@ -16,7 +16,7 @@ export default class Cart {
 
 	getById = async (cartId) => {
 		try {
-			const result = await cartModel.findOne({ _id: cartId });
+			const result = await cartModel.findOne({ _id: cartId }).populate('products.product');
 			if(!result) throw new errorHandler(400, 'Cart ID not found');
 			return result;
 		} catch (error) {
