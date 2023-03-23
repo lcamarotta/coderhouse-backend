@@ -1,9 +1,10 @@
 import { Router } from "express";
-import { errorHandler } from '../../utils.js';
 import Product from '../../dao/dbManagers/products.js';
+import Cart from "../../dao/dbManagers/carts.js";
 
 const router = Router();
 const product = new Product;
+const cart = new Cart;
 
 router.get('/', async(req, res) => {
 		res.render('home')
@@ -13,6 +14,23 @@ router.get('/chat', async(req, res) => {
 	try {
 		res
 			.render('chat')
+	} catch (error) {
+		res
+			.status(error.httpStatusCode || 500)
+			.send({
+				status: `Error ${error.httpStatusCode || 500}`,
+				payload: `${error.msg || error} `
+			});
+	}
+});
+
+router.get('/carts/:cid', async(req, res) => {
+	const { cid } = req.params;
+
+	try {
+		const result = await cart.getById(cid);
+		res
+			.render('cart', result)
 	} catch (error) {
 		res
 			.status(error.httpStatusCode || 500)
