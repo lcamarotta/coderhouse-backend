@@ -29,8 +29,16 @@ router.get('/carts/:cid', async(req, res) => {
 
 	try {
 		const result = await cart.getById(cid);
+		const productsArray = []
+		result.products.forEach(element => {
+			const product = {
+				quantity: element.quantity,
+				...element.product._doc
+			}
+			productsArray.push(product)
+		});
 		res
-			.render('cart', result)
+			.render('cart', {productsArray})
 	} catch (error) {
 		res
 			.status(error.httpStatusCode || 500)

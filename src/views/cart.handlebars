@@ -1,5 +1,15 @@
 <h1>Cartpage</h1>
-{{!-- {{#each products}} --}}
-<p>{{products}}</p>
-{{!-- {{/each}} --}}
+{{#each productsArray}}
+    <ul>
+        <p><b>*--------PRODUCT ID {{this._id}}--------*</b></p>
+        <li><b>Quantity {{this.quantity}}</b></li>
+        <li>Code: {{this.code}}</li>
+        <li>Title: {{this.title}}</li>
+        <li>Categpry: {{this.category}}</li>
+        <li>Description:{{this.description}}</li>
+        <li>Price: {{this.price}}</li>
+        <li>Stock: {{this.stock}}</li>
+        <li>Thumbnail: {{this.thumbnail}}</li>
+    </ul>
+{{/each}}
 <script src="/js/cart.js"></script>
