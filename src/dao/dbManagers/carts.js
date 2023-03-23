@@ -5,31 +5,40 @@ export default class Cart {
 	constructor() {
 		console.log('DB Manager - CARTS')
 	}
-	getById = async (id) => {
-		try {
-			const cart = await cartModel.find({_id: id});
-			return cart;
-		} catch (error) {
-			throw new errorHandler(500, `${error}`)
-		}
-	}
+
 	create = async () => {
 		try {
-			const result = await cartModel.create({
-				products: []
-			});
-			return result;
+			return await cartModel.create({ products: [] });
 		} catch (error) {
-			throw new errorHandler(500, `${error}`)
+			throw new errorHandler(error.httpStatusCode || 500, `${error.msg || error}`)
 		}
 	}
-	update = async (cid, pid) => {
+
+	getById = async (cartId) => {
 		try {
-			const cart = await cartModel.findOne({ _id: cid })
-			cart.products.push({ product: pid })
-			return await cartModel.updateOne({_id: cid}, cart);
+			const result = await cartModel.findOne({ _id: cartId });
+			if(!result) throw new errorHandler(400, 'Cart ID not found');
+			return result;
 		} catch (error) {
-			throw new errorHandler(500, `${error}`)
+			throw new errorHandler(error.httpStatusCode || 500, `${error.msg || error}`)
+		}
+	}
+
+	update = async (cartId, productId, quantity) => {
+		try {
+			const cart = await cartModel.findOne({ _id: cartId });
+			if(!cart) throw new errorHandler(400, 'Cart ID not found');
+
+			const index = cart.products.findIndex(product => product.product.toString() == productId);
+			if(index != -1){
+				cart.products[index].quantity += quantity;
+			} else {
+				cart.products.push({ product: productId, quantity: 1 })
+			}
+			
+			return await cartModel.updateOne({_id: cartId}, cart);
+		} catch (error) {
+			throw new errorHandler(error.httpStatusCode || 500, `${error.msg || error}`)
 		}
 	}
 }
