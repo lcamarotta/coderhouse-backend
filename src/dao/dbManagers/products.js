@@ -29,6 +29,9 @@ export default class Product {
 
 		try {
 			const result = await productModel.paginate(queryObject, options);
+
+			if(options.page > result.totalPages || options.page <= 0 || isNaN(options.page)) throw new errorHandler(400, 'Incorrect page request');
+			
 			let link = `?limit=${options.limit}`;
 			if(options.sort) link = `${link}&sort=${options.sort.price}`;
 			if(queryString) link = `${link}&query=${queryString}`;
@@ -44,7 +47,7 @@ export default class Product {
 				nextLink
 			};
 		} catch (error) {
-			throw new errorHandler(500, `${error}`)
+			throw new errorHandler(error.httpStatusCode || 500, `${error.msg || error}`)
 		}
 	}
 	
@@ -53,7 +56,7 @@ export default class Product {
 			const products = await productModel.find({ _id: id });
 			return products.map(product => product.toObject());
 		} catch (error) {
-			throw new errorHandler(500, `${error}`)
+			throw new errorHandler(error.httpStatusCode || 500, `${error.msg || error}`)
 		}
 	}
 
@@ -65,7 +68,7 @@ export default class Product {
 			io.emit('productEvent', socketData)
 			return result;
 		} catch (error) {
-			throw new errorHandler(500, `${error}`)
+			throw new errorHandler(error.httpStatusCode || 500, `${error.msg || error}`)
 		}
 	}
 	
@@ -77,7 +80,7 @@ export default class Product {
 			io.emit('productEvent', socketData)
 			return result;
 		} catch (error) {
-			throw new errorHandler(500, `${error}`)
+			throw new errorHandler(error.httpStatusCode || 500, `${error.msg || error}`)
 		}
 	}
 	
@@ -89,7 +92,7 @@ export default class Product {
 			io.emit('productEvent', socketData)
 			return result;
 		} catch (error) {
-			throw new errorHandler(500, `${error}`)
+			throw new errorHandler(error.httpStatusCode || 500, `${error.msg || error}`)
 		}
 	}
 }

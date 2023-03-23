@@ -1,5 +1,5 @@
-<div id="prodList" class="center">
-    <h1>Hello world! Dynamic product list:</h1>
+<div class="center">
+    <h1>Hello world! Static product list:</h1>
     <h2><b>CART ID: 641bb9fa11f628c9e03b3cfd</b></h2>
     <br>
     {{#each payload}}
@@ -7,8 +7,8 @@
         <p><b>*--------PRODUCT ID {{this._id}}--------*</b></p>
         <li>Code: {{this.code}}</li>
         <li>Title: {{this.title}}</li>
-        <li>Category: {{this.category}}</li>
-        <li>Description: {{this.description}}</li>
+        <li>Categpry: {{this.category}}</li>
+        <li>Description:{{this.description}}</li>
         <li>Price: {{this.price}}</li>
         <li>Stock: {{this.stock}}</li>
         <li>Thumbnail: {{this.thumbnail}}</li>
@@ -23,16 +23,15 @@
 </div>
 <div id="buttonsDiv">
     {{#if hasPrevPage}}
-    <a href="/realtimeproducts{{prevLink}}"><button type="button">Previus Page</button></a>
+    <a href="/products/{{prevLink}}"><button type="button">Previus Page</button></a>
     {{else}}
     <button type="button" disabled="true">Previus Page</button>
     {{/if}}
 
     {{#if hasNextPage}}
-    <a href="/realtimeproducts{{nextLink}}"><button type="button">Next Page</button></a>
+    <a href="/products/{{nextLink}}"><button type="button">Next Page</button></a>
     {{else}}
     <button type="button" disabled="true">Next Page</button>
     {{/if}}
 </div>
-<script src="/socket.io/socket.io.js"></script>
-<script src="/js/realTimeProducts.js"></script>
+<script src="/js/products.js"></script>
