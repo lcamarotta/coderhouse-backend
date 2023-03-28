@@ -6,6 +6,11 @@ const router = Router();
 const product = new Product;
 const cart = new Cart;
 
+const publicAccess = (req, res, next) => {
+    if (req.session.user) return res.redirect('/');
+    next();
+};
+
 const privateAccess = (req, res, next) => {
     if (!req.session.user) return res.redirect('/login');
     next();
@@ -108,11 +113,11 @@ router.get('/realTimeProducts', privateAccess, async(req, res) => {
 	}
 });
 
-router.get('/register', (req, res) => {
+router.get('/register', publicAccess, (req, res) => {
 	res.render('register');
 });
 
-router.get('/login', (req, res) => {
+router.get('/login', publicAccess, (req, res) => {
 	res.render('login');
 });
 
