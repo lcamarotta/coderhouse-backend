@@ -1,16 +1,25 @@
 import { Router } from 'express';
-import { errorHandler, rootDir } from '../../utils.js';
-import router from './carts.router.js';
-import userModel from '../../dao/models/users.js';
+import User from '../../dao/dbManagers/users.js';
+import { errorHandler } from '../../utils.js';
 
 const router = Router();
 
-router.post('/register', async(req, res) => {
+const userDB = new User;
+
+const publicAccess = (req, res, next) => {
+    if (req.session.user) return res.redirect('/');
+    next();
+};
+
+const privateAccess = (req, res, next) => {
+    if (!req.session.user) return res.redirect('/login');
+    next();
+};
+
+router.post('/register', publicAccess, async(req, res) => {
     const { first_name, last_name, email, age, password } = req.body;
     try {
-        const exists = await userModel.findOne({ email });
-        if (exists) throw new errorHandler(400, 'User already exists')
-
+        if (await userDB.exists(email)) throw new errorHandler(400, 'User already exists');
         const user = {
             first_name,
             last_name,
@@ -19,7 +28,7 @@ router.post('/register', async(req, res) => {
             password
         };
 
-        const result = await userModel.create(user);
+        const result = await userDB.create(user);
         res.send({ status: 'success', result })
     } catch (error) {
 		res
@@ -32,16 +41,16 @@ router.post('/register', async(req, res) => {
     }
 });
 
-router.post('/login', async (req, res) => {
+router.post('/login', publicAccess, async (req, res) => {
     const { email, password } = req.body;
     try {
-        const user = await userModel.findOne({ email, password });
-        if (!user) throw new errorHandler(400, 'Incorrect username or password');
-        
+        if(!email || !password) throw new errorHandler(400, 'Incomplete values');
+        const user = await userDB.get( email, password );
         req.session.user = {
-            name: `${user.first_name} ${user.last_name}`,
+            name: user.name,
             email: user.email,
-            age: user.age
+            age: user.age,
+            role: user.role
         };
 
         res.send({ status: 'success', message: 'login success' });
@@ -56,7 +65,7 @@ router.post('/login', async (req, res) => {
     }
 });
 
-router.get('/logout', (req, res) => {
+router.get('/logout', privateAccess, (req, res) => {
     try {
         req.session.destroy(err => {
             if (err) throw new errorHandler(500, `${err}`);

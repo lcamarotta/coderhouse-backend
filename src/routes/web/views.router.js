@@ -6,10 +6,13 @@ const router = Router();
 const product = new Product;
 const cart = new Cart;
 
+const privateAccess = (req, res, next) => {
+    if (!req.session.user) return res.redirect('/login');
+    next();
+};
+
 router.get('/', async(req, res) => {
-	res.render('home', {
-		user: req.session.user
-	});
+	res.redirect('/products');
 });
 
 router.get('/chat', async(req, res) => {
@@ -26,7 +29,7 @@ router.get('/chat', async(req, res) => {
 	}
 });
 
-router.get('/carts/:cid', async(req, res) => {
+router.get('/carts/:cid', privateAccess, async(req, res) => {
 	const { cid } = req.params;
 
 	try {
@@ -51,9 +54,9 @@ router.get('/carts/:cid', async(req, res) => {
 	}
 });
 
-router.get('/products', async(req, res) => {
+router.get('/products', privateAccess, async(req, res) => {
 	const { page = 1, limit = 10, sort, query} = req.query;
-
+	const user = req.session.user
 	const options = {
 		page,
 		limit,
@@ -62,8 +65,12 @@ router.get('/products', async(req, res) => {
 
 	try {
 		const result = await product.get(query, options);
+		const payload = {
+			user,
+			...result
+		}
 		res
-			.render('products', result)
+			.render('products', payload)
 	} catch (error) {
 		res
 			.status(error.httpStatusCode || 500)
@@ -74,9 +81,9 @@ router.get('/products', async(req, res) => {
 	}
 });
 
-router.get('/realTimeProducts', async(req, res) => {
+router.get('/realTimeProducts', privateAccess, async(req, res) => {
 	const { page = 1, limit = 10, sort, query} = req.query;
-
+	const user = req.session.user
 	const options = {
 		page,
 		limit,
@@ -85,8 +92,12 @@ router.get('/realTimeProducts', async(req, res) => {
 
 	try {
 		const result = await product.get(query, options);
+		const payload = {
+			user,
+			...result
+		}
 		res
-			.render('realTimeProducts', result)
+			.render('realTimeProducts', payload)
 	} catch (error) {
 		res
 			.status(error.httpStatusCode || 500)
@@ -97,11 +108,11 @@ router.get('/realTimeProducts', async(req, res) => {
 	}
 });
 
-router.get('register', (req, res) => {
+router.get('/register', (req, res) => {
 	res.render('register');
 });
 
-router.get('login', (req, res) => {
+router.get('/login', (req, res) => {
 	res.render('login');
 });
 

@@ -2,6 +2,14 @@
     <h1>Hello world! Dynamic product list:</h1>
     <h2><b>CART ID: 641bb9fa11f628c9e03b3cfd</b></h2>
     <br>
+    <ul>
+        <p><b>Your Profile Data</b></p>
+        <li>Name: {{user.name}}</li>
+        <li>Email: {{user.email}}</li>
+        <li>Age: {{user.age}}</li> 
+        <li>Role: {{user.role}}</li> 
+        <a href="/api/sessions/logout"><button type="button">LOGOUT</button></a>
+    </ul>
     {{#each payload}}
     <ul>
         <p><b>*--------PRODUCT ID {{this._id}}--------*</b></p>

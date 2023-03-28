@@ -33,7 +33,7 @@ app.use(session({
 	store: MongoStore.create({
 		mongoUrl: 'mongodb+srv://lcamarotta:CcrmSx6UvtaZpKZo@codercluster.9ibjsd5.mongodb.net/?retryWrites=true&w=majority',
 		mongoOptions: { useNewUrlParser: true },
-		ttl: 3600
+		ttl: 60
 	}),
 	secret: 'coderbackendSecret',
 	resave: true,
@@ -43,6 +43,7 @@ app.use(session({
 app.use('/', viewsRouter);
 app.use('/api/carts', cartsRouter);
 app.use('/api/products', productsRouter);
+app.use('/api/sessions', sessionsRouter);
 
 try {
 	await mongoose.connect('mongodb+srv://lcamarotta:CcrmSx6UvtaZpKZo@codercluster.9ibjsd5.mongodb.net/?retryWrites=true&w=majority')
