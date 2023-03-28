@@ -7,7 +7,9 @@ const product = new Product;
 const cart = new Cart;
 
 router.get('/', async(req, res) => {
-		res.render('home')
+	res.render('home', {
+		user: req.session.user
+	});
 });
 
 router.get('/chat', async(req, res) => {
@@ -93,6 +95,14 @@ router.get('/realTimeProducts', async(req, res) => {
 				payload: `${error.msg || error} `
 			});
 	}
+});
+
+router.get('register', (req, res) => {
+	res.render('register');
+});
+
+router.get('login', (req, res) => {
+	res.render('login');
 });
 
 export default router;
