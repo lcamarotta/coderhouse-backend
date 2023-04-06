@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import User from '../../dao/dbManagers/users.js';
-import { errorHandler } from '../../utils.js';
+import { createHash, errorHandler } from '../../utils.js';
 
 const router = Router();
 
@@ -25,7 +25,7 @@ router.post('/register', publicAccess, async(req, res) => {
             last_name,
             email,
             age,
-            password
+            password: createHash(password)
         };
 
         const result = await userDB.create(user);
@@ -46,12 +46,7 @@ router.post('/login', publicAccess, async (req, res) => {
     try {
         if(!email || !password) throw new errorHandler(400, 'Incomplete values');
         const user = await userDB.get( email, password );
-        req.session.user = {
-            name: user.name,
-            email: user.email,
-            age: user.age,
-            role: user.role
-        };
+        req.session.user = user;
 
         res.send({ status: 'success', message: 'login success' });
     } catch (error) {

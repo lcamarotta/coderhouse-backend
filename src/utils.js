@@ -1,6 +1,7 @@
 // --imports--
 import { fileURLToPath } from "url";
 import path, { dirname } from "path";
+import bcrypt from 'bcrypt';
 
 // --absolute path to files--
 const filename = fileURLToPath(import.meta.url);
@@ -14,3 +15,7 @@ export class errorHandler {
 			this.msg = msg;
 	}
 }
+
+// --pwd hash
+export const createHash = pwd => bcrypt.hashSync(pwd, bcrypt.genSaltSync(10));
+export const checkPwd = (user, pwd) => bcrypt.compareSync(pwd, user.password);
