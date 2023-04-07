@@ -1,10 +1,10 @@
 import { Router } from 'express';
 import User from '../../dao/dbManagers/users.js';
-import { createHash, errorHandler } from '../../utils.js';
+import { errorHandler } from '../../utils.js';
+import passport from 'passport';
 
 const router = Router();
-
-const userDB = new User;
+const userManager = new User;
 
 const publicAccess = (req, res, next) => {
     if (req.session.user) return res.redirect('/');
@@ -16,20 +16,20 @@ const privateAccess = (req, res, next) => {
     next();
 };
 
-router.post('/register', publicAccess, async(req, res) => {
-    const { first_name, last_name, email, age, password } = req.body;
-    try {
-        if (await userDB.exists(email)) throw new errorHandler(400, 'User already exists');
-        const user = {
-            first_name,
-            last_name,
-            email,
-            age,
-            password: createHash(password)
-        };
+router.post('/register', publicAccess, passport.authenticate('register', { failureRedirect: '/failregister' }), (req, res) => {
+    res.send({ status: 'success' })
+});
 
-        const result = await userDB.create(user);
-        res.send({ status: 'success', result })
+router.post('/login', publicAccess, passport.authenticate('login', { failureRedirect: '/faillogin' }), async (req, res) => {
+    try {
+        if(!req.user) throw new errorHandler(401, 'Invalid credentials');
+        req.session.user = {
+            first_name: req.user.first_name,
+            last_name: req.user.last_name,
+            age: req.user.age,
+            email: req.user.email
+        }
+        res.send({ status: 'success', payload: req.user });
     } catch (error) {
 		res
 			.status(error.httpStatusCode || 500)
@@ -41,23 +41,14 @@ router.post('/register', publicAccess, async(req, res) => {
     }
 });
 
-router.post('/login', publicAccess, async (req, res) => {
-    const { email, password } = req.body;
-    try {
-        if(!email || !password) throw new errorHandler(400, 'Incomplete values');
-        const user = await userDB.get( email, password );
-        req.session.user = user;
+router.get('/faillogin', (req, res) => {
+    console.log('Failed login');
+    res.send({ error: 'failed login' })
+});
 
-        res.send({ status: 'success', message: 'login success' });
-    } catch (error) {
-		res
-			.status(error.httpStatusCode || 500)
-			.send({
-				status: `Error ${error.httpStatusCode || 500}`,
-				payload: `${error.msg || error}`
-			});
-	
-    }
+router.get('/failregister', (req, res) => {
+    console.log('Failed Strategy');
+    res.send({ error: 'failed' })
 });
 
 router.get('/logout', privateAccess, (req, res) => {
@@ -75,6 +66,12 @@ router.get('/logout', privateAccess, (req, res) => {
 			});
 	
     }
+});
+
+router.get('/github', passport.authenticate('github', { scope: ['user: email'] }), async(req, res) => {});
+router.get('/githubcallback', passport.authenticate('github', { failureRedirect: '/login' }), async(req, res) => {
+    req.session.user = req.user;
+    res.redirect('/');
 });
 
 export default router;

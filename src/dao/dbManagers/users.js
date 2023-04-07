@@ -14,6 +14,22 @@ export default class User {
         }
     };
 
+	get = async (email) => {
+        try {
+            return await userModel.findOne({ email });
+        } catch (error) {
+            throw new errorHandler(error.httpStatusCode || 500, `${error.msg || error}`)
+        }
+    };
+
+	findById = async (id) => {
+        try {
+            return await userModel.findById(id);
+        } catch (error) {
+            throw new errorHandler(error.httpStatusCode || 500, `${error.msg || error}`)
+        }
+    };
+
     create = async (user) => {
         try {
             if(user.email.startsWith('admin')) user['role'] = 'admin';
@@ -24,7 +40,7 @@ export default class User {
         }
     };
 
-    get = async (email, password) => {
+    login = async (email, password) => {
         try {
             const result = await userModel.findOne({ email });
             if (!result) throw new errorHandler(401, 'User not found');

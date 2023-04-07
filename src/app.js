@@ -5,6 +5,7 @@ import mongoose from 'mongoose';
 import MongoStore from 'connect-mongo';
 import { Server } from 'socket.io';
 import handlebars from 'express-handlebars';
+import passport from 'passport';
 
 //files
 import { rootDir } from './utils.js';
@@ -13,6 +14,7 @@ import cartsRouter from './routes/api/carts.router.js';
 import sessionsRouter from './routes/api/sessions.router.js';
 import productsRouter from './routes/api/products.router.js';
 import Message from './dao/dbManagers/messages.js';
+import inistializePassport from './config/passport.config.js';
 
 export const app = express();
 const port = 8080;
@@ -39,6 +41,10 @@ app.use(session({
 	resave: true,
 	saveUninitialized: true
 }));
+
+inistializePassport();
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.use('/', viewsRouter);
 app.use('/api/carts', cartsRouter);

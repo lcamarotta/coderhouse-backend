@@ -3,7 +3,7 @@ import { errorHandler } from '../../utils.js';
 import Product from '../../dao/dbManagers/products.js';
 
 const router = Router();
-const productDB = new Product;
+const productManager = new Product;
 
 router.get('/', async(req, res) => {
 	const { page = 1, limit = 10, sort, query} = req.query;
@@ -15,7 +15,7 @@ router.get('/', async(req, res) => {
 	}
 
 	try {
-		const result = await productDB.get(query, options);
+		const result = await productManager.get(query, options);
 		res
 			.send({ 
 				status: 'success',
@@ -34,7 +34,7 @@ router.get('/', async(req, res) => {
 router.get('/:pid', async(req, res) => {
 	const pid = req.params.pid;
 	try {
-		const result = await productDB.getById(pid);
+		const result = await productManager.getById(pid);
 		res
 			.send({
 				status: 'success',
@@ -59,7 +59,7 @@ router.post('/', async(req, res) => {
 	}
 
 	try {
-		const result = await productDB.save(product)
+		const result = await productManager.save(product)
 		res
 			.send({
 				status: 'success',
@@ -85,7 +85,7 @@ router.put('/:pid', async(req, res) => {
 	}
 	
 	try {
-		const result = await productDB.update(pid, product)
+		const result = await productManager.update(pid, product)
 		res
 			.send({
 				status: 'success',
@@ -104,7 +104,7 @@ router.put('/:pid', async(req, res) => {
 router.delete('/:pid', async(req, res) =>{
 	const id = req.params.pid;
 	try {
-		const result = await productDB.delete(id);
+		const result = await productManager.delete(id);
 		res
 			.send({
 				status: 'success',

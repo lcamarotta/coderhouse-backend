@@ -3,8 +3,8 @@ import Product from '../../dao/dbManagers/products.js';
 import Cart from "../../dao/dbManagers/carts.js";
 
 const router = Router();
-const product = new Product;
-const cart = new Cart;
+const productManager = new Product;
+const cartManager = new Cart;
 
 const publicAccess = (req, res, next) => {
     if (req.session.user) return res.redirect('/');
@@ -38,7 +38,7 @@ router.get('/carts/:cid', privateAccess, async(req, res) => {
 	const { cid } = req.params;
 
 	try {
-		const result = await cart.getById(cid);
+		const result = await cartManager.getById(cid);
 		const productsArray = []
 		result.products.forEach(element => {
 			const product = {
@@ -69,7 +69,7 @@ router.get('/products', privateAccess, async(req, res) => {
 	}
 
 	try {
-		const result = await product.get(query, options);
+		const result = await productManager.get(query, options);
 		const payload = {
 			user,
 			...result
@@ -96,7 +96,7 @@ router.get('/realTimeProducts', privateAccess, async(req, res) => {
 	}
 
 	try {
-		const result = await product.get(query, options);
+		const result = await productManager.get(query, options);
 		const payload = {
 			user,
 			...result
