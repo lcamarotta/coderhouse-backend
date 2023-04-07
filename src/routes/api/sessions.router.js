@@ -16,20 +16,20 @@ const privateAccess = (req, res, next) => {
     next();
 };
 
-router.post('/register', publicAccess, passport.authenticate('register', { failureRedirect: '/failregister' }), (req, res) => {
+router.post('/register', publicAccess, passport.authenticate('register', { failureRedirect: '/api/sessions/failregister' }), (req, res) => {
     res.send({ status: 'success' })
 });
 
-router.post('/login', publicAccess, passport.authenticate('login', { failureRedirect: '/faillogin' }), async (req, res) => {
+router.post('/login', publicAccess, passport.authenticate('login', { failureRedirect: '/api/sessions/faillogin' }), async (req, res) => {
     try {
         if(!req.user) throw new errorHandler(401, 'Invalid credentials');
         req.session.user = {
-            first_name: req.user.first_name,
-            last_name: req.user.last_name,
+            name: req.user.first_name + ' ' + req.user.last_name,
+            role: req.user.role,
             age: req.user.age,
             email: req.user.email
         }
-        res.send({ status: 'success', payload: req.user });
+        res.send({ status: 'success', payload: req.session.user });
     } catch (error) {
 		res
 			.status(error.httpStatusCode || 500)
@@ -70,7 +70,12 @@ router.get('/logout', privateAccess, (req, res) => {
 
 router.get('/github', passport.authenticate('github', { scope: ['user: email'] }), async(req, res) => {});
 router.get('/githubcallback', passport.authenticate('github', { failureRedirect: '/login' }), async(req, res) => {
-    req.session.user = req.user;
+    req.session.user = {
+        name: req.user.first_name + ' ' + req.user.last_name,
+        role: req.user.role,
+        age: req.user.age,
+        email: req.user.email
+    }
     res.redirect('/');
 });
 

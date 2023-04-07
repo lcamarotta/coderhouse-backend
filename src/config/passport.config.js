@@ -7,7 +7,7 @@ import { checkPwd, createHash } from "../utils.js";
 const userManager = new User;
 const LocalStrategy = local.Strategy;
 
-const inistializePassport = () => {
+const initializePassport = () => {
     passport.serializeUser((user, done) => {
         done(null, user._id);
     });
@@ -47,8 +47,9 @@ const inistializePassport = () => {
             };
             const user = await userManager.get(username)
             if(!checkPwd(user, password)) return done(null, false);
-            return done(done, false);
+            return done(null, user);
         } catch (error) {
+            console.log(error)
             return done(error);
         }
     }))
@@ -60,7 +61,7 @@ const inistializePassport = () => {
     }, async(accessToken, refreshToken, profile, done) => {
         try {
             console.log(profile);
-            let user = await userManager.get({ email: profile._json.email });
+            let user = await userManager.get(profile._json.email);
             if (!user) {
                 const newUser = {
                     first_name: profile._json.name,
@@ -75,9 +76,10 @@ const inistializePassport = () => {
                 done(null, user);
             }
         } catch (error) {
+            console.log(error)
             return done(error);
         }
     }));
 }
 
-export default inistializePassport;
+export default initializePassport;

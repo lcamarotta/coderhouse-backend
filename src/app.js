@@ -14,7 +14,7 @@ import cartsRouter from './routes/api/carts.router.js';
 import sessionsRouter from './routes/api/sessions.router.js';
 import productsRouter from './routes/api/products.router.js';
 import Message from './dao/dbManagers/messages.js';
-import inistializePassport from './config/passport.config.js';
+import initializePassport from './config/passport.config.js';
 
 export const app = express();
 const port = 8080;
@@ -42,7 +42,7 @@ app.use(session({
 	saveUninitialized: true
 }));
 
-inistializePassport();
+initializePassport();
 app.use(passport.initialize());
 app.use(passport.session());
 
