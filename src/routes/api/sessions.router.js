@@ -81,4 +81,8 @@ router.get('/githubcallback', passport.authenticate('github', { failureRedirect:
     res.redirect('/');
 });
 
+router.get('/current', privateAccess, (req, res) => {
+    res.send(req.session.user)
+});
+
 export default router;
