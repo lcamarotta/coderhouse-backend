@@ -27,7 +27,8 @@ router.post('/login', publicAccess, passport.authenticate('login', { failureRedi
             name: req.user.first_name + ' ' + req.user.last_name,
             role: req.user.role,
             age: req.user.age,
-            email: req.user.email
+            email: req.user.email,
+            cart: req.user.cart
         }
         res.send({ status: 'success', payload: req.session.user });
     } catch (error) {
@@ -74,7 +75,8 @@ router.get('/githubcallback', passport.authenticate('github', { failureRedirect:
         name: req.user.first_name + ' ' + req.user.last_name,
         role: req.user.role,
         age: req.user.age,
-        email: req.user.email
+        email: req.user.email,
+        cart: req.user.cart
     }
     res.redirect('/');
 });

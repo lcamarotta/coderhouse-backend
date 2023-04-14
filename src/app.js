@@ -29,7 +29,7 @@ app.set('view engine', 'handlebars');
 
 app.use(express.static(rootDir('/src/public')));
 app.use(express.json());
-app.use(express.urlencoded({extended:true}));
+app.use(express.urlencoded({ extended:true }));
 
 app.use(session({
 	store: MongoStore.create({
@@ -61,17 +61,17 @@ io.on('connection', async socket => {
 	const address = socket.handshake.address;
 	console.log(`New client from ${address}`)
 	
-	const messageDB = new Message;
+	const messageManager = new Message;
 
 	socket.on('authenticated', async () => {
-		const messages = await messageDB.getAll();
+		const messages = await messageManager.getAll();
 		socket.emit('messagesLog', messages)
 	});
 
 	socket.on('newMessage', async data =>{
 		io.emit('messagesLog', [data])
 		try {
-			await messageDB.save(data)
+			await messageManager.save(data)
 		} catch (error) {
 			throw new errorHandler(500, `${error}`)
 		}

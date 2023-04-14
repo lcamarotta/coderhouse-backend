@@ -24,24 +24,6 @@ router.get('/:cid', async(req,res) => {
 	}
 });
 
-router.post('/', async(req, res) => {
-	try {
-		const result = await cartManager.create();
-		res
-			.send({
-				status: 'Success',
-				payload: result
-			});
-	} catch (error) {
-		res
-			.status(error.httpStatusCode || 500)
-			.send({
-				status: `Error ${error.httpStatusCode || 500}`,
-				payload: `${error.msg || error} `
-			});
-	}
-});
-
 router.post('/:cid/product/:pid', async(req, res) => {
 	const { cid, pid } = req.params;
 	try {

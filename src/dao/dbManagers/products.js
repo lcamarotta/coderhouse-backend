@@ -27,72 +27,52 @@ export default class Product {
 			}
 		}
 
-		try {
-			const result = await productModel.paginate(queryObject, options);
+		const result = await productModel.paginate(queryObject, options);
 
-			if(options.page > result.totalPages || options.page <= 0 || isNaN(options.page)) throw new errorHandler(400, 'Incorrect page request');
-			
-			let link = `?limit=${options.limit}`;
-			if(options.sort) link = `${link}&sort=${options.sort.price}`;
-			if(queryString) link = `${link}&query=${queryString}`;
+		if(options.page > result.totalPages || options.page <= 0 || isNaN(options.page)) throw new errorHandler(400, 'Incorrect page request');
+		
+		let link = `?limit=${options.limit}`;
+		if(options.sort) link = `${link}&sort=${options.sort.price}`;
+		if(queryString) link = `${link}&query=${queryString}`;
 
-			let prevLink = link;
-			let nextLink = link;
-			prevLink = result.hasPrevPage ? `${link}&page=${result.prevPage}` : null;
-			nextLink = result.hasNextPage ? `${link}&page=${result.nextPage}` : null;
-			
-			return {
-				...result,
-				prevLink,
-				nextLink
-			};
-		} catch (error) {
-			throw new errorHandler(error.httpStatusCode || 500, `${error.msg || error}`)
-		}
+		let prevLink = link;
+		let nextLink = link;
+		prevLink = result.hasPrevPage ? `${link}&page=${result.prevPage}` : null;
+		nextLink = result.hasNextPage ? `${link}&page=${result.nextPage}` : null;
+		
+		return {
+			...result,
+			prevLink,
+			nextLink
+		};
 	}
 	
 	getById = async (id) => {
-		try {
-			const products = await productModel.find({ _id: id });
-			return products.map(product => product.toObject());
-		} catch (error) {
-			throw new errorHandler(error.httpStatusCode || 500, `${error.msg || error}`)
-		}
+		const products = await productModel.find({ _id: id });
+		return products.map(product => product.toObject());
 	}
 
 	save = async (product) => {
-		try {
-			const result = await productModel.create(product);
-			const socketData = await this.get();
-			const io = app.get('socketio');
-			io.emit('productEvent', socketData)
-			return result;
-		} catch (error) {
-			throw new errorHandler(error.httpStatusCode || 500, `${error.msg || error}`)
-		}
+		const result = await productModel.create(product);
+		const socketData = await this.get();
+		const io = app.get('socketio');
+		io.emit('productEvent', socketData)
+		return result;
 	}
 	
 	update = async (id, product) => {
-		try {
-			const result = await productModel.updateOne({_id: id}, product);
-			const socketData = await this.get();
-			const io = app.get('socketio');
-			io.emit('productEvent', socketData)
-			return result;
-		} catch (error) {
-			throw new errorHandler(error.httpStatusCode || 500, `${error.msg || error}`)
-		}
+		const result = await productModel.updateOne({_id: id}, product);
+		const socketData = await this.get();
+		const io = app.get('socketio');
+		io.emit('productEvent', socketData)
+		return result;
 	}
 	
 	delete = async (id) => {
-		try {
-			const result = await productModel.deleteOne({_id: id});
-			const socketData = await this.get();
-			const io = app.get('socketio');
-			io.emit('productEvent', socketData)
-			return result;
-		} catch (error) {
-			throw new errorHandler(error.httpStatusCode || 500, `${error.msg || error}`)
-		}
+		const result = await productModel.deleteOne({_id: id});
+		const socketData = await this.get();
+		const io = app.get('socketio');
+		io.emit('productEvent', socketData)
+		return result;
 	}
 }
