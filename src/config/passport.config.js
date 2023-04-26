@@ -1,11 +1,10 @@
 import passport from "passport";
 import local from "passport-local";
 import GitHubStrategy from "passport-github2"
-import User from "../dao/dbManagers/users.js";
+import config from '../config/config.js';
 import { checkPwd, createHash } from "../utils.js";
-import { cartModel } from "../dao/models/carts.js";
+import { createUserService, existsUserService, getUserService, findUserByIdService } from "../services/sessions.service.js";
 
-const userManager = new User;
 const LocalStrategy = local.Strategy;
 
 const initializePassport = () => {
@@ -14,14 +13,14 @@ const initializePassport = () => {
     });
 
     passport.deserializeUser(async (id, done) => {
-        const user = await userManager.findById(id);
+        const user = await findUserByIdService(id);
         done(null, user);
     });
 
     passport.use('register', new LocalStrategy({ passReqToCallback: true, usernameField: 'email' }, async(req, username, password, done) => {
             const { first_name, last_name, email, age} = req.body;
             try {
-                if(await userManager.exists(username)){
+                if(await existsUserService(username)){
                     console.log('User already exists');
                     return done(null, false);
                 };
@@ -34,7 +33,7 @@ const initializePassport = () => {
                     password: createHash(password),
                     cart: cart._id
                 };
-                const result = await userManager.create(newUser);
+                const result = await createUserService(newUser);
                 return done(null, result)
             } catch (error) {
                 return done(`Error getting user ${error}`);
@@ -44,11 +43,11 @@ const initializePassport = () => {
 
     passport.use('login', new LocalStrategy({ usernameField: 'email' }, async(username, password, done) => {
         try {
-            if(!await userManager.exists(username)){
+            if(!await existsUserService(username)){
                 console.log('User does not exist');
                 return done(null, false);
             };
-            const user = await userManager.get(username)
+            const user = await getUserService(username);
             if(!checkPwd(user, password)) return done(null, false);
             return done(null, user);
         } catch (error) {
@@ -58,14 +57,14 @@ const initializePassport = () => {
     }))
 
     passport.use('github', new GitHubStrategy({
-        clientID:"Iv1.334ccdc8185cbca4",
-        clientSecret:"9072f6b6d06e7621b08794ef00b1ee1587d3b978",
+        clientID: config.githubClientId,
+        clientSecret: config.githubClientSecret,
         scope: ['user:email'],
-        callbackURL:"http://localhost:8080/api/sessions/githubcallback"
+        callbackURL:`http://localhost:${config.port}/api/sessions/githubcallback`
     }, async(accessToken, refreshToken, profile, done) => {
         try {
             console.log(profile);
-            let user = await userManager.get(profile.emails[0].value);
+            let user = await getUserService(profile.emails[0].value);
             if (!user) {
                 const cart = await cartModel.create({ products: [] });
                 const name = profile._json.name.split(' ');
@@ -78,7 +77,7 @@ const initializePassport = () => {
                     password: '',
                     cart: cart._id
                 }
-                const result = await userManager.create(newUser);
+                const result = await createUserService(newUser);
                 done(null, result);
             } else {
                 done(null, user);

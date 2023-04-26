@@ -1,7 +1,7 @@
-import { errorHandler } from "../../utils.js";
-import { cartModel } from "../models/carts.js";
+import { errorWithStatusCode as err } from "../../utils.js";
+import { cartModel } from "./models/carts.js";
 
-export default class Cart {
+export default class MongoCartDao {
 	constructor() {
 		console.log('DB Manager - CARTS')
 	}
@@ -12,7 +12,7 @@ export default class Cart {
 
 	getById = async (cartId) => {
 		const result = await cartModel.findOne({ _id: cartId }).populate('products.product');
-		if(!result) throw new errorHandler(400, 'Cart ID not found');
+		if(!result) throw new err('Cart ID not found', 400);
 		return result;
 	}
 
@@ -32,7 +32,7 @@ export default class Cart {
 
 	isProductInCart = async (cartId, productId) => {
 		const cart = await cartModel.findOne({ _id: cartId });
-		if(!cart) throw new errorHandler(400, 'Cart ID not found');
+		if(!cart) throw new err('Cart ID not found', 400);
 		const index = cart.products.findIndex(product => product.product.toString() == productId);
 		return index;
 
@@ -47,7 +47,7 @@ export default class Cart {
 	deleteById = async (cartId, productId) => {
 		const cart = await cartModel.findOne({ _id: cartId });
 		const index = await this.isProductInCart(cartId, productId);
-		if(index == -1) throw new errorHandler(400, 'Product is not in cart');
+		if(index == -1) throw new err('Product is not in cart', 400);
 		cart.products.splice(index, 1);
 		return await cartModel.updateOne({_id: cartId}, cart);
 	}

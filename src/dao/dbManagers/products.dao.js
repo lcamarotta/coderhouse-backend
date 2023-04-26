@@ -1,8 +1,7 @@
-import { errorHandler } from "../../utils.js";
-import { productModel } from "../models/products.js";
-import { app } from "../../app.js"
+import { errorWithStatusCode as err } from "../../utils.js";
+import { productModel } from "./models/products.js";
 
-export default class Product {
+export default class MongoProductDao {
 	constructor() {
 		console.log('DB Manager - PRODUCTS')
 	}
@@ -29,7 +28,7 @@ export default class Product {
 
 		const result = await productModel.paginate(queryObject, options);
 
-		if(options.page > result.totalPages || options.page <= 0 || isNaN(options.page)) throw new errorHandler(400, 'Incorrect page request');
+		if(options.page > result.totalPages || options.page <= 0 || isNaN(options.page)) throw new err('Incorrect page request', 400);
 		
 		let link = `?limit=${options.limit}`;
 		if(options.sort) link = `${link}&sort=${options.sort.price}`;
@@ -54,25 +53,16 @@ export default class Product {
 
 	save = async (product) => {
 		const result = await productModel.create(product);
-		const socketData = await this.get();
-		const io = app.get('socketio');
-		io.emit('productEvent', socketData)
 		return result;
 	}
 	
 	update = async (id, product) => {
 		const result = await productModel.updateOne({_id: id}, product);
-		const socketData = await this.get();
-		const io = app.get('socketio');
-		io.emit('productEvent', socketData)
 		return result;
 	}
 	
 	delete = async (id) => {
 		const result = await productModel.deleteOne({_id: id});
-		const socketData = await this.get();
-		const io = app.get('socketio');
-		io.emit('productEvent', socketData)
 		return result;
 	}
 }
