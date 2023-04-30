@@ -1,9 +1,7 @@
 import userModel from "./models/users.js";
 
 export default class MongoUserDao {
-	constructor() {
-		console.log('DB Manager - USERS')
-	};
+	constructor() {};
 
 	exists = async (email) => {
         return await userModel.findOne({ email }) ? true : false;

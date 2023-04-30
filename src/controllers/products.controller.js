@@ -11,7 +11,7 @@ const getAll = async(req, res) => {
 		const result = await getAllService(query, options);
 		res.send({ status: 'success', ...result });
     } catch (error) {
-        res.status(error.httpStatusCode || 500).send(error);
+        res.status(error.httpStatusCode || 500).send({ error: error.message });
     }
 };
 
@@ -21,7 +21,7 @@ const getById = async(req, res) => {
 		const result = await getByIdService(pid);
 		res.send({ status: 'success', payload: result });
     } catch (error) {
-        res.status(error.httpStatusCode || 500).send(error);
+        res.status(error.httpStatusCode || 500).send({ error: error.message });
     }
 };
 
@@ -31,7 +31,7 @@ const addOne = async(req, res) => {
 		const result = await addOneService(product);
 		res.send({ status: 'success', payload: result });
     } catch (error) {
-        res.status(error.httpStatusCode || 500).send(error);
+        res.status(error.httpStatusCode || 500).send({ error: error.message });
     }
 };
 
@@ -42,7 +42,7 @@ const updateOneById = async(req, res) => {
 		const result = await updateOneByIdService(pid, product);
 		res.send({ status: 'success', payload: result });
     } catch (error) {
-        res.status(error.httpStatusCode || 500).send(error);
+        res.status(error.httpStatusCode || 500).send({ error: error.message });
     }
 };
 
@@ -52,7 +52,7 @@ const deleteOneById = async(req, res) => {
 		const result = await deleteOneByIdService(id);
 		res.send({ status: 'success', payload: result });
     } catch (error) {
-        res.status(error.httpStatusCode || 500).send(error);
+        res.status(error.httpStatusCode || 500).send({ error: error.message });
     }
 };
 

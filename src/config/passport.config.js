@@ -3,7 +3,7 @@ import local from "passport-local";
 import GitHubStrategy from "passport-github2"
 import config from '../config/config.js';
 import { checkPwd, createHash } from "../utils.js";
-import { createUserService, existsUserService, getUserService, findUserByIdService } from "../services/sessions.service.js";
+import { createUserService, existsUserService, getUserService, findUserByIdService } from "../services/sessions.services.js";
 
 const LocalStrategy = local.Strategy;
 
@@ -21,7 +21,7 @@ const initializePassport = () => {
             const { first_name, last_name, email, age} = req.body;
             try {
                 if(await existsUserService(username)){
-                    console.log('User already exists');
+                    console.warn('User already exists');
                     return done(null, false);
                 };
                 const cart = await cartModel.create({ products: [] });
@@ -44,14 +44,14 @@ const initializePassport = () => {
     passport.use('login', new LocalStrategy({ usernameField: 'email' }, async(username, password, done) => {
         try {
             if(!await existsUserService(username)){
-                console.log('User does not exist');
+                console.warn('User does not exist');
                 return done(null, false);
             };
             const user = await getUserService(username);
             if(!checkPwd(user, password)) return done(null, false);
             return done(null, user);
         } catch (error) {
-            console.log(error)
+            console.warn(error)
             return done(error);
         }
     }))
@@ -63,7 +63,6 @@ const initializePassport = () => {
         callbackURL:`http://localhost:${config.port}/api/sessions/githubcallback`
     }, async(accessToken, refreshToken, profile, done) => {
         try {
-            console.log(profile);
             let user = await getUserService(profile.emails[0].value);
             if (!user) {
                 const cart = await cartModel.create({ products: [] });
@@ -83,7 +82,7 @@ const initializePassport = () => {
                 done(null, user);
             }
         } catch (error) {
-            console.log(error)
+            console.warn(error)
             return done(error);
         }
     }));

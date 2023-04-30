@@ -5,7 +5,7 @@ const getCurrentUser = async(req, res) => {
     try {
         res.send(req.session.user);
     } catch (error) {
-        res.status(error.httpStatusCode || 500).send(error);
+        res.status(error.httpStatusCode || 500).send({ error: error.message });
     }
 };
 
@@ -16,17 +16,17 @@ const logout = async(req, res) => {
             res.redirect('/')
         });
     } catch (error) {
-        res.status(error.httpStatusCode || 500).send(error);
+        res.status(error.httpStatusCode || 500).send({ error: error.message });
     }
 };
 
 const failLogin = (req, res) => {
-    console.log('Failed login');
+    console.warn('Failed login');
     res.send({ error: 'failed login' })
 };
 
 const failRegister = (req, res) => {
-    console.log('Failed Strategy');
+    console.warn('Failed Strategy');
     res.send({ error: 'failed' })
 };
 
@@ -70,7 +70,7 @@ const loginByEmail = (
             }
             res.send({ status: 'success', payload: req.session.user });
         } catch (error) {
-            res.status(error.httpStatusCode || 500).send(error);
+            res.status(error.httpStatusCode || 500).send({ error: error.message });
         }
     }
 );

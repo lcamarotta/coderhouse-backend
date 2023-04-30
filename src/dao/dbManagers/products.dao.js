@@ -2,9 +2,7 @@ import { errorWithStatusCode as err } from "../../utils.js";
 import { productModel } from "./models/products.js";
 
 export default class MongoProductDao {
-	constructor() {
-		console.log('DB Manager - PRODUCTS')
-	}
+	constructor() {}
 
 	get = async (queryString, options) => {
 		

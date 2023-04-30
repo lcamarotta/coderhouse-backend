@@ -2,9 +2,7 @@ import { errorWithStatusCode as err } from "../../utils.js";
 import { cartModel } from "./models/carts.js";
 
 export default class MongoCartDao {
-	constructor() {
-		console.log('DB Manager - CARTS')
-	}
+	constructor() {}
 
 	create = async () => {
 		return await cartModel.create({ products: [] });
