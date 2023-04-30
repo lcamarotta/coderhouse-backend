@@ -14,7 +14,7 @@ import { mongoConnect, useMongoSession } from './dao/db.config.js';
 export const app = express();
 const port = Number(config.port);
 
-app.listen(port, () => console.log(`Server listening on port ${port}`));
+export const server = app.listen(port, () => console.log(`Server listening on port ${port}`));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended:true }));
@@ -25,7 +25,7 @@ useMongoSession();
 
 initializePassport();
 app.use(passport.initialize());
-app.use(passport.session());
+// app.use(passport.session());
 
 app.use('/api/carts', cartsRouter);
 app.use('/api/products', productsRouter);

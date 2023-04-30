@@ -2,14 +2,14 @@ import mongoose from 'mongoose';
 import MongoStore from 'connect-mongo';
 import session from 'express-session';
 import config from '../config/config.js';
-import { app } from '../app.js';
+import { app, server } from '../app.js';
 
 export async function mongoConnect() {
 	try {
 		await mongoose.connect(config.mongoUrl);
-		console.info('Connected to mongoDB');
+		console.info('Connected to mongoDBaaS');
 	} catch (error) {
-		console.error('MongoDB connection error', error)
+		server.close(function() { console.warn('Closing Server please fix error on mongoConnect func'); });
 	}
 }
 
