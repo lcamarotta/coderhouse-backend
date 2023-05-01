@@ -1,16 +1,16 @@
-import { PRODUCTDAO } from "../dao/index.js";
+import { addOneRepository, deleteOneByIdRepository, getAllRepository, getByIdRepository, updateOneByIdRepository } from "../repository/products.repository.js";
 import { errorWithStatusCode as err } from "../utils.js";
 
-const getAllService = async(query, options) => await PRODUCTDAO.get(query, options);
+const getAllService = async(query, options) => await getAllRepository(query, options);
 
-const getByIdService = async(pid) => await PRODUCTDAO.getById(pid);
+const getByIdService = async(pid) => await getByIdRepository(pid);
 
 const addOneService = async(product) => {
     const { title, category, price, stock, description, thumbnail, code } = product;
 	if(!title || !category || !price || !stock || !description || !thumbnail || !code){
 		throw new err('Incomplete Values', 400);
 	}
-    await PRODUCTDAO.save(product)
+    await addOneRepository(product);
 };
 
 const updateOneByIdService = async(pid, product) => {
@@ -18,10 +18,10 @@ const updateOneByIdService = async(pid, product) => {
 	if(!title || !category || !price || !stock || !description || !thumbnail || !code){
 		throw new err('Incomplete Values', 400);
 	}
-    await PRODUCTDAO.update(pid, product)
+    await updateOneByIdRepository(pid, product)
 };
 
-const deleteOneByIdService = async(id) => await PRODUCTDAO.delete(id);
+const deleteOneByIdService = async(id) => await deleteOneByIdRepository(id);
 
 
 export {

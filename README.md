@@ -23,7 +23,7 @@ Search the database for a product with PRODUCT-ID and returns it as an object.
 
 `` POST /api/products ``
 
-Requires authentication. This endpoint allows uploading products to database. Expects a JSON as follows.
+Requires admin authentication. This endpoint allows uploading products to database. Expects a JSON as follows.
 
 ````
 {
@@ -38,10 +38,10 @@ Requires authentication. This endpoint allows uploading products to database. Ex
 ````
 
 `` PUT /api/products/:PRODUCT-ID ``
-Requires authentication. This endpoint allows editing data of a product. Expects a JSON like above.
+Requires admin authentication. This endpoint allows editing data of a product. Expects a JSON like above.
 
 `` DELETE /api/products/:PRODUCT-ID ``
-Requires authentication. Delete a product from database.
+Requires admin authentication. Delete a product from database.
 
 #### User's cart
 `` GET /api/carts/:cid `` \

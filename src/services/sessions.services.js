@@ -1,9 +1,9 @@
-import { USERDAO } from "../dao/index.js";
+import { createUserRepository, existsUserRepository, findUserByIdRepository, getUserRepository } from "../repository/sessions.repository.js";
 
-const createUserService = async(newUser) => await USERDAO.create(newUser);
-const existsUserService = async(username) => await USERDAO.exists(username);
-const getUserService = async(username) => await USERDAO.get(username);
-const findUserByIdService = async(id) => await USERDAO.findById(id);
+const createUserService = async(newUser) => await createUserRepository(newUser);
+const existsUserService = async(username) => await existsUserRepository(username);
+const getUserService = async(username) => await getUserRepository(username);
+const findUserByIdService = async(id) => await findUserByIdRepository(id);
 
 export {
     createUserService,
