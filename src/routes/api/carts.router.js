@@ -3,14 +3,22 @@ import { getById, addOneProduct, addOrUpdateManyProducts, updateOneProduct, remo
 
 const router = Router();
 
-router.get('/:cid', getById);
+const privateAccess = (req, res, next) => {
+    if (!req.session.user) {
+        console.log('Must be authenticated');
+        return res.redirect('/login');
+    }
+    next();
+};
 
-router.post('/:cid/product/:pid', addOneProduct);
+router.get('/:cid', privateAccess, getById);
 
-router.put('/:cid', addOrUpdateManyProducts);
-router.put('/:cid/products/:pid', updateOneProduct);
+router.post('/:cid/product/:pid', privateAccess, addOneProduct);
 
-router.delete('/:cid', removeAllProducts);
-router.delete('/:cid/products/:pid', removeOneProduct);
+router.put('/:cid', privateAccess, addOrUpdateManyProducts);
+router.put('/:cid/products/:pid', privateAccess, updateOneProduct);
+
+router.delete('/:cid', privateAccess, removeAllProducts);
+router.delete('/:cid/products/:pid', privateAccess, removeOneProduct);
 
 export default router;

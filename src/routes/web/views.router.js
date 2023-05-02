@@ -4,12 +4,18 @@ import { productsPage, registerPage, loginPage, cartPage } from "../../controlle
 const router = Router();
 
 const publicAccess = (req, res, next) => {
-    if (req.session.user) return res.redirect('/products');
+    if (req.session.user) {
+        console.log('Already authenticated');
+        return res.redirect('/products');
+    }
     next();
 };
 
 const privateAccess = (req, res, next) => {
-    if (!req.session.user) return res.redirect('/login');
+    if (!req.session.user) {
+        console.log('Must be authenticated');
+        return res.redirect('/login');
+    }
     next();
 };
 
