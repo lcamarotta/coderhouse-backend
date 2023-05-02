@@ -18,7 +18,8 @@ router.get('/githubcallback', passport.authenticate('github', { failureRedirect:
         email: req.user.email,
         cart: req.user.cart
     }
-    res.redirect('/');
+    console.log(req.session.user)
+    res.redirect('/products');
 });
 
 router.post('/login', passport.authenticate('login', { failureRedirect: '/api/sessions/faillogin' }), loginByEmail);

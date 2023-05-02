@@ -12,7 +12,7 @@ const logout = async(req, res) => {
     try {
         req.session.destroy(error => {
             if (error) throw new err(`${error}`, 500);
-            res.redirect('/')
+            res.redirect('/products')
         });
     } catch (error) {
         res.status(error.httpStatusCode || 500).send({ error: error.message });

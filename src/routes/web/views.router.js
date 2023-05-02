@@ -4,7 +4,7 @@ import { productsPage, registerPage, loginPage, cartPage } from "../../controlle
 const router = Router();
 
 const publicAccess = (req, res, next) => {
-    if (req.session.user) return res.redirect('/');
+    if (req.session.user) return res.redirect('/products');
     next();
 };
 
@@ -12,8 +12,6 @@ const privateAccess = (req, res, next) => {
     if (!req.session.user) return res.redirect('/login');
     next();
 };
-
-router.get('/', privateAccess, productsPage);
 
 router.get('/products', privateAccess, productsPage);
 

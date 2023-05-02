@@ -21,7 +21,7 @@
         <li>Stock: {{this.stock}}</li>
         <li class="center"><img src={{this.thumbnail.[0]}} alt={{this.thumbnail}}></li>
         <li class="center">
-            <form action="/carts/{{../user.cart}}/product/{{this._id}}" method="post">
+            <form action="/api/carts/{{../user.cart}}/product/{{this._id}}" method="post">
                 <button type="submit">ADD TO CART</button>
             </form>
         </li>
