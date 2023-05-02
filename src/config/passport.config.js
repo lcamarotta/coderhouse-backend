@@ -43,6 +43,19 @@ const initializePassport = () => {
     ))
 
     passport.use('login', new LocalStrategy({ usernameField: 'email' }, async(username, password, done) => {
+        if (username === config.adminEmail && password === config.adminPassword) {
+            console.warn('.env admin logged in');
+            return done(null, {
+                _id: "6450702c60b6860df4642777",
+                first_name: 'SUPER',
+                last_name: 'ADMIN',
+                email: config.adminEmail,
+                age: '',
+                role: 'admin',
+                password: config.adminPassword,
+                cart: ''
+            });
+        }
         try {
             if(!await existsUserService(username)){
                 console.warn('User does not exist');
