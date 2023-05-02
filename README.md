@@ -1,7 +1,6 @@
 # 🤖  E-commerce back-end API
 #### My project for the 'back-end' course of coderhouse.
-This is a REST API with Node.js, Express and MongoDB I made to learn back-end programming. \
-It is intended to work as the back-end for an ecommerce single page aplication I made [here](https://github.com/lcamarotta/ecommerce-react_app).
+This is a REST API with Node.js, Express and MongoDB I made to learn back-end programming.
 
 ## Endpoints:
 #### Products
