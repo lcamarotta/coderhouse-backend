@@ -4,6 +4,7 @@ import GitHubStrategy from "passport-github2"
 import config from '../config/config.js';
 import { checkPwd, createHash } from "../utils.js";
 import { createUserService, existsUserService, getUserService, findUserByIdService } from "../services/sessions.services.js";
+import { createCartService } from "../services/carts.services.js";
 
 const LocalStrategy = local.Strategy;
 
@@ -24,7 +25,7 @@ const initializePassport = () => {
                     console.warn('User already exists');
                     return done(null, false);
                 };
-                const cart = await cartModel.create({ products: [] });
+                const cart = await createCartService();
                 const newUser = {
                     first_name,
                     last_name,
@@ -65,7 +66,7 @@ const initializePassport = () => {
         try {
             let user = await getUserService(profile.emails[0].value);
             if (!user) {
-                const cart = await cartModel.create({ products: [] });
+                const cart = await createCartService();
                 const name = profile._json.name.split(' ');
                     let lastname = name.length > 1 ? name[name.length-1] : '';
                 const newUser = {

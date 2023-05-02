@@ -1,4 +1,6 @@
-import { isProductInCartRepository, getByIdRepository, updateRepository, deleteAllRepository, deleteByIdRepository } from "../repository/carts.repository.js";
+import { isProductInCartRepository, getByIdRepository, updateRepository, deleteAllRepository, deleteByIdRepository, createCartRepository } from "../repository/carts.repository.js";
+
+const createCartService = async() => await createCartRepository();
 
 const isProductInCartService = async(cid, pid) => await isProductInCartRepository(cid, pid);
 
@@ -19,6 +21,7 @@ const deleteAllService = async(cid) => await deleteAllRepository(cid);
 const deleteByIdService = async(cid, pid) => await deleteByIdRepository(cid, pid);
 
 export {
+    createCartService,
     isProductInCartService,
     getByIdService,
     updateService,

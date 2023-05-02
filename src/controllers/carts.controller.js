@@ -14,6 +14,7 @@ const getById = async(req, res) => {
 const addOneProduct = async(req, res) => {
     const { cid, pid } = req.params;
 	try {
+        console.log('hola')
 		const result = await updateService(cid, pid);
 		res.send({ status: 'Success', payload: result });
     } catch (error) {
