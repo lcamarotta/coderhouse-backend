@@ -26,7 +26,7 @@ router.get('/faillogin', publicAccess, failLogin);
 router.get('/failregister', publicAccess, failRegister);
 
 router.get('/github', publicAccess, passport.authenticate('github', { scope: ['user: email'] }), (req, res) => {});
-router.get('/githubcallback', publicAccess, passport.authenticate('github', { failureRedirect: '/login' }), (req, res) => {
+router.get('/githubcallback', publicAccess, passport.authenticate('github', { failureRedirect: '/api/sessions/faillogin' }), (req, res) => {
     req.session.user = {
         name: req.user.first_name + ' ' + req.user.last_name,
         role: req.user.role,
@@ -34,7 +34,7 @@ router.get('/githubcallback', publicAccess, passport.authenticate('github', { fa
         email: req.user.email,
         cart: req.user.cart
     }
-    res.redirect('/products');
+    res.send({ status: 'success' });
 });
 
 router.post('/login', publicAccess, passport.authenticate('login', { failureRedirect: '/api/sessions/faillogin' }), loginByEmail);
