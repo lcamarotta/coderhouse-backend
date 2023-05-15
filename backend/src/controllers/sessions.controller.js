@@ -21,12 +21,12 @@ const logout = async(req, res) => {
 
 const failLogin = (req, res) => {
     console.warn('Failed login');
-    res.send({ error: 'failed login' })
+    res.status(500).send({ error: 'failed login' })
 };
 
 const failRegister = (req, res) => {
-    console.warn('Failed Strategy');
-    res.send({ error: 'failed' })
+    console.warn('Failed register');
+    res.status(500).send({ error: 'failed' })
 };
 
 const registerNewUser = (req, res) => {
@@ -43,6 +43,7 @@ const loginByEmail = async (req, res) => {
             email: req.user.email,
             cart: req.user.cart
         }
+        const userSession = req.user.session;
         res.send({ status: 'success', payload: req.session.user });
     } catch (error) {
         res.status(error.httpStatusCode || 500).send({ error: error.message });

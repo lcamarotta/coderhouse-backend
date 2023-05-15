@@ -21,7 +21,13 @@ export function useMongoSession() {
 			ttl: 60
 		}),
 		secret: 'coderbackendSecret',
+		name: 'session-id', // cookies name to be put in "key" field in postman
+		cookie: {
+		  maxAge: 1000 * 60 * 5, // this is when our cookies will expired and the session will not be valid anymore (user will be log out)
+		  sameSite: false,
+		  secure: false, // to turn on just in production
+		},
 		resave: true,
-		saveUninitialized: true
+		saveUninitialized: false
 	}));
 }

@@ -12,9 +12,9 @@ const getById = async(req, res) => {
 };
 
 const addOneProduct = async(req, res) => {
-    const { cid, pid } = req.params;
+    const { cid, pid, quantity } = req.params;
 	try {
-		const result = await updateService(cid, pid);
+		const result = await updateService(cid, pid, quantity);
 		res.send({ status: 'Success', payload: result });
     } catch (error) {
         res.status(error.httpStatusCode || 500).send({ error: error.message });

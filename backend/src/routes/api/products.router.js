@@ -6,7 +6,7 @@ const router = Router();
 const privateAccess = (req, res, next) => {
     if (!req.session.user) {
         console.log('Must be authenticated');
-        return res.redirect('/login');
+        return res.status(401).send('Must be authenticated');
     }
     next();
 };
@@ -19,8 +19,8 @@ const adminAccess = (req, res, next) => {
     next();
 };
 
-router.get('/', privateAccess, getAll);
-router.get('/:pid', privateAccess, getById);
+router.get('/', getAll);
+router.get('/:pid', getById);
 
 router.post('/', privateAccess, adminAccess, addOne);
 

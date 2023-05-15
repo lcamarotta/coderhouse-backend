@@ -1,0 +1,50 @@
+// This sass file overwrites bootstrap defaults //
+
+// 1. Include functions first (so you can manipulate colors, SVGs, calc, etc)
+@import "../node_modules/bootstrap/scss/functions";
+
+// 2. Include any default variable overrides here.
+$green: #44d62c;
+$primary: $green;
+
+// 3. Include remainder of required Bootstrap stylesheets
+@import "../node_modules/bootstrap/scss/variables";
+@import "../node_modules/bootstrap/scss/mixins";
+
+// 4. Include any optional Bootstrap components as you like
+@import "../node_modules/bootstrap/scss/buttons";
+@import "../node_modules/bootstrap/scss/dropdown";
+@import "../node_modules/bootstrap/scss/maps";
+@import "../node_modules/bootstrap/scss/root";
+
+// 5. Add additional custom code here
+.text-primary:hover{
+  color: rgba(40, 167, 70, 0.5) !important;
+}
+
+.form-control:focus {
+  border-color: $green;
+  box-shadow: 0 0 0 0.3rem rgba(40, 167, 69, 0.25);
+}
+
+.ItemDetailCard img{
+  align-self: center;
+  max-width: 22rem;
+}
+
+.loading-text{
+  display: flex;
+  margin-top: 3rem;
+  justify-content: center;
+  font-weight: 500;
+  font-size: 1.5rem;
+  font-style: italic;
+}
+
+nav{
+  .brand-text{
+    @media screen and (max-width: 576px) {
+      display: none;  
+    }
+  }
+}

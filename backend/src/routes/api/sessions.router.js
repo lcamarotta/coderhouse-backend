@@ -15,7 +15,7 @@ const publicAccess = (req, res, next) => {
 const privateAccess = (req, res, next) => {
     if (!req.session.user) {
         console.log('Must be authenticated');
-        return res.redirect('/login');
+        return res.status(401).send('Must be authenticated');
     }
     next();
 };
@@ -37,7 +37,7 @@ router.get('/githubcallback', publicAccess, passport.authenticate('github', { fa
     res.send({ status: 'success' });
 });
 
-router.post('/login', publicAccess, passport.authenticate('login', { failureRedirect: '/api/sessions/faillogin' }), loginByEmail);
+router.post('/login', publicAccess, passport.authenticate('login'), loginByEmail);
 router.post('/register', publicAccess, passport.authenticate('register', { failureRedirect: '/api/sessions/failregister' }), registerNewUser);
 
 export default router;
