@@ -1,15 +1,26 @@
 {
-  "name": "ecommerce",
-  "private": true,
-  "version": "0.0.0",
+  "name": "ecommerce-frontend",
+  "version": "1.0.0",
+  "description": "Sample frontend for a mock ecommerce website.",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lcamarotta/coderhouse-backend.git"
+  },
+  "keywords": [
+    "ecommerce",
+    "frontend"
+  ],
+  "author": "Lucas Camarotta",
+  "license": "ISC",
+  "homepage": "https://github.com/lcamarotta/coderhouse-backend#readme",
+  
   "dependencies": {
-    "axios": "^1.4.0",
     "bootstrap": "^5.2.3",
     "react": "^18.2.0",
     "react-bootstrap": "^2.6.0",

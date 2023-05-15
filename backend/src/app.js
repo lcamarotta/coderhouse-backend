@@ -2,11 +2,8 @@
 import express from 'express';
 import passport from 'passport';
 import cors from 'cors';
-import handlebars from 'express-handlebars';
-import cookieParser from 'cookie-parser';
 
 //files
-import { rootDir } from './utils.js';
 import config from './config/config.js';
 import cartsRouter from './routes/api/carts.router.js';
 import sessionsRouter from './routes/api/sessions.router.js';
@@ -24,15 +21,10 @@ useMongoSession();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended:true }));
-app.use(express.static(rootDir('/src/public')));
 app.use(cors({
-    credentials: true, // Enable credentials (cookies)
+  origin: config.frontendUrlCors,
+  credentials: true, // Enable credentials (cookies)
   }));
-app.use(cookieParser());
-
-app.engine('handlebars', handlebars.engine());
-app.set('views', rootDir('/src/views'));
-app.set('view engine', 'handlebars');
 
 initializePassport();
 app.use(passport.initialize());

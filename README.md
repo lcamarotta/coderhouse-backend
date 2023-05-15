@@ -17,24 +17,10 @@ Example: `` /api/products?limit=5&page=1&query=category:WORK&sort=asc ``
 Returns an object containing mongoose-paginate-v2 data regarding pagination and an array of products as objects.
 
 `` GET /api/products/:PRODUCT-ID ``
-
 Search the database for a product with PRODUCT-ID and returns it as an object.
 
 `` POST /api/products ``
-
-Requires admin authentication. This endpoint allows uploading products to database. Expects a JSON as follows.
-
-````
-{
-    "thumbnail": ["linkToImage", "linkToImage"],
-    "category": "STRING",
-    "price": NUMBER,  
-    "stock": NUMBER,
-    "code": "UNIQUE STRING",
-    "description": "STRING",
-    "title": "STRING"
-}
-````
+Requires admin authentication. This endpoint allows uploading products to database.
 
 `` PUT /api/products/:PRODUCT-ID ``
 Requires admin authentication. This endpoint allows editing data of a product. Expects a JSON like above.

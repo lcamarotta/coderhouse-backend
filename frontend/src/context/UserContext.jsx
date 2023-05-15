@@ -17,7 +17,7 @@ const UserContextProvider = ({ children }) => {
         setUserSession(response);
         console.log('Logged in as', response.name)
     }
-    fetchUser()
+    // fetchUser()
   }, [userSession])
 
   return (

@@ -2,7 +2,8 @@ import { errorWithStatusCode as err } from "../utils.js";
 
 const getCurrentUser = async(req, res) => {
     try {
-        res.send(req.session.user);
+        console.log(req.session.user)
+        res.send({ status: 'success', payload: req.session.user });
     } catch (error) {
         res.status(error.httpStatusCode || 500).send({ error: error.message });
     }

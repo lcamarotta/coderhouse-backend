@@ -6,6 +6,7 @@ const getProducts = async(query, queryData, page) => {
     const url = queryData == 'all' ? `${baseUrl}/api/products?limit=6&page=${page}&sort=asc` : `${baseUrl}/api/products?limit=6&page=${page}&query=category:${queryData}&sort=asc`
     let response = await fetch(url);
     response = response.json();
+    getUser()
     return response;
   };
   
@@ -43,10 +44,11 @@ const getUser = async() => {
         'Cookie': 'session-id',
       },
     })
-    if (!response.ok) return response;
-    response = await response.json();
+    // if (!response.ok) return response;
+    // response = await response.json();
+    console.log('consolelog getUser',await response.json());
     console.log('consolelog getUser',response);
-    return response.payload;
+    // return response.payload;
   } catch (error) {
     console.error('There was an error getUser', error);
     return;
@@ -57,6 +59,7 @@ const emailLogin = async(formData) => {
   try {
     let response = await fetch(`${baseUrl}/api/sessions/login`, {
       method: 'POST',
+      credentials: 'include',
       body: JSON.stringify(formData),
       headers: {
         'Content-Type': 'application/json'
