@@ -3,24 +3,26 @@ import { Link } from "react-router-dom";
 import { MdShoppingCart } from "react-icons/md";
 import {  Navbar } from 'react-bootstrap';
 
-import { CartContext } from "../context/CartContext";
-import { UserContext } from '../context/UserContext';
+import { CartContext } from "../../context/CartContext";
+import { UserContext } from '../../context/UserContext';
 
 const NavWidget = () => {
   const userCtx = useContext(UserContext);
   const cartCtx = useContext(CartContext);
 
-  const cartIconLink = userCtx.userSession ? '/cart' : '/loginpage';
+  const cartIconLink = userCtx.userSession ? '/user/cart' : '/user/login';
 
   function showUsername() {
     return (
-      <Navbar.Text className='me-3 text-success'>Welcome {userCtx.userSession.name}</Navbar.Text>
+      <Link to="/user/profile" className='text-decoration-none mx-3'>
+        <Navbar.Text className='me-3 text-success'>Welcome {userCtx.userSession.name}</Navbar.Text>
+      </Link>
     )
   }
 
   function showLoginButton() {
     return (
-      <Link to="/loginpage" className='text-decoration-none mx-3'>Log in</Link>
+      <Link to="/user/login" className='text-decoration-none mx-3'>Log in</Link>
     )
   }
   

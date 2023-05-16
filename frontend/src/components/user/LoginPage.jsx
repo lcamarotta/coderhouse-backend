@@ -3,8 +3,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Col, Container, Row, Button, Form } from 'react-bootstrap'
 import { ToastContainer, toast } from 'react-toastify';
 
-import { emailLogin } from '../utils/fetchAPI';
-import { UserContext } from '../context/UserContext';
+import { emailLogin } from '../../utils/fetchAPI';
+import { UserContext } from '../../context/UserContext';
 
 const LoginPage = () => {
 
@@ -34,20 +34,9 @@ const LoginPage = () => {
         });
     }
     else{
-      toast.success(`Logged in as ${response.name}`, {
-        position: "top-right",
-        autoClose: 2000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "colored",
-      });
       userCtx.setUserSession(response);
-      setTimeout( () => {
-        navigate('/all/1')
-      }, 3000)
+      userCtx.setIsUserLogged(true);
+      navigate('/all/1');
     }
   }
 
@@ -86,7 +75,7 @@ const LoginPage = () => {
                 </a>
           </Col>
           <Col sm={3} className='text-center m-1'>                
-            <Link to={'/registerpage'} className='text-decoration-none text-reset'>
+            <Link to={'/user/register'} className='text-decoration-none text-reset'>
               <Button variant='outline-info'>Sign up here!</Button>
             </Link>
           </Col>

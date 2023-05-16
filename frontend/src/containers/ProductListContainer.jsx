@@ -2,7 +2,8 @@
 
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import ProductList from '../components/ProductList';
+
+import ProductList from '../components/product/ProductList';
 import { getProducts } from '../utils/fetchAPI';
 
 const ProductListContainer = () => {

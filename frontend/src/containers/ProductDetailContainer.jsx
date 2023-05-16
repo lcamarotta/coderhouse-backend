@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 
 import { getProducts } from "../utils/fetchAPI";
-import ProductDetail from "../components/ProductDetail";
+import ProductDetail from "../components/product/ProductDetail";
 import LoadingScreen from "../components/LoadingScreen";
 
 const ProductDetailContainer = () => {

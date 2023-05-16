@@ -2,7 +2,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Col, Container, Row, Button, Form } from 'react-bootstrap';
 import { toast, ToastContainer } from 'react-toastify';
 
-import { registerUser } from '../utils/fetchAPI';
+import { registerUser } from '../../utils/fetchAPI';
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -57,7 +57,7 @@ const LoginPage = () => {
         theme: "colored",
       });
       setTimeout( () => {
-        navigate('/loginpage')
+        navigate('/user/login')
       }, 5000)
     }
   }
@@ -118,7 +118,7 @@ const LoginPage = () => {
 
       <Row className="my-3 justify-content-center">
           <Col sm={3} className='text-center my-1'>
-                <Link to={'/loginpage'} className='text-decoration-none text-reset'>
+                <Link to={'/user/login'} className='text-decoration-none text-reset'>
                   <Button variant='outline-info'>Log In instead</Button>
                 </Link>
           </Col>

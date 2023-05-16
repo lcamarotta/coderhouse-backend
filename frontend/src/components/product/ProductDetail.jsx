@@ -7,7 +7,7 @@ import { Container, Row, Col, Card, Button } from 'react-bootstrap';
 import { ToastContainer, toast } from 'react-toastify';
 
 import ProductCount from './ProductCount';
-import { CartContext } from '../context/CartContext';
+import { CartContext } from '../../context/CartContext';
 
 const ProductDetail = ( product ) => {
 
@@ -48,7 +48,7 @@ const ProductDetail = ( product ) => {
               </Row>
               { checkoutButton
                ?
-                <Link to={'/cart'} className='text-decoration-none text-reset'><Button variant='outline-info'>Checkout</Button></Link>
+                <Link to={'/user/cart'} className='text-decoration-none text-reset'><Button variant='outline-info'>Checkout</Button></Link>
                :
                 <ProductCount stock={ product.stock } checkoutReady={ checkoutReady }/>
               }

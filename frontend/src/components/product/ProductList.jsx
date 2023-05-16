@@ -2,8 +2,9 @@
 
 import { Button, Container, Row, Col } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
+
 import Product from './Product';
-import LoadingScreen from './LoadingScreen';
+import LoadingScreen from '../LoadingScreen';
 
 const ProductList = ({ productsToRender, category, page, prevPage, nextPage } ) => {
 

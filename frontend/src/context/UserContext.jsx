@@ -6,27 +6,25 @@ export const UserContext = createContext({})
 const UserContextProvider = ({ children }) => {
 
   const [userSession, setUserSession] = useState(false);
+  const [isUserLogged, setIsUserLogged] = useState(false);
 
   useEffect(() => {
     async function fetchUser() {
       const user = await getUser();
-      const result = user.message == 'not logged in' ? false : user;
-      setUserSession(result);
+      if(user.message == 'not logged in'){
+        setUserSession(false);
+        setIsUserLogged(false);
+      }else{
+        setUserSession(user);
+        setIsUserLogged(true);
+        console.log('Logged in as ',user.name);
+      }
     }
     fetchUser();
   }, [])
 
-  useEffect(() => {
-    async function fetchUser() {
-      const user = await getUser();
-      const result = user.message == 'not logged in' ? 'Not Logged In' : userSession.name;
-      console.log(result);
-    }
-    fetchUser();
-  }, [userSession])
-
   return (
-    <UserContext.Provider value={{ userSession, setUserSession }}>
+    <UserContext.Provider value={{ userSession, setUserSession, isUserLogged, setIsUserLogged }}>
         { children }
     </UserContext.Provider>
   )

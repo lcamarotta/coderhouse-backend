@@ -5,11 +5,10 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import CartContextProvider from "./context/CartContext";
 import UserContextProvider from "./context/UserContext";
 import NotFound from "./components/NotFound"
-import NavBar from "./components/NavBar";
+import NavBar from "./components/navbar/NavBar";
 import ProductListContainer from "./containers/ProductListContainer";
 import ProductDetailContainer from "./containers/ProductDetailContainer";
-import LoginPage from "./components/LoginPage";
-import RegisterPage from "./components/RegisterPage";
+import UserPageContainer from "./containers/UserPageContainer";
 
 const App = () => {
   return (
@@ -22,8 +21,7 @@ const App = () => {
             <Route path="/" element={<ProductListContainer/>}/>
             <Route path="/:category/:page" element={<ProductListContainer/>}/>
             <Route path="/product/:productId" element={<ProductDetailContainer/>} />
-            <Route path="/loginpage" element={<LoginPage/>} />
-            <Route path="/registerpage" element={<RegisterPage/>} />
+            <Route path="/user/:page" element={<UserPageContainer/>} />
           </Routes>
         </BrowserRouter>
       </CartContextProvider>
