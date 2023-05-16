@@ -1,6 +1,7 @@
-import { Nav, Navbar, NavDropdown, Container, Button, Form } from 'react-bootstrap';
+import { Nav, Navbar, NavDropdown, Container } from 'react-bootstrap';
 import { Link } from "react-router-dom";
-import CartWidget from './CartWidget';
+
+import NavWidget from './NavWidget';
 
 
 const NavBar = () => {
@@ -21,8 +22,8 @@ const NavBar = () => {
           </Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
-          <Nav className="ms-4 me-auto align-items-center">
-            <NavDropdown title="Search by Use" id="basic-nav-dropdown">
+          <Nav className="ms-3 me-auto align-items-center">
+            <NavDropdown title="Categories" id="basic-nav-dropdown">
               <div className="dropdown-item">
                 <Link to="/work/1" className='text-decoration-none text-reset'>Work</Link>
               </div>
@@ -37,8 +38,7 @@ const NavBar = () => {
               </div>
             </NavDropdown>
           </Nav>
-          <Link to="/loginpage" className='text-decoration-none mx-3'>Log in</Link>
-          <CartWidget/>
+          <NavWidget/>
         </Navbar.Collapse>
       </Container>
     </Navbar>

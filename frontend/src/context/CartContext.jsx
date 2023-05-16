@@ -12,11 +12,12 @@ const CartContextProvider = ({ children }) => {
     addToCartAPI(userCart._id, product._id, quantity);
   }
 
-  // const totalProducts = () => {
+  const totalProducts = () => {
   //   let productsQty = 0
   //   cartList.map( product => productsQty = product.qty + productsQty )
   //   return productsQty
-  // }
+   return 0
+  }
   
   // const thisProductTotalPrice = (product) => {
   //   return product.qty * product.price
@@ -76,7 +77,7 @@ const CartContextProvider = ({ children }) => {
 
   return (
     // <CartContext.Provider value={{ cartList, orderID, addToCart, totalProducts, thisProductTotalPrice, totalPrice, deleteAll, deleteProduct, checkout }}>
-    <CartContext.Provider value={{ cartList, addToCart }}>
+    <CartContext.Provider value={{ cartList, addToCart, totalProducts}}>
       { children }
     </CartContext.Provider>
   )
