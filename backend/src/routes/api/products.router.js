@@ -1,31 +1,16 @@
 import { Router } from 'express';
 import { getAll, getById, addOne, updateOneById, deleteOneById } from "../../controllers/products.controller.js";
+import { auth } from "../../services/sessions.services.js";
 
 const router = Router();
 
-const privateAccess = (req, res, next) => {
-    if (!req.session.user) {
-        console.log('Must be authenticated');
-        return res.status(401).send('Must be authenticated');
-    }
-    next();
-};
+router.get('/', auth('public'), getAll);
+router.get('/:pid', auth('public'), getById);
 
-const adminAccess = (req, res, next) => {
-    if (req.session.user.role != 'admin') {
-        console.log('Must be admin');
-        return res.status(401).send({ error: 'UNAUTHORIZED' });
-    }
-    next();
-};
+router.post('/', auth('admin'), addOne);
 
-router.get('/', getAll);
-router.get('/:pid', getById);
+router.put('/:pid', auth('admin'), updateOneById);
 
-router.post('/', privateAccess, adminAccess, addOne);
-
-router.put('/:pid', privateAccess, adminAccess, updateOneById);
-
-router.delete('/:pid', privateAccess, adminAccess, deleteOneById);
+router.delete('/:pid', auth('admin'), deleteOneById);
 
 export default router;

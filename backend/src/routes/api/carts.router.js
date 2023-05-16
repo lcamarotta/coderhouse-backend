@@ -1,24 +1,17 @@
 import { Router } from "express";
 import { getById, addOneProduct, addOrUpdateManyProducts, updateOneProduct, removeAllProducts, removeOneProduct} from "../../controllers/carts.controller.js";
+import { auth } from "../../services/sessions.services.js";
 
 const router = Router();
 
-const privateAccess = (req, res, next) => {
-    if (!req.session.user) {
-        console.log('Must be authenticated');
-        return res.status(401).send('Must be authenticated');
-    }
-    next();
-};
+router.get('/:cid', auth('any'), getById);
 
-router.get('/:cid', privateAccess, getById);
+router.post('/:cid/product/:pid/:quantity', auth('any'), addOneProduct);
 
-router.post('/:cid/product/:pid/:quantity', privateAccess, addOneProduct);
+router.put('/:cid', auth('any'), addOrUpdateManyProducts);
+router.put('/:cid/products/:pid', auth('any'), updateOneProduct);
 
-router.put('/:cid', privateAccess, addOrUpdateManyProducts);
-router.put('/:cid/products/:pid', privateAccess, updateOneProduct);
-
-router.delete('/:cid', privateAccess, removeAllProducts);
-router.delete('/:cid/products/:pid', privateAccess, removeOneProduct);
+router.delete('/:cid', auth('any'), removeAllProducts);
+router.delete('/:cid/products/:pid', auth('any'), removeOneProduct);
 
 export default router;

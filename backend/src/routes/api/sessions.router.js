@@ -1,32 +1,15 @@
 import { Router } from 'express';
 import passport from "passport";
-import { getCurrentUser, failLogin, failRegister, logout, registerNewUser, loginByEmail } from "../../controllers/sessions.controller.js";
+import { getCurrentUser, logout, registerNewUser, loginByEmail } from "../../controllers/sessions.controller.js";
+import { auth } from "../../services/sessions.services.js";
 
 const router = Router();
 
-const publicAccess = (req, res, next) => {
-    if (req.session.user) {
-        console.log('Already authenticated');
-        return res.redirect('/products');
-    }
-    next();
-};
+router.get('/current', auth('public'), getCurrentUser);
+router.get('/logout', auth('any'), logout);
 
-const privateAccess = (req, res, next) => {
-    if (!req.session.user) {
-        console.log('Must be authenticated');
-        return res.status(401).send('Must be authenticated');
-    }
-    next();
-};
-
-router.get('/current', privateAccess, getCurrentUser);
-router.get('/logout', privateAccess, logout);
-router.get('/faillogin', publicAccess, failLogin);
-router.get('/failregister', publicAccess, failRegister);
-
-router.get('/github', publicAccess, passport.authenticate('github', { scope: ['user: email'] }), (req, res) => {});
-router.get('/githubcallback', publicAccess, passport.authenticate('github', { failureRedirect: '/api/sessions/faillogin' }), (req, res) => {
+router.get('/github', auth('public'), passport.authenticate('github', { scope: ['user: email'] }), (req, res) => {});
+router.get('/githubcallback', auth('public'), passport.authenticate('github'), (req, res) => {
     req.session.user = {
         name: req.user.first_name + ' ' + req.user.last_name,
         role: req.user.role,
@@ -34,10 +17,10 @@ router.get('/githubcallback', publicAccess, passport.authenticate('github', { fa
         email: req.user.email,
         cart: req.user.cart
     }
-    res.send({ status: 'success' });
+    res.send({ status: 'success', payload: req.session.user });
 });
 
-router.post('/login', publicAccess, passport.authenticate('login'), loginByEmail);
-router.post('/register', publicAccess, passport.authenticate('register', { failureRedirect: '/api/sessions/failregister' }), registerNewUser);
+router.post('/login', auth('public'), passport.authenticate('login'), loginByEmail);
+router.post('/register', auth('public'), passport.authenticate('register'), registerNewUser);
 
 export default router;

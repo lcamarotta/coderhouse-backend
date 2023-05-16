@@ -2,8 +2,11 @@ import { errorWithStatusCode as err } from "../utils.js";
 
 const getCurrentUser = async(req, res) => {
     try {
-        console.log(req.session.user)
-        res.send({ status: 'success', payload: req.session.user });
+        if(!req.session.user){
+            res.send({ status: 'success', payload: { message: 'not logged in' } });
+        }else {
+            res.send({ status: 'success', payload: req.session.user });
+        }
     } catch (error) {
         res.status(error.httpStatusCode || 500).send({ error: error.message });
     }
@@ -13,25 +16,15 @@ const logout = async(req, res) => {
     try {
         req.session.destroy(error => {
             if (error) throw new err(`${error}`, 500);
-            res.redirect('/products')
+            res.send({ status: 'success', payload: { message: 'logged out' } });
         });
     } catch (error) {
         res.status(error.httpStatusCode || 500).send({ error: error.message });
     }
 };
 
-const failLogin = (req, res) => {
-    console.warn('Failed login');
-    res.status(500).send({ error: 'failed login' })
-};
-
-const failRegister = (req, res) => {
-    console.warn('Failed register');
-    res.status(500).send({ error: 'failed' })
-};
-
 const registerNewUser = (req, res) => {
-    res.send({ status: 'success' })
+    res.send({ status: 'success', payload: { message: 'user registered' } });
 };
 
 const loginByEmail = async (req, res) => {
@@ -44,7 +37,6 @@ const loginByEmail = async (req, res) => {
             email: req.user.email,
             cart: req.user.cart
         }
-        const userSession = req.user.session;
         res.send({ status: 'success', payload: req.session.user });
     } catch (error) {
         res.status(error.httpStatusCode || 500).send({ error: error.message });
@@ -55,8 +47,6 @@ const loginByEmail = async (req, res) => {
 export {
     getCurrentUser,
     logout,
-    failLogin,
-    failRegister,
     registerNewUser,
     loginByEmail
 }
