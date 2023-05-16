@@ -2,6 +2,7 @@ import { Router } from 'express';
 import passport from "passport";
 import { getCurrentUser, logout, registerNewUser, loginByEmail } from "../../controllers/sessions.controller.js";
 import { auth } from "../../services/sessions.services.js";
+import config from '../../config/config.js';
 
 const router = Router();
 
@@ -17,7 +18,8 @@ router.get('/githubcallback', auth('public'), passport.authenticate('github'), (
         email: req.user.email,
         cart: req.user.cart
     }
-    res.send({ status: 'success', payload: req.session.user });
+    const url = config.frontendUrlCors
+    res.redirect(url)
 });
 
 router.post('/login', auth('public'), passport.authenticate('login'), loginByEmail);

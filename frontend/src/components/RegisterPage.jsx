@@ -2,40 +2,64 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Col, Container, Row, Button, Form } from 'react-bootstrap';
 import { toast, ToastContainer } from 'react-toastify';
 
-const LoginPage = () => {
+import { registerUser } from '../utils/fetchAPI';
 
-  const formSubmit = (event) => {
+const LoginPage = () => {
+  const navigate = useNavigate();
+  
+  const formSubmit = async(event) => {
     event.preventDefault()
     
-    const obj = {
+    const formData = {
       first_name: formFirstname.value,
       last_name: formLastname.value,
       age: formAge.value,
       email: formEmail.value,
       password: formPassword.value
     }
-    
-    fetch('http://localhost:8080/api/sessions/register', {
-        method: 'POST',
-        body: JSON.stringify(obj),
-        headers: {
-            'Content-Type': 'application/json'
-        }
-    }).then(result => {
-        if(result.status === 200){
-          toast.success(`Success`, {
-            position: "top-right",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "colored",
-          });
-          window.location.replace('/loginpage');
-        }
-    })
+
+    if(!formFirstname.value || !formLastname.value || !formAge.value || !formEmail.value || !formPassword.value){
+      toast.info(`Please complete all fields`, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+    });
+    return
+    }
+
+    const response =  await registerUser(formData);
+    if(response.ok == false){
+      toast.warning(`email already registered?`, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    }
+    else{
+      toast.success(`User Registered, Now Log In`, {
+        position: "top-right",
+        autoClose: 4000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+      setTimeout( () => {
+        navigate('/loginpage')
+      }, 5000)
+    }
   }
 
   return (
