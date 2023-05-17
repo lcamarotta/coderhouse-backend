@@ -7,18 +7,21 @@ import { Container, Row, Col, Card, Button } from 'react-bootstrap';
 import { ToastContainer, toast } from 'react-toastify';
 
 import ProductCount from './ProductCount';
+import ProductImageSlide from './ProductImageSlide';
 import { CartContext } from '../../context/CartContext';
+import { UserContext } from '../../context/UserContext';
 
 const ProductDetail = ( product ) => {
-
-  const [checkoutButton, setCheckoutButton] = useState(false)
-
-  const cartCtx = useContext(CartContext)
   
-  const checkoutReady = (productCuantity) => {
-    setCheckoutButton(true)
+  const [productWasAddedToCart, setProductWasAddedToCart] = useState(false)
+  
+  const cartCtx = useContext(CartContext)
+  const userCtx = useContext(UserContext)
+  
+  
+  const addToCartButton = (productCuantity) => {
     cartCtx.addToCart(productCuantity, product)
-
+    setProductWasAddedToCart(true)
     toast.success(`You added ${productCuantity} products to cart`, {
       position: "top-right",
       autoClose: 5000,
@@ -28,8 +31,15 @@ const ProductDetail = ( product ) => {
       draggable: true,
       progress: undefined,
       theme: "colored",
-      });
+    });
   }
+  
+  const userIsNotLoggedButton = <Link to={'/user/login'} className='text-decoration-none text-reset'><Button variant='outline-info'>Log In!</Button></Link>;
+  const userIsLoggedButton = <ProductCount stock={ product.stock } addToCartButton={ addToCartButton }/>;
+
+  const conditionalButton = userCtx.isUserLogged ? userIsLoggedButton : userIsNotLoggedButton;
+  
+  const checkoutButton = <Link to={'/user/cart'} className='text-decoration-none text-reset'><Button variant='outline-info'>Checkout</Button></Link>;
 
   return (
     <Container fluid>
@@ -37,7 +47,7 @@ const ProductDetail = ( product ) => {
         <Col sm={10} lg={6}>
           <Card className="text-center ProductDetailCard mx-1 my-4"> 
             <Card.Header>Best for: { product.category[0].toUpperCase() + product.category.substring(1) }</Card.Header>
-            <Card.Img variant="top" src={ product.thumbnail[0] } />
+            <ProductImageSlide imgUrlArray={product.thumbnail}/>
             <Card.Body>
               <Card.Title>{ product.title }</Card.Title>
               <Card.Title>${ product.price }</Card.Title>
@@ -46,12 +56,7 @@ const ProductDetail = ( product ) => {
                   <Card.Text>{ product.description }</Card.Text>
                 </Col>
               </Row>
-              { checkoutButton
-               ?
-                <Link to={'/user/cart'} className='text-decoration-none text-reset'><Button variant='outline-info'>Checkout</Button></Link>
-               :
-                <ProductCount stock={ product.stock } checkoutReady={ checkoutReady }/>
-              }
+              { productWasAddedToCart ? checkoutButton : conditionalButton }
             </Card.Body>
             <Card.Footer className="text-muted">{ product.stock } IN STOCK</Card.Footer>
           </Card>

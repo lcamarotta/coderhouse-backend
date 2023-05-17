@@ -3,7 +3,7 @@
 import { useState } from "react"
 import { Button, Card, Container } from "react-bootstrap"
 
-const ItemCount = ( {stock, checkoutReady} ) => {
+const ItemCount = ({ stock, addToCartButton }) => {
   const [itemCuantity, setItemCuantity] = useState(1)
 
   const modifyItemCuantity = (oper) => {
@@ -19,8 +19,8 @@ const ItemCount = ( {stock, checkoutReady} ) => {
     return itemCuantity === stock
   }
 
-  const addToCart = () => {
-    checkoutReady(itemCuantity)
+  const addToCartButtonOnClick = () => {
+    addToCartButton(itemCuantity)
   }
 
   return (
@@ -30,7 +30,7 @@ const ItemCount = ( {stock, checkoutReady} ) => {
         <Card.Text className='m-0'>{ itemCuantity }</Card.Text>
         <Button disabled={ addBtnCondition() } className='my-2 mx-3' variant="outline-primary" onClick={ () => { modifyItemCuantity('+') }}>+</Button>
       </Container>
-      <Button className='my-2' variant="primary" onClick={ addToCart }>Add to cart</Button>
+      <Button className='my-2' variant="primary" onClick={ addToCartButtonOnClick }>Add to cart</Button>
     </>
   )
 }
