@@ -89,11 +89,62 @@ const logout = async() => {
 }
 
 const addToCart = async(cid, pid, quantity) => {
-  const url = `${backendURL}/${cid}/product/${pid}/${quantity}`
-  let response = await fetch();
-  response = response.json();
+  const url = `${backendURL}/api/carts/${cid}/product/${pid}/${quantity}`
+  let response = await fetch(url, {
+    method: 'POST',
+    credentials: 'include',
+  })
+  response = await response.json();
   console.log(response)
   return response;
 }
 
-export { getProducts, getUser, emailLogin, registerUser, logout, addToCart };
+const getCart = async(cartid) => {
+  try {
+    let response = await fetch(`${backendURL}/api/carts/${cartid}`, {
+      method: 'GET',
+      credentials: 'include',
+    })
+    response = await response.json();
+    console.log(response)
+    return response.payload;
+
+  } catch (error) {
+    console.error('There was an error getCart', error);
+    return;
+  }
+}
+
+const deleteCart = async(cartId) => {
+  try {
+    let response = await fetch(`${backendURL}/api/carts/${cartId}`, {
+      method: 'DELETE',
+      credentials: 'include',
+    })
+    response = await response.json();
+    console.log(response)
+    return response.payload;
+
+  } catch (error) {
+    console.error('There was an error deleteCart', error);
+    return;
+  }
+}
+
+const deleteProductFromCart = async(cartId, productId) => {
+  try {
+    let response = await fetch(`${backendURL}/api/carts/${cartId}/products/${productId}`, {
+      method: 'DELETE',
+      credentials: 'include',
+    })
+    response = await response.json();
+    console.log(response)
+    return response.payload;
+
+  } catch (error) {
+    console.error('There was an error deleteProductFromCart', error);
+    return;
+  }
+}
+
+export { getProducts, getUser, emailLogin, registerUser, logout, addToCart, getCart, deleteCart, deleteProductFromCart};

@@ -1,5 +1,6 @@
-import { useState, useEffect, createContext } from 'react'
+import { useState, useEffect, useContext, createContext } from 'react'
 import { getUser } from '../utils/fetchAPI';
+import { CartContext } from './CartContext';
 
 export const UserContext = createContext({})
 
@@ -7,6 +8,8 @@ const UserContextProvider = ({ children }) => {
 
   const [userSession, setUserSession] = useState(false);
   const [isUserLogged, setIsUserLogged] = useState(false);
+
+  const cartCtx = useContext(CartContext);
 
   useEffect(() => {
     async function fetchUser() {
@@ -22,6 +25,13 @@ const UserContextProvider = ({ children }) => {
     }
     fetchUser();
   }, [])
+
+  useEffect(() => {
+    async function fetchCart() {
+      await cartCtx.setCartFromAPI(userSession.cart);
+    }
+    if(isUserLogged) fetchCart();
+  }, [isUserLogged])
 
   return (
     <UserContext.Provider value={{ userSession, setUserSession, isUserLogged, setIsUserLogged }}>

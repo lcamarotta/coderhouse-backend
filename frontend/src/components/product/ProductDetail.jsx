@@ -19,10 +19,10 @@ const ProductDetail = ( product ) => {
   const userCtx = useContext(UserContext)
   
   
-  const addToCartButton = (productCuantity) => {
-    cartCtx.addToCart(productCuantity, product)
+  const addToCartButton = (productQuantity) => {
+    cartCtx.addToCart(productQuantity, product)
     setProductWasAddedToCart(true)
-    toast.success(`You added ${productCuantity} products to cart`, {
+    toast.success(`You added ${productQuantity} products to cart`, {
       position: "top-right",
       autoClose: 5000,
       hideProgressBar: false,

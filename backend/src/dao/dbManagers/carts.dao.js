@@ -16,11 +16,11 @@ export default class MongoCartDao {
 
 	update = async (cartId, productId, quantity) => {
 		if(!quantity) quantity = 1;
-
+		
 		const cart = await cartModel.findOne({ _id: cartId });
 		const index = await this.isProductInCart(cartId, productId);
 		if(index != -1){
-			cart.products[index].quantity += quantity;
+			cart.products[index].quantity += Number(quantity);
 		} else {
 			cart.products.push({ product: productId, quantity })
 		}

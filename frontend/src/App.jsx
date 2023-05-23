@@ -12,8 +12,8 @@ import UserPageContainer from "./containers/UserPageContainer";
 
 const App = () => {
   return (
-    <UserContextProvider>
-      <CartContextProvider>
+    <CartContextProvider>
+      <UserContextProvider>
         <BrowserRouter>
           <NavBar/>
           <Routes>
@@ -24,8 +24,8 @@ const App = () => {
             <Route path="/user/:page" element={<UserPageContainer/>} />
           </Routes>
         </BrowserRouter>
-      </CartContextProvider>
-    </UserContextProvider>
+      </UserContextProvider>
+    </CartContextProvider>
   )
 }
 
