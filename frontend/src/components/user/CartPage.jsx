@@ -9,9 +9,9 @@ const CartPage = () => {
   const userCtx = useContext(UserContext);
   const cartCtx = useContext(CartContext);
 
-  const checkout = () => {
-    cartCtx.checkout()
-      toast.success(`Order PENDING sent`, {
+  const checkout = async() => {
+    const response = await cartCtx.checkout()
+      toast.success(`Order ${response._id} sent`, {
         position: "top-right",
         autoClose: 15000,
         hideProgressBar: false,

@@ -1,5 +1,5 @@
 import { createContext, useState } from "react";
-import { addToCart as addToCartAPI, getCart as getCartAPI, deleteCart as deleteCartAPI, deleteProductFromCart as deleteProductFromCartAPI } from "../utils/fetchAPI";
+import { addToCart as addToCartAPI, getCart as getCartAPI, deleteCart as deleteCartAPI, deleteProductFromCart as deleteProductFromCartAPI, checkout as checkoutAPI } from "../utils/fetchAPI";
 
 export const CartContext = createContext();
 
@@ -50,9 +50,10 @@ const CartContextProvider = ({ children }) => {
     await setCartFromAPI(userCartId);
   }
   
-  const checkout = () => {
-    return false
-  }//to do
+  const checkout = async() => {
+    const response = await checkoutAPI(userCartId);
+    return response;
+  }
 
   return (
     <CartContext.Provider value={{ cartProducts, setCartFromAPI, addToCart, deleteAll, deleteProduct, thisProductTotalPrice, totalProducts, totalPrice, checkout }}>

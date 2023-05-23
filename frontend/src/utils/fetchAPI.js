@@ -1,21 +1,26 @@
-import { backendURL } from "./config";
+import { backendURL, devMode } from "./config";
 
 const getProducts = async(query, queryData, page) => {
-
-  if(query === 'category'){
-    const url = queryData == 'all' ? `${backendURL}/api/products?limit=6&page=${page}&sort=asc` : `${backendURL}/api/products?limit=6&page=${page}&query=category:${queryData}&sort=asc`
-    let response = await fetch(url);
-    response = response.json();
-    return response;
-  };
-  
-  if(query === 'productById'){
-    const url = `${backendURL}/api/products/${queryData}`
-    let response = await fetch(url);
-    response = response.json();
-    return response;
-  };
-
+  try {
+    if(query === 'category'){
+      const url = queryData == 'all' ? `${backendURL}/api/products?limit=6&page=${page}&sort=asc` : `${backendURL}/api/products?limit=6&page=${page}&query=category:${queryData}&sort=asc`
+      let response = await fetch(url);
+      response = await response.json();
+      if(devMode) console.log('getProductsAPI response:', response);
+      return response;
+    };
+    
+    if(query === 'productById'){
+      const url = `${backendURL}/api/products/${queryData}`
+      let response = await fetch(url);
+      response = await response.json();
+      if(devMode) console.log('getProductsAPI response:', response);
+      return response;
+    };
+  } catch (error) {
+    console.error('There was an error getProducts API', error);
+    return -1;
+  }
 }
 
 const getUser = async() => {
@@ -25,11 +30,12 @@ const getUser = async() => {
       credentials: 'include',
     })
     response = await response.json();
+    if(devMode) console.log('getUserAPI response:', response);
     return response.payload;
 
   } catch (error) {
-    console.error('There was an error getUser', error);
-    return;
+    console.error('There was an error getUser API', error);
+    return -1;
   }
 }
 
@@ -46,10 +52,11 @@ const emailLogin = async(formData) => {
     })
     if (!response.ok) return response;
     response = await response.json();
+    if(devMode) console.log('loginAPI response:', response);
     return response.payload;
   } catch (error) {
-    console.error('There was an error emailLogin', error);
-    return;
+    console.error('There was an error emailLogin API', error);
+    return -1;
   }
 }
 
@@ -66,10 +73,11 @@ const registerUser = async(formData) => {
     })
     if (!response.ok) return response;
     response = await response.json();
+    if(devMode) console.log('registerUser API response:', response);
     return response.payload;
   } catch (error) {
-    console.error('There was an error emailLogin', error);
-    return;
+    console.error('There was an error registerUser API', error);
+    return -1;
   }
 }
 
@@ -80,23 +88,29 @@ const logout = async() => {
       credentials: 'include',
     })
     response = await response.json();
+    if(devMode) console.log('logoutAPI response:', response);
     return response.payload;
 
   } catch (error) {
-    console.error('There was an error logout', error);
-    return;
+    console.error('There was an error logout API', error);
+    return -1;
   }
 }
 
 const addToCart = async(cid, pid, quantity) => {
+try {
   const url = `${backendURL}/api/carts/${cid}/product/${pid}/${quantity}`
   let response = await fetch(url, {
     method: 'POST',
     credentials: 'include',
   })
   response = await response.json();
-  console.log(response)
+  if(devMode) console.log('addToCartAPI response:', response);
   return response;
+} catch (error) {
+  console.error('There was an error addToCart API', error);
+  return -1;
+}
 }
 
 const getCart = async(cartid) => {
@@ -106,12 +120,12 @@ const getCart = async(cartid) => {
       credentials: 'include',
     })
     response = await response.json();
-    console.log(response)
+    if(devMode) console.log('getCartaAPI response:', response);
     return response.payload;
 
   } catch (error) {
-    console.error('There was an error getCart', error);
-    return;
+    console.error('There was an error getCart API', error);
+    return -1;
   }
 }
 
@@ -122,12 +136,12 @@ const deleteCart = async(cartId) => {
       credentials: 'include',
     })
     response = await response.json();
-    console.log(response)
+    if(devMode) console.log('deleteCartAPI response:', response);
     return response.payload;
 
   } catch (error) {
-    console.error('There was an error deleteCart', error);
-    return;
+    console.error('There was an error deleteCart API', error);
+    return -1;
   }
 }
 
@@ -138,13 +152,29 @@ const deleteProductFromCart = async(cartId, productId) => {
       credentials: 'include',
     })
     response = await response.json();
-    console.log(response)
+    if(devMode) console.log('deleteProdFromCartAPI response:', response);
     return response.payload;
 
   } catch (error) {
-    console.error('There was an error deleteProductFromCart', error);
-    return;
+    console.error('There was an error deleteProductFromCart API', error);
+    return -1;
   }
 }
 
-export { getProducts, getUser, emailLogin, registerUser, logout, addToCart, getCart, deleteCart, deleteProductFromCart};
+const checkout = async(cartId) => {
+  try {
+    let response = await fetch(`${backendURL}/api/carts/${cartId}/checkout`, {
+      method: 'GET',
+      credentials: 'include',
+    })
+    response = await response.json();
+    if(devMode) console.log('checkoutAPI response:', response);
+    return response.payload;
+
+  } catch (error) {
+    console.error('There was an error checkout API', error);
+    return -1;
+  }
+}
+
+export { getProducts, getUser, emailLogin, registerUser, logout, addToCart, getCart, deleteCart, deleteProductFromCart, checkout };
