@@ -2,6 +2,7 @@
 import express from 'express';
 import passport from 'passport';
 import cors from 'cors';
+import { Server } from 'socket.io';
 
 //files
 import config from './config/config.js';
@@ -29,6 +30,21 @@ app.use(cors({
 initializePassport();
 app.use(passport.initialize());
 app.use(passport.session());
+
+const io = new Server(server, {
+  cors: {
+    origin: config.frontendUrlCors,
+    credentials: true, // Enable credentials (cookies)
+    }
+});
+app.set('socketio', io)
+
+io.on('connection', async socket => {
+	socket.on('newMessage', async data =>{
+    console.log(data)
+		io.emit('messagesLog', [data])
+	});
+});
 
 app.use('/api/carts', cartsRouter);
 app.use('/api/products', productsRouter);

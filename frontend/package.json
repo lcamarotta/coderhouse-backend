@@ -19,7 +19,6 @@
   "author": "Lucas Camarotta",
   "license": "ISC",
   "homepage": "https://github.com/lcamarotta/coderhouse-backend#readme",
-  
   "dependencies": {
     "bootstrap": "^5.2.3",
     "react": "^18.2.0",
@@ -28,7 +27,8 @@
     "react-icons": "^4.6.0",
     "react-loading-skeleton": "^3.1.0",
     "react-router-dom": "^6.4.5",
-    "react-toastify": "^9.1.1"
+    "react-toastify": "^9.1.1",
+    "socket.io-client": "^4.6.1"
   },
   "devDependencies": {
     "@types/react": "^18.0.24",

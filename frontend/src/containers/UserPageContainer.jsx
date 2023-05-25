@@ -8,6 +8,7 @@ import LoginPage from "../components/user/LoginPage";
 import RegisterPage from "../components/user/RegisterPage";
 import ProfilePage from "../components/user/ProfilePage";
 import CartPage from "../components/user/CartPage";
+import ChatPage from "../components/user/ChatPage";
 import NotFound from "../components/NotFound";
 
 const UserPageContainer = () => {
@@ -30,6 +31,10 @@ const UserPageContainer = () => {
 
             case 'cart':
                 if(userCtx.isUserLogged) return(<CartPage/>)
+                return(<LoginPage/>)
+
+            case 'chat':
+                if(userCtx.isUserLogged) return(<ChatPage/>)
                 return(<LoginPage/>)
 
             default:
