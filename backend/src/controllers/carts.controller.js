@@ -1,10 +1,25 @@
 import { errorWithStatusCode as err } from "../utils.js";
-import { isProductInCartService, getByIdService, updateService, updateManyService, deleteAllService, deleteByIdService } from "../services/carts.services.js";
+import { isProductInCartService, getByIdService, updateService, updateManyService, deleteAllService, deleteByIdService, checkoutService } from "../services/carts.services.js";
 
 const getById = async(req, res) => {
 	const { cid } = req.params;
 	try {
 		const result = await getByIdService(cid);
+		res.send({ status: 'Success', payload: result });
+    } catch (error) {
+        res.status(error.httpStatusCode || 500).send({ error: error.message });
+    }
+};
+
+const checkout = async(req, res) => {
+	const { cid } = req.params;
+	try {
+		const result = await checkoutService(cid, req.session.user);
+        if(result == -1){
+            res.send({ status: 'success', payload: -1 });
+            return
+        }
+
 		res.send({ status: 'Success', payload: result });
     } catch (error) {
         res.status(error.httpStatusCode || 500).send({ error: error.message });
@@ -71,6 +86,7 @@ const removeOneProduct = async(req, res) => {
 
 export {
     getById,
+    checkout,
     addOneProduct,
     addOrUpdateManyProducts,
     updateOneProduct,

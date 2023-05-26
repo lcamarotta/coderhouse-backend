@@ -1,4 +1,7 @@
 import { isProductInCartRepository, getByIdRepository, updateRepository, deleteAllRepository, deleteByIdRepository, createCartRepository } from "../repository/carts.repository.js";
+import { createOrderRepository, getOrderByIdRepository } from "../repository/orders.repository.js";
+import { getByIdService as getProductByIdService, updateOneByIdService as updateOneProductByIdService } from "./products.services.js";
+import { addOrderToUserService } from "./sessions.services.js";
 
 const createCartService = async() => await createCartRepository();
 
@@ -20,6 +23,39 @@ const deleteAllService = async(cid) => await deleteAllRepository(cid);
 
 const deleteByIdService = async(cid, pid) => await deleteByIdRepository(cid, pid);
 
+const checkoutService = async(cid, user) => {
+    const cart = await getByIdRepository(cid);
+    const productsInStock = [];
+
+    //check if there is enough stock for each product
+    for (const cartItem of cart.products) {
+        const thisProductInDB = await getProductByIdService(cartItem.product._id);
+        const isProductInStock = Number(cartItem.quantity) <= Number(thisProductInDB[0].stock);
+        if(isProductInStock) productsInStock.push(cartItem);  
+    }
+
+    //return -1 if all products are out of stock
+    if(productsInStock.length == 0) return -1;
+
+    //keep items out of stock in cart, remove others
+    for (const product of productsInStock) {
+        await deleteByIdService(cid, product.product._id,);
+    }
+
+    //make order for products in stock
+    const result = await createOrderRepository( productsInStock );
+    await addOrderToUserService(user.email, result._id);
+    
+    //update stocks
+    for (const product of productsInStock) {
+        const update = product.product;
+        update.stock = update.stock - product.quantity;
+        await updateOneProductByIdService(product.product._id, update);
+    }
+
+    return result;
+};
+
 export {
     createCartService,
     isProductInCartService,
@@ -27,5 +63,6 @@ export {
     updateService,
     updateManyService,
     deleteAllService,
-    deleteByIdService
+    deleteByIdService,
+    checkoutService
 }

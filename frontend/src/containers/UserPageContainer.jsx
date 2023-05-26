@@ -4,6 +4,7 @@ import { useContext } from 'react';
 import { useParams } from "react-router-dom";
 
 import { UserContext } from '../context/UserContext';
+import { CartContext } from '../context/CartContext';
 import LoginPage from "../components/user/LoginPage";
 import RegisterPage from "../components/user/RegisterPage";
 import ProfilePage from "../components/user/ProfilePage";
@@ -13,6 +14,7 @@ import NotFound from "../components/NotFound";
 
 const UserPageContainer = () => {
 	const { page } = useParams();
+    const cartCtx = useContext(CartContext);
     const userCtx = useContext(UserContext);
     
     function render(pageToRender){
@@ -30,7 +32,7 @@ const UserPageContainer = () => {
                 return(<RegisterPage/>)
 
             case 'cart':
-                if(userCtx.isUserLogged) return(<CartPage/>)
+                if(userCtx.isUserLogged) return(<CartPage user={ userCtx.userSession } cart={ cartCtx }/>)
                 return(<LoginPage/>)
 
             case 'chat':

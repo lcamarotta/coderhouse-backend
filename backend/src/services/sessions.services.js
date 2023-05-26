@@ -1,9 +1,10 @@
-import { createUserRepository, existsUserRepository, findUserByIdRepository, getUserRepository } from "../repository/sessions.repository.js";
+import { createUserRepository, existsUserRepository, findUserByIdRepository, getUserRepository, addOrderToUserRepository } from "../repository/sessions.repository.js";
 
 const createUserService = async(newUser) => await createUserRepository(newUser);
 const existsUserService = async(username) => await existsUserRepository(username);
 const getUserService = async(username) => await getUserRepository(username);
 const findUserByIdService = async(id) => await findUserByIdRepository(id);
+const addOrderToUserService = async(email, orderId) => addOrderToUserRepository(email, orderId);
 
 function auth(role) {
     
@@ -28,5 +29,6 @@ export {
     createUserService,
     existsUserService,
     getUserService,
-    findUserByIdService
+    findUserByIdService,
+    addOrderToUserService
 }

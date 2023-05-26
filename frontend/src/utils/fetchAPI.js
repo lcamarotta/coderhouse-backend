@@ -120,7 +120,7 @@ const getCart = async(cartid) => {
       credentials: 'include',
     })
     response = await response.json();
-    if(devMode) console.log('getCartaAPI response:', response);
+    if(devMode) console.log('getCartAPI response:', response);
     return response.payload;
 
   } catch (error) {

@@ -35,7 +35,8 @@ const loginByEmail = async (req, res) => {
             role: req.user.role,
             age: req.user.age,
             email: req.user.email,
-            cart: req.user.cart
+            cart: req.user.cart,
+            orders: req.user.orders
         }
         res.send({ status: 'success', payload: req.session.user });
     } catch (error) {

@@ -32,7 +32,8 @@ const initializePassport = () => {
                     email,
                     age,
                     password: createHash(password),
-                    cart: cart._id
+                    cart: cart._id,
+                    orders: []
                 };
                 const result = await createUserService(newUser);
                 return done(null, result)
@@ -53,7 +54,8 @@ const initializePassport = () => {
                 age: '',
                 role: 'admin',
                 password: config.adminPassword,
-                cart: ''
+                cart: '',
+                orders: []
             });
         }
         try {
@@ -88,7 +90,8 @@ const initializePassport = () => {
                     email: profile.emails[0].value,
                     age: '',
                     password: '',
-                    cart: cart._id
+                    cart: cart._id,
+                    orders: []
                 }
                 const result = await createUserService(newUser);
                 done(null, result);

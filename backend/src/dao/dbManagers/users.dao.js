@@ -20,4 +20,10 @@ export default class MongoUserDao {
         const result = await userModel.create(user);
         return result;
     };
+
+    addOrder = async (email, orderId) => {
+        const user = await this.get(email);
+        user.orders.push(orderId);
+        return await userModel.updateOne({_id: user._id}, user);
+    };
 }

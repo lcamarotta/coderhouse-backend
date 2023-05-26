@@ -39,7 +39,10 @@ const ProductDetail = ( product ) => {
 
   const conditionalButton = userCtx.isUserLogged ? userIsLoggedButton : userIsNotLoggedButton;
   
-  const checkoutButton = <Link to={'/user/cart'} className='text-decoration-none text-reset'><Button variant='outline-info'>Checkout</Button></Link>;
+  const checkoutButton = <>
+    <Link to={'/user/cart'} className='text-decoration-none text-reset mx-1'><Button variant='outline-info'>Checkout</Button></Link>
+    <Link to={'/all/1'} className='text-decoration-none text-reset mx-1'><Button variant='outline-success'>Home</Button></Link>
+  </>;
 
   return (
     <Container fluid>
