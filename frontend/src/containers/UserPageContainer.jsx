@@ -12,7 +12,7 @@ import ChatPage from "../components/user/ChatPage";
 import NotFound from "../components/NotFound";
 
 const UserPageContainer = () => {
-	const	{ page } = useParams();
+	const { page } = useParams();
     const userCtx = useContext(UserContext);
     
     function render(pageToRender){
@@ -34,7 +34,7 @@ const UserPageContainer = () => {
                 return(<LoginPage/>)
 
             case 'chat':
-                if(userCtx.isUserLogged) return(<ChatPage/>)
+                if(userCtx.isUserLogged) return(<ChatPage username={ userCtx.userSession.name }/>)
                 return(<LoginPage/>)
 
             default:

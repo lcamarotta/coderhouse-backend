@@ -25,7 +25,8 @@ app.use(express.urlencoded({ extended:true }));
 app.use(cors({
   origin: config.frontendUrlCors,
   credentials: true, // Enable credentials (cookies)
-  }));
+  })
+);
 
 initializePassport();
 app.use(passport.initialize());
@@ -37,12 +38,14 @@ const io = new Server(server, {
     credentials: true, // Enable credentials (cookies)
     }
 });
-app.set('socketio', io)
 
+app.set('socketio', io);
+
+const storedMessages = []
 io.on('connection', async socket => {
-	socket.on('newMessage', async data =>{
-    console.log(data)
-		io.emit('messagesLog', [data])
+	socket.on('send-message', async newMessage => {
+    storedMessages.push(newMessage)
+		io.emit('messageLog', storedMessages)
 	});
 });
 

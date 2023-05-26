@@ -15,8 +15,8 @@ const NavWidget = () => {
   function showUsername() {
     return (
       <>
-        <Link to="/user/profile" className='text-decoration-none mx-3'>
-          <Navbar.Text className='me-3 text-success'>Welcome {userCtx.userSession.name}</Navbar.Text>
+        <Link to="/user/profile" className='text-decoration-none me-2'>
+          <Navbar.Text className='me-3 text-success'>{userCtx.userSession.name}</Navbar.Text>
         </Link>
         <Link to='/user/chat' className='me-3 text-decoration-none text-reset'><MdMessage size="2em"/></Link>
       </>
