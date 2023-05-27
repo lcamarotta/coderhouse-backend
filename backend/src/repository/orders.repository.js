@@ -1,8 +1,8 @@
 import { ORDERDAO } from "../dao/index.js";
 
-const createOrderRepository = async() => await ORDERDAO.create();
-const getOrderByIdRepository = async(cid) => await ORDERDAO.getById(cid);
+const createRepository = async(email, products) => await ORDERDAO.create(email, products);
+const getByEmailRepository = async(email) => await ORDERDAO.getByEmail(email);
 export {
-    createOrderRepository,
-    getOrderByIdRepository
+    createRepository,
+    getByEmailRepository
 }

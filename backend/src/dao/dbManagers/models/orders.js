@@ -2,6 +2,10 @@ import mongoose from "mongoose";
 
 const orderCollection = 'orders';
 const orderSchema = new mongoose.Schema({
+    user_email: {
+        type: String,
+        required: true
+    },
     order: [
         {
             quantity: Number,

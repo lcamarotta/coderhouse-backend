@@ -16,8 +16,7 @@ router.get('/githubcallback', auth('public'), passport.authenticate('github'), (
         role: req.user.role,
         age: req.user.age,
         email: req.user.email,
-        cart: req.user.cart,
-        orders: req.user.orders
+        cart: req.user.cart
     }
     const url = config.frontendUrlCors
     res.redirect(url)

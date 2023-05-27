@@ -4,12 +4,12 @@ import { orderModel } from "./models/orders.js";
 export default class MongoOrderDao {
 	constructor() {}
 
-	create = async (order) => {
-		return await orderModel.create({ order });
+	create = async (email, products) => {
+		return await orderModel.create({ user_email: email, order: products });
 	}
 
-	getById = async (orderId) => {
-		const result = await orderModel.findOne({ _id: orderId }).populate('products.product');
+	getByEmail = async (user_email) => {
+		const result = await orderModel.find({ user_email: user_email }).populate('order.product');
 		if(!result) throw new err('Order ID not found', 400);
 		return result;
 	}
