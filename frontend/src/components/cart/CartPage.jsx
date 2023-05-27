@@ -48,7 +48,7 @@ const CartPage = ({ user, cart }) => {
     }
 
     await cart.setCartFromAPI(cart.userCartId);
-    navigate(`/user/orders/${result._id}`);
+    navigate(`/user/orders`);
   }
 
   const remove = (productToDelete) => {
