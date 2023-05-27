@@ -2,9 +2,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Col, Container, Row, Button, Form } from 'react-bootstrap';
 import { toast, ToastContainer } from 'react-toastify';
 
-import { registerUser } from '../../utils/fetchAPI';
-
-const LoginPage = () => {
+const LoginPage = ({ registerUser }) => {
   const navigate = useNavigate();
   
   const formSubmit = async(event) => {

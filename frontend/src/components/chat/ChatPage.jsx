@@ -1,10 +1,7 @@
 import { Col, Container, Row, ListGroup, Form, InputGroup, Button } from 'react-bootstrap';
-
-
-import socket from "../../utils/socket";
 import ChatWindow from './ChatWindow';
 
-const ChatPage = ({ username }) => {
+const ChatPage = ({ username, socket }) => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -24,7 +21,7 @@ const ChatPage = ({ username }) => {
       <Row className='m-5'>
         <Col className='d-flex justify-content-center align-items-center'>
           <ListGroup>
-            <ChatWindow/>
+            <ChatWindow socket={ socket }/>
           </ListGroup>
         </Col>
       </Row>

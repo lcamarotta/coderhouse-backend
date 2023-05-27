@@ -1,15 +1,10 @@
-import { useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Col, Container, Row, Button, Form } from 'react-bootstrap'
 import { ToastContainer, toast } from 'react-toastify';
 
-import { emailLogin } from '../../utils/fetchAPI';
-import { UserContext } from '../../context/UserContext';
-
-const LoginPage = () => {
+const LoginPage = ({ user, emailLogin }) => {
 
   const navigate = useNavigate();
-  const userCtx = useContext(UserContext);
 
   const formSubmit = async(event) => {
     event.preventDefault()
@@ -34,8 +29,8 @@ const LoginPage = () => {
         });
     }
     else{
-      userCtx.setUserSession(response);
-      userCtx.setIsUserLogged(true);
+      user.setUserSession(response);
+      user.setIsUserLogged(true);
       navigate('/all/1');
     }
   }

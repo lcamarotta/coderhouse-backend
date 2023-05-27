@@ -8,7 +8,7 @@ import NotFound from "./components/NotFound"
 import NavBar from "./components/navbar/NavBar";
 import ProductListContainer from "./containers/ProductListContainer";
 import ProductDetailContainer from "./containers/ProductDetailContainer";
-import UserPageContainer from "./containers/UserPageContainer";
+import UserSessionCheck from "./containers/UserSessionCheck";
 
 const App = () => {
   return (
@@ -21,7 +21,7 @@ const App = () => {
             <Route path="/" element={<ProductListContainer/>}/>
             <Route path="/:category/:page" element={<ProductListContainer/>}/>
             <Route path="/product/:productId" element={<ProductDetailContainer/>} />
-            <Route path="/user/:page" element={<UserPageContainer/>} />
+            <Route path="/user/:page" element={<UserSessionCheck/>} />
           </Routes>
         </BrowserRouter>
       </UserContextProvider>

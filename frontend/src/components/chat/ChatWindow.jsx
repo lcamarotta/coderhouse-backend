@@ -1,9 +1,7 @@
 import { useState, useEffect } from 'react';
 import { ListGroup } from 'react-bootstrap';
 
-import socket from '../../utils/socket';
-
-const ChatWindow = () => {
+const ChatWindow = ({ socket }) => {
 	const [user, setUser] = useState([]);
 	const [messages, setMessages] = useState([]);
 
