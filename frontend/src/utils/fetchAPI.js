@@ -161,18 +161,18 @@ const deleteProductFromCart = async(cartId, productId) => {
   }
 }
 
-const getOrder = async(orderId) => {
+const getOrders = async(email) => {
   try {
-    let response = await fetch(`${backendURL}/api/orders/${orderId}`, {
+    let response = await fetch(`${backendURL}/api/orders/${email}`, {
       method: 'GET',
       credentials: 'include',
     })
     response = await response.json();
-    if(devMode) console.log('getOrderAPI response:', response);
+    if(devMode) console.log('getOrdersAPI response:', response);
     return response.payload;
 
   } catch (error) {
-    console.error('There was an error getOrder API', error);
+    console.error('There was an error getOrders API', error);
     return -1;
   }
 }
@@ -193,4 +193,4 @@ const checkout = async(cartId) => {
   }
 }
 
-export { getProducts, getUser, emailLogin, registerUser, logout, addToCart, getCart, deleteCart, deleteProductFromCart, checkout };
+export { getProducts, getUser, emailLogin, registerUser, logout, addToCart, getCart, deleteCart, deleteProductFromCart, checkout, getOrders };

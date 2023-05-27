@@ -10,6 +10,7 @@ import RegisterPage from "../components/user/RegisterPage";
 import ProfilePage from "../components/user/ProfilePage";
 import CartPage from "../components/user/CartPage";
 import ChatPage from "../components/user/ChatPage";
+import OrdersPageContainer from "./OrdersPageContainer";
 import NotFound from "../components/NotFound";
 
 const UserPageContainer = () => {
@@ -37,6 +38,10 @@ const UserPageContainer = () => {
 
             case 'chat':
                 if(userCtx.isUserLogged) return(<ChatPage username={ userCtx.userSession.name }/>)
+                return(<LoginPage/>)
+
+            case 'orders':
+                if(userCtx.isUserLogged) return(<OrdersPageContainer user={ userCtx.userSession }/>)
                 return(<LoginPage/>)
 
             default:

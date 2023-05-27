@@ -32,7 +32,7 @@ const checkoutService = async(cartId, user) => {
         update.stock = update.stock - product.quantity;
         await updateOneProductByIdService(product.product._id, update);
     }
-    console.log('RESULT OF CREATE ORDER SERVICE  ==  ', result);
+    
     return result;
 };
 
