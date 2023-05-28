@@ -10,5 +10,7 @@ export default {
     githubClientSecret: process.env.GITHUB_CLIENT_SECRET,
     adminEmail: process.env.ADMIN_EMAIL,
     adminPassword: process.env.ADMIN_PASSWORD,
-    frontendUrlCors: process.env.FRONTEND_URL_CORS
+    frontendUrlCors: process.env.FRONTEND_URL_CORS,
+    mailingUser: process.env.MAILING_USER,
+    mailingPass: process.env.MAILING_PASS
 }

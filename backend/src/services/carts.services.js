@@ -1,4 +1,5 @@
 import { isProductInCartRepository, getByIdRepository, updateRepository, deleteAllRepository, deleteByIdRepository, createCartRepository, createPurchaseRepository, getPurchaseByEmailRepository } from "../repository/carts.repository.js";
+import mail from "./mailer.services.js";
 import { getByIdService as getProductByIdService, updateOneByIdService as updateOneProductByIdService } from "./products.services.js";
 
 const createCartService = async() => await createCartRepository();
@@ -45,6 +46,9 @@ const purchaseService = async(cid, user) => {
     //make order for products in stock
     const result = await createPurchaseRepository( user.email, productsInStock );
     
+    //mail user
+    mail(user.email, result) //async
+
     //update stocks
     for (const product of productsInStock) {
         const update = product.product;
