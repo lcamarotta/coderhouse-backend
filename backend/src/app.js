@@ -7,7 +7,6 @@ import { Server } from 'socket.io';
 //files
 import config from './config/config.js';
 import cartsRouter from './routes/api/carts.router.js';
-import ordersRouter from './routes/api/orders.router.js';
 import sessionsRouter from './routes/api/sessions.router.js';
 import productsRouter from './routes/api/products.router.js';
 import initializePassport from './config/passport.config.js';
@@ -51,6 +50,5 @@ io.on('connection', async socket => {
 });
 
 app.use('/api/carts', cartsRouter);
-app.use('/api/orders', ordersRouter);
 app.use('/api/products', productsRouter);
 app.use('/api/sessions', sessionsRouter);

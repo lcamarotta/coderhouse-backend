@@ -1,10 +1,12 @@
 import { Router } from "express";
-import { getById, addOneProduct, addOrUpdateManyProducts, updateOneProduct, removeAllProducts, removeOneProduct} from "../../controllers/carts.controller.js";
+import { getById, addOneProduct, addOrUpdateManyProducts, updateOneProduct, removeAllProducts, removeOneProduct, getPurchaseByEmail, purchase} from "../../controllers/carts.controller.js";
 import { auth } from "../../services/sessions.services.js";
 
 const router = Router();
 
 router.get('/:cid', auth('any'), getById);
+router.get('/:cid/purchase', auth('any'), purchase);
+router.get('/purchase/:email', auth('any'), getPurchaseByEmail);
 
 router.post('/:cid/product/:pid/:quantity', auth('any'), addOneProduct);
 

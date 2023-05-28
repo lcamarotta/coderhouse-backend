@@ -163,7 +163,7 @@ const deleteProductFromCart = async(cartId, productId) => {
 
 const getOrders = async(email) => {
   try {
-    let response = await fetch(`${backendURL}/api/orders/${email}`, {
+    let response = await fetch(`${backendURL}/api/carts/purchase/${email}`, {
       method: 'GET',
       credentials: 'include',
     })
@@ -179,7 +179,7 @@ const getOrders = async(email) => {
 
 const checkout = async(cartId) => {
   try {
-    let response = await fetch(`${backendURL}/api/orders/${cartId}/checkout`, {
+    let response = await fetch(`${backendURL}/api/carts/${cartId}/purchase`, {
       method: 'GET',
       credentials: 'include',
     })

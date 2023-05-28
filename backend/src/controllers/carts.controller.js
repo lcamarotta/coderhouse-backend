@@ -1,5 +1,5 @@
 import { errorWithStatusCode as err } from "../utils.js";
-import { isProductInCartService, getByIdService, updateService, updateManyService, deleteAllService, deleteByIdService } from "../services/carts.services.js";
+import { isProductInCartService, getByIdService, updateService, updateManyService, deleteAllService, deleteByIdService, getPurchaseByEmailService, purchaseService } from "../services/carts.services.js";
 
 const getById = async(req, res) => {
 	const { cid } = req.params;
@@ -69,11 +69,38 @@ const removeOneProduct = async(req, res) => {
     }
 };
 
+const purchase = async(req, res) => {
+	const { cid } = req.params;
+	try {
+		const result = await purchaseService(cid, req.session.user);
+        if(result == -1){
+            res.send({ status: 'no stock', payload: -1 });
+            return
+        }
+
+		res.send({ status: 'Success', payload: result });
+    } catch (error) {
+        res.status(error.httpStatusCode || 500).send({ error: error.message });
+    }
+};
+
+const getPurchaseByEmail = async(req, res) => {
+	const { email } = req.params;
+	try {
+		const result = await getPurchaseByEmailService(email);
+		res.send({ status: 'Success', payload: result });
+    } catch (error) {
+        res.status(error.httpStatusCode || 500).send({ error: error.message });
+    }
+};
+
 export {
     getById,
     addOneProduct,
     addOrUpdateManyProducts,
     updateOneProduct,
     removeAllProducts,
-    removeOneProduct
+    removeOneProduct,
+    purchase,
+    getPurchaseByEmail
 }

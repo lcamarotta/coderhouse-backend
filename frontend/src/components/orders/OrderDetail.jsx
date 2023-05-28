@@ -3,19 +3,14 @@ import { Card, Row, Col, ListGroup } from 'react-bootstrap';
 
 const OrderDetail = ({ order }) => {
 
-    const products = order.order;
+    const products = order.products;
     const id = order._id
-    const total = () => {
-        let sum = 0;
-        products.map( item => sum += item.quantity * item.product.price )
-        return sum;
-    }
 
 	return (
     <>  
         <ListGroup className="text-center mb-2">
             <ListGroup.Item>ORDER: { id }</ListGroup.Item>
-            <ListGroup.Item>Total: ${ total() }</ListGroup.Item>
+            <ListGroup.Item>Total: ${ order.amount }</ListGroup.Item>
         </ListGroup>
         {
             products.map( item =>
