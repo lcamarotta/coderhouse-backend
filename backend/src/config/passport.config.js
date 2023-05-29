@@ -5,6 +5,8 @@ import config from '../config/config.js';
 import { checkPwd, createHash } from "../utils.js";
 import { createUserService, existsUserService, getUserService, findUserByIdService } from "../services/sessions.services.js";
 import { createCartService } from "../services/carts.services.js";
+import CustomError from "../services/errors/CustomError.js";
+import EErrors from "../services/errors/enums.js";
 
 const LocalStrategy = local.Strategy;
 
@@ -59,10 +61,14 @@ const initializePassport = () => {
         try {
             if(!await existsUserService(username)){
                 console.warn('User does not exist');
+                throw CustomError.createError(EErrors.USER_NOT_EXIST);
                 return done(null, false);
             };
             const user = await getUserService(username);
-            if(!checkPwd(user, password)) return done(null, false);
+            if(!checkPwd(user, password)){
+                throw CustomError.createError(EErrors.BAD_PASSWORD);
+                return done(null, false);
+            }
             return done(null, user);
         } catch (error) {
             console.warn(error)

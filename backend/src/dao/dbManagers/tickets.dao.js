@@ -1,6 +1,7 @@
 import { faker } from '@faker-js/faker';
-import { errorWithStatusCode as err } from "../../utils.js";
 import { ticketModel } from "./models/tickets.js";
+import CustomError from '../../services/errors/CustomError.js';
+import EErrors from '../../services/errors/enums.js';
 
 export default class MongoOrderDao {
 	constructor() {}
@@ -21,7 +22,7 @@ export default class MongoOrderDao {
 
 	getPurchaseByEmail = async (user_email) => {
 		const result = await ticketModel.find({ purchaser: user_email }).populate('products.product');
-		if(!result) throw new err('Order ID not found', 400);
+		if(!result) throw CustomError.createError(EErrors.ITEM_NOT_FOUND);
 		return result;
 	}
 }

@@ -1,21 +1,12 @@
-import EErrors from '../services/errors/enums.js'
+import createErrorMessage from '../services/errors/info.js';
 
 export default (error, req, res, next) => {
-    console.log(error);
-    switch (error.code) {
-        case EErrors.INVALID_TYPES_ERROR:
-            res.status(400).send({
-                status: 'error',
-                error: error.name,
-                description: error.cause
-            });
-            break;
-        default:
-            res.send({
-                status: 'error',
-                error: 'unhandled error'
-            });
-            break;
+    const details = { 
+        cause: error.type,
+        code: error.code,
+        message: createErrorMessage(error.type)
     }
+    res.status(error.code).send({ status: 'error', payload: details })
+    console.log('TEST LOG')
     next()
 }

@@ -1,4 +1,5 @@
-import { errorWithStatusCode as err } from "../utils.js";
+import CustomError from "../services/errors/CustomError.js";
+import EErrors from "../services/errors/enums.js";
 
 const getCurrentUser = async(req, res) => {
     try {
@@ -8,18 +9,18 @@ const getCurrentUser = async(req, res) => {
             res.send({ status: 'success', payload: req.session.user });
         }
     } catch (error) {
-        res.status(error.httpStatusCode || 500).send({ error: error.message });
+        throw CustomError.createError(EErrors.SERVER_ERROR);
     }
 };
 
 const logout = async(req, res) => {
     try {
         req.session.destroy(error => {
-            if (error) throw new err(`${error}`, 500);
+            if (error) throw CustomError.createUnknownError(`${error}`);
             res.send({ status: 'success', payload: { message: 'logged out' } });
         });
     } catch (error) {
-        res.status(error.httpStatusCode || 500).send({ error: error.message });
+        throw CustomError.createError(EErrors.SERVER_ERROR);
     }
 };
 
@@ -29,7 +30,7 @@ const registerNewUser = (req, res) => {
 
 const loginByEmail = async (req, res) => {
     try {
-        if(!req.user) throw new err('Invalid credentials', 401);
+        if(!req.user) throw CustomError.createError(EErrors.INVALID_CREDENTIALS);
         req.session.user = {
             name: req.user.first_name + ' ' + req.user.last_name,
             role: req.user.role,
@@ -40,7 +41,7 @@ const loginByEmail = async (req, res) => {
         }
         res.send({ status: 'success', payload: req.session.user });
     } catch (error) {
-        res.status(error.httpStatusCode || 500).send({ error: error.message });
+        throw CustomError.createError(EErrors.SERVER_ERROR);
     }
 };
 

@@ -1,9 +1,9 @@
 export default class CustomError {
-    static createError({ name = "Error", cause, message, code = 1 }) {
-        let error = new Error(message, { cause });
-        error.name = name,
-        error.code = code;
-        console.log(error);
+    static createError(err_enum) {
+        let error = new Error(err_enum.type, err_enum.code);
+        error.type = err_enum.type;
+        error.code = err_enum.code;
+        error.handled = true
         return error;
     }
 }

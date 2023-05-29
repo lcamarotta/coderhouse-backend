@@ -1,4 +1,6 @@
 import { createUserRepository, existsUserRepository, findUserByIdRepository, getUserRepository } from "../repository/sessions.repository.js";
+import CustomError from "./errors/CustomError.js";
+import EErrors from "./errors/enums.js";
 
 const createUserService = async(newUser) => await createUserRepository(newUser);
 const existsUserService = async(username) => await existsUserRepository(username);
@@ -6,20 +8,40 @@ const getUserService = async(username) => await getUserRepository(username);
 const findUserByIdService = async(id) => await findUserByIdRepository(id);
 
 function auth(role) {
-    
-    return function(req, res, next) {
-      
-        if(role == 'public') return next();
-        if(role == 'notloggedin') return req.session.user ? res.status(400).send({ error: 'already authenticated' }) : next();
+    switch (role) {
+        case 'public':
+            return function(req, res, next){
+                return next();
+            }
 
-        if(req.session.user){
-            if(role == 'any') return next();
-            if(role == 'user') return req.session.user.role == 'user' ? next() : res.status(403).send({ error: 'forbidden, not authenticated'});
-            if(role == 'admin') return req.session.user.role == 'admin' ? next() : res.status(403).send({ error: 'forbidden, user is not admin'});
-        }
+        case 'notloggedin':
+            return function(req, res, next){
+                if(req.session.user) throw CustomError.createError(EErrors.USER_AREADY_LOGGED);
+                return next();
+            }
 
-        return res.status(403).send({ error: 'forbidden'});
+        case 'any':
+            return function(req, res, next){
+                if(!req.session.user) throw CustomError.createError(EErrors.USER_NOT_LOGGED);
+                return next();
+            }
+
+        case 'user':
+            return function(req, res, next){
+                if(!req.session.user) throw CustomError.createError(EErrors.USER_NOT_LOGGED);
+                if(req.session.user.role == 'user') return next();
+                throw CustomError.createError(EErrors.FORBIDDEN);
+            }
+
+        case 'admin':
+            return function(req, res, next){
+                if(!req.session.user) throw CustomError.createError(EErrors.USER_NOT_LOGGED);
+                if(req.session.user.role == 'admin') return next();
+                throw CustomError.createError(EErrors.USER_MUST_BE_ADMIN);
+            }
     
+        default:
+            throw CustomError.createError(EErrors.SERVER_ERROR);
     }
   }
 

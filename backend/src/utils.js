@@ -12,14 +12,6 @@ export const rootDir = (string) => path.join(filename_dir, '..',string);
 export const createHash = pwd => bcrypt.hashSync(pwd, bcrypt.genSaltSync(10));
 export const checkPwd = (user, pwd) => bcrypt.compareSync(pwd, user.password);
 
-// --custom error handler--
-export class errorWithStatusCode extends Error {
-	constructor(message, httpStatusCode) {
-			super(message);
-			this.httpStatusCode = httpStatusCode;
-	}
-}
-
 export function make_id(length) {
     let result = '';
     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';

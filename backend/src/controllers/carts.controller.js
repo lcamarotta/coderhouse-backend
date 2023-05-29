@@ -1,4 +1,5 @@
-import { errorWithStatusCode as err } from "../utils.js";
+import CustomError from "../services/errors/CustomError.js";
+import EErrors from "../services/errors/enums.js";
 import { isProductInCartService, getByIdService, updateService, updateManyService, deleteAllService, deleteByIdService, getPurchaseByEmailService, purchaseService } from "../services/carts.services.js";
 
 const getById = async(req, res) => {
@@ -7,7 +8,7 @@ const getById = async(req, res) => {
 		const result = await getByIdService(cid);
 		res.send({ status: 'Success', payload: result });
     } catch (error) {
-        res.status(error.httpStatusCode || 500).send({ error: error.message });
+        throw CustomError.createError(EErrors.SERVER_ERROR);
     }
 };
 
@@ -17,7 +18,7 @@ const addOneProduct = async(req, res) => {
 		const result = await updateService(cid, pid, quantity);
 		res.send({ status: 'Success', payload: result });
     } catch (error) {
-        res.status(error.httpStatusCode || 500).send({ error: error.message });
+        throw CustomError.createError(EErrors.SERVER_ERROR);
     }
 };
 
@@ -28,7 +29,7 @@ const addOrUpdateManyProducts = async(req, res) => {
         const result = await updateManyService(cid, productsToUpdate);
 		res.send({ status: 'Success', payload: result });
     } catch (error) {
-        res.status(error.httpStatusCode || 500).send({ error: error.message });
+        throw CustomError.createError(EErrors.SERVER_ERROR);
     }
 };
 
@@ -36,7 +37,7 @@ const updateOneProduct = async(req, res) => {
 	const { cid, pid } = req.params;
 	const quantity = req.body;
 	try {
-		if(await isProductInCartService(cid, pid) == -1) throw new err('Can not update product quantity because it has not been added to cart', 400);
+		if(await isProductInCartService(cid, pid) == -1) throw CustomError.createError(EErrors.BAD_REQUEST);
 		const result = await updateService(cid, pid, quantity.quantity);
 		res.send(
             {
@@ -45,7 +46,7 @@ const updateOneProduct = async(req, res) => {
             }
         );
     } catch (error) {
-        res.status(error.httpStatusCode || 500).send({ error: error.message });
+        throw CustomError.createError(EErrors.SERVER_ERROR);
     }
 };
 
@@ -55,7 +56,7 @@ const removeAllProducts = async(req, res) => {
 		const result = await deleteAllService(cid);
 		res.send({ status: 'Success', payload: result });
     } catch (error) {
-        res.status(error.httpStatusCode || 500).send({ error: error.message });
+        throw CustomError.createError(EErrors.SERVER_ERROR);
     }
 };
 
@@ -65,7 +66,7 @@ const removeOneProduct = async(req, res) => {
 		const result = await deleteByIdService(cid, pid);
 		res.send({ status: 'Success', payload: result });
     } catch (error) {
-        res.status(error.httpStatusCode || 500).send({ error: error.message });
+        throw CustomError.createError(EErrors.SERVER_ERROR);
     }
 };
 
@@ -80,7 +81,7 @@ const purchase = async(req, res) => {
 
 		res.send({ status: 'Success', payload: result });
     } catch (error) {
-        res.status(error.httpStatusCode || 500).send({ error: error.message });
+        throw CustomError.createError(EErrors.SERVER_ERROR);
     }
 };
 
@@ -90,7 +91,7 @@ const getPurchaseByEmail = async(req, res) => {
 		const result = await getPurchaseByEmailService(email);
 		res.send({ status: 'Success', payload: result });
     } catch (error) {
-        res.status(error.httpStatusCode || 500).send({ error: error.message });
+        throw CustomError.createError(EErrors.SERVER_ERROR);
     }
 };
 

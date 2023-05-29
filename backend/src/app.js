@@ -29,7 +29,6 @@ app.use(cors({
   credentials: true, // Enable credentials (cookies)
   })
 );
-app.use(errorHandler);
 
 initializePassport();
 app.use(passport.initialize());
@@ -39,14 +38,14 @@ const io = new Server(server, {
   cors: {
     origin: config.frontendUrlCors,
     credentials: true, // Enable credentials (cookies)
-    }
+  }
 });
 
 app.set('socketio', io);
 
 const storedMessages = []
 io.on('connection', async socket => {
-	socket.on('send-message', async newMessage => {
+  socket.on('send-message', async newMessage => {
     storedMessages.push(newMessage)
 		io.emit('messageLog', storedMessages)
 	});
@@ -56,3 +55,5 @@ app.use('/api/carts', cartsRouter);
 app.use('/api/products', productsRouter);
 app.use('/api/sessions', sessionsRouter);
 app.use('/api/mocking-products', mockingProductsRouter);
+
+app.use(errorHandler);

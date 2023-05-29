@@ -1,4 +1,5 @@
-import { errorWithStatusCode as err } from "../../utils.js";
+import CustomError from "../../services/errors/CustomError.js";
+import EErrors from "../../services/errors/enums.js";
 import { cartModel } from "./models/carts.js";
 
 export default class MongoCartDao {
@@ -10,7 +11,7 @@ export default class MongoCartDao {
 
 	getById = async (cartId) => {
 		const result = await cartModel.findOne({ _id: cartId }).populate('products.product');
-		if(!result) throw new err('Cart ID not found', 400);
+		if(!result) throw CustomError.createError(EErrors.ITEM_NOT_FOUND);
 		return result;
 	}
 
@@ -30,7 +31,7 @@ export default class MongoCartDao {
 
 	isProductInCart = async (cartId, productId) => {
 		const cart = await cartModel.findOne({ _id: cartId });
-		if(!cart) throw new err('Cart ID not found', 400);
+		if(!cart) throw CustomError.createError(EErrors.ITEM_NOT_FOUND);
 		const index = cart.products.findIndex(product => product.product.toString() == productId);
 		return index;
 
@@ -45,7 +46,7 @@ export default class MongoCartDao {
 	deleteById = async (cartId, productId) => {
 		const cart = await cartModel.findOne({ _id: cartId });
 		const index = await this.isProductInCart(cartId, productId);
-		if(index == -1) throw new err('Product is not in cart', 400);
+		if(index == -1) throw CustomError.createError(EErrors.ITEM_NOT_FOUND);
 		cart.products.splice(index, 1);
 		return await cartModel.updateOne({_id: cartId}, cart);
 	}

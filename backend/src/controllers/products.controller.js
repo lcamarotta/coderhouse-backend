@@ -1,3 +1,5 @@
+import CustomError from "../services/errors/CustomError.js";
+import EErrors from "../services/errors/enums.js";
 import { getAllService, getByIdService, addOneService, updateOneByIdService, deleteOneByIdService } from "../services/products.services.js";
 
 const getAll = async(req, res) => {
@@ -6,12 +8,12 @@ const getAll = async(req, res) => {
 		page,
 		limit,
 		...(sort && { sort: { price: sort } })
-	}
+    }
 	try {
 		const result = await getAllService(query, options);
 		res.send({ status: 'success', ...result });
     } catch (error) {
-        res.status(error.httpStatusCode || 500).send({ error: error.message });
+        throw CustomError.createError(EErrors.SERVER_ERROR);
     }
 };
 
@@ -21,7 +23,7 @@ const getById = async(req, res) => {
 		const result = await getByIdService(pid);
 		res.send({ status: 'success', payload: result });
     } catch (error) {
-        res.status(error.httpStatusCode || 500).send({ error: error.message });
+        throw CustomError.createError(EErrors.SERVER_ERROR);
     }
 };
 
@@ -31,7 +33,7 @@ const addOne = async(req, res) => {
 		const result = await addOneService(product);
 		res.send({ status: 'success', payload: result });
     } catch (error) {
-        res.status(error.httpStatusCode || 500).send({ error: error.message });
+        throw CustomError.createError(EErrors.SERVER_ERROR);
     }
 };
 
@@ -42,7 +44,7 @@ const updateOneById = async(req, res) => {
 		const result = await updateOneByIdService(pid, product);
 		res.send({ status: 'success', payload: result });
     } catch (error) {
-        res.status(error.httpStatusCode || 500).send({ error: error.message });
+        throw CustomError.createError(EErrors.SERVER_ERROR);
     }
 };
 
@@ -52,7 +54,7 @@ const deleteOneById = async(req, res) => {
 		const result = await deleteOneByIdService(id);
 		res.send({ status: 'success', payload: result });
     } catch (error) {
-        res.status(error.httpStatusCode || 500).send({ error: error.message });
+        throw CustomError.createError(EErrors.SERVER_ERROR);
     }
 };
 

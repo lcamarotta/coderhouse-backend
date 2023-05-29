@@ -1,4 +1,5 @@
-import { errorWithStatusCode as err } from "../../utils.js";
+import CustomError from "../../services/errors/CustomError.js";
+import EErrors from "../../services/errors/enums.js";
 import { productModel } from "./models/products.js";
 
 export default class MongoProductDao {
@@ -26,7 +27,7 @@ export default class MongoProductDao {
 
 		const result = await productModel.paginate(queryObject, options);
 
-		if(options.page > result.totalPages || options.page <= 0 || isNaN(options.page)) throw new err('Incorrect page request', 400);
+		if(options.page > result.totalPages || options.page <= 0 || isNaN(options.page)) throw CustomError.createError(EErrors.BAD_REQUEST);
 		
 		let link = `?limit=${options.limit}`;
 		if(options.sort) link = `${link}&sort=${options.sort.price}`;
