@@ -1,4 +1,5 @@
-import { errorWithStatusCode as err, make_id } from "../../utils.js";
+import { faker } from '@faker-js/faker';
+import { errorWithStatusCode as err } from "../../utils.js";
 import { ticketModel } from "./models/tickets.js";
 
 export default class MongoOrderDao {
@@ -12,7 +13,7 @@ export default class MongoOrderDao {
 			purchaser: email,
 			products,
 			amount: totalAmount,
-			code: make_id(15)
+			code: faker.string.alphanumeric(10)
 		}
 
 		return await ticketModel.create(purchaseOrder);

@@ -6,11 +6,13 @@ import { Server } from 'socket.io';
 
 //files
 import config from './config/config.js';
-import cartsRouter from './routes/api/carts.router.js';
-import sessionsRouter from './routes/api/sessions.router.js';
-import productsRouter from './routes/api/products.router.js';
+import errorHandler from './middlewares/errorHandler.js';
 import initializePassport from './config/passport.config.js';
 import { mongoConnect, useMongoSession } from './dao/db.config.js';
+import cartsRouter from './routes/api/carts.router.js';
+import productsRouter from './routes/api/products.router.js';
+import sessionsRouter from './routes/api/sessions.router.js';
+import mockingProductsRouter from './routes/api/mocking-products.js';
 
 export const app = express();
 const port = Number(config.port);
@@ -27,6 +29,7 @@ app.use(cors({
   credentials: true, // Enable credentials (cookies)
   })
 );
+app.use(errorHandler);
 
 initializePassport();
 app.use(passport.initialize());
@@ -52,3 +55,4 @@ io.on('connection', async socket => {
 app.use('/api/carts', cartsRouter);
 app.use('/api/products', productsRouter);
 app.use('/api/sessions', sessionsRouter);
+app.use('/api/mocking-products', mockingProductsRouter);
