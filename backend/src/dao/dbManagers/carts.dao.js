@@ -11,7 +11,7 @@ export default class MongoCartDao {
 
 	getById = async (cartId) => {
 		const result = await cartModel.findOne({ _id: cartId }).populate('products.product');
-		if(!result) throw CustomError.createError(EErrors.ITEM_NOT_FOUND);
+		if(!result) return CustomError.createError(EErrors.ITEM_NOT_FOUND);
 		return result;
 	}
 
@@ -31,7 +31,7 @@ export default class MongoCartDao {
 
 	isProductInCart = async (cartId, productId) => {
 		const cart = await cartModel.findOne({ _id: cartId });
-		if(!cart) throw CustomError.createError(EErrors.ITEM_NOT_FOUND);
+		if(!cart) return CustomError.createError(EErrors.ITEM_NOT_FOUND);
 		const index = cart.products.findIndex(product => product.product.toString() == productId);
 		return index;
 
@@ -46,7 +46,7 @@ export default class MongoCartDao {
 	deleteById = async (cartId, productId) => {
 		const cart = await cartModel.findOne({ _id: cartId });
 		const index = await this.isProductInCart(cartId, productId);
-		if(index == -1) throw CustomError.createError(EErrors.ITEM_NOT_FOUND);
+		if(index == -1) return CustomError.createError(EErrors.ITEM_NOT_FOUND);
 		cart.products.splice(index, 1);
 		return await cartModel.updateOne({_id: cartId}, cart);
 	}

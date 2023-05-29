@@ -22,7 +22,7 @@ export default class MongoOrderDao {
 
 	getPurchaseByEmail = async (user_email) => {
 		const result = await ticketModel.find({ purchaser: user_email }).populate('products.product');
-		if(!result) throw CustomError.createError(EErrors.ITEM_NOT_FOUND);
+		if(!result) return CustomError.createError(EErrors.ITEM_NOT_FOUND);
 		return result;
 	}
 }
