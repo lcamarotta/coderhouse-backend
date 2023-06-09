@@ -2,7 +2,7 @@ import passport from "passport";
 import local from "passport-local";
 import GitHubStrategy from "passport-github2"
 import config from '../config/config.js';
-import { checkPwd, createHash } from "../utils.js";
+import { checkPwd, createHash } from "../utils/utils.js";
 import { createUserService, existsUserService, getUserService, findUserByIdService } from "../services/sessions.services.js";
 import { createCartService } from "../services/carts.services.js";
 import CustomError from "../services/errors/CustomError.js";

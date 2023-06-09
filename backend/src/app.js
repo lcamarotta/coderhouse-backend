@@ -6,12 +6,14 @@ import { Server } from 'socket.io';
 
 //files
 import config from './config/config.js';
+import { addLogger } from './utils/logger.js';
 import errorHandler from './middlewares/errorHandler.js';
 import initializePassport from './config/passport.config.js';
 import { mongoConnect, useMongoSession } from './dao/db.config.js';
 import cartsRouter from './routes/api/carts.router.js';
 import productsRouter from './routes/api/products.router.js';
 import sessionsRouter from './routes/api/sessions.router.js';
+import loggerRouter from './routes/api/logger.router.js';
 import mockingProductsRouter from './routes/api/mocking-products.js';
 
 export const app = express();
@@ -50,10 +52,12 @@ io.on('connection', async socket => {
 		io.emit('messageLog', storedMessages)
 	});
 });
+app.use(addLogger);
 
 app.use('/api/carts', cartsRouter);
 app.use('/api/products', productsRouter);
 app.use('/api/sessions', sessionsRouter);
+app.use('/api/loggerTest', loggerRouter);
 app.use('/api/mocking-products', mockingProductsRouter);
 
 app.use(errorHandler);
