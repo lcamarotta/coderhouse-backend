@@ -7,46 +7,47 @@ import { createUserService, existsUserService, getUserService, findUserByIdServi
 import { createCartService } from "../services/carts.services.js";
 import CustomError from "../services/errors/CustomError.js";
 import EErrors from "../services/errors/enums.js";
+import { logger } from "../utils/logger.js";
 
 const LocalStrategy = local.Strategy;
 
 const initializePassport = () => {
     passport.serializeUser((user, done) => {
+        logger.debug(`passport.serializeUser ${user}`)
         done(null, user._id);
     });
 
     passport.deserializeUser(async (id, done) => {
         const user = await findUserByIdService(id);
+        logger.debug(`passport.deserializeUser ${user}`)
         done(null, user);
     });
 
     passport.use('register', new LocalStrategy({ passReqToCallback: true, usernameField: 'email' }, async(req, username, password, done) => {
-            const { first_name, last_name, email, age} = req.body;
-            try {
-                if(await existsUserService(username)){
-                    console.warn('User already exists');
-                    return done(null, false);
-                };
-                const cart = await createCartService();
-                const newUser = {
-                    first_name,
-                    last_name,
-                    email,
-                    age,
-                    password: createHash(password),
-                    cart: cart._id
-                };
-                const result = await createUserService(newUser);
-                return done(null, result)
-            } catch (error) {
-                return done(`Error getting user ${error}`);
-            }
+        const { first_name, last_name, email, age} = req.body;
+        try {
+            if(await existsUserService(username)) throw CustomError.createError(EErrors.USER_ALREADY_EXIST);
+            const cart = await createCartService();
+            const newUser = {
+                first_name,
+                last_name,
+                email,
+                age,
+                password: createHash(password),
+                cart: cart._id
+            };
+            const result = await createUserService(newUser);
+            logger.debug(`passport createUser Result ${result}`)
+            return done(null, result)
+        } catch (error) {
+            return done(`Error getting user ${error}`);
         }
+    }
     ))
 
     passport.use('login', new LocalStrategy({ usernameField: 'email' }, async(username, password, done) => {
         if (username === config.adminEmail && password === config.adminPassword) {
-            console.warn('.env admin logged in');
+            logger.info(`.env admin logged in`)
             return done(null, {
                 _id: "6450702c60b6860df4642777",
                 first_name: 'SUPER',
@@ -59,19 +60,12 @@ const initializePassport = () => {
             });
         }
         try {
-            if(!await existsUserService(username)){
-                console.warn('User does not exist');
-                throw CustomError.createError(EErrors.USER_NOT_EXIST);
-                return done(null, false);
-            };
+            if(!await existsUserService(username)) throw CustomError.createError(EErrors.USER_NOT_EXIST);
             const user = await getUserService(username);
-            if(!checkPwd(user.password, password)){
-                throw CustomError.createError(EErrors.BAD_PASSWORD);
-                return done(null, false);
-            }
+            if(!checkPwd(user.password, password)) throw CustomError.createError(EErrors.BAD_PASSWORD);
             return done(null, user);
         } catch (error) {
-            console.warn(error)
+            logger.error(`passport error ${error}`)
             return done(error);
         }
     }))
@@ -97,12 +91,14 @@ const initializePassport = () => {
                     cart: cart._id
                 }
                 const result = await createUserService(newUser);
+                logger.debug(`passport github createUser Result ${result}`)
                 done(null, result);
             } else {
+                logger.debug(`passport github login ${user}`)
                 done(null, user);
             }
         } catch (error) {
-            console.warn(error)
+            logger.error(`passport error ${error}`)
             return done(error);
         }
     }));

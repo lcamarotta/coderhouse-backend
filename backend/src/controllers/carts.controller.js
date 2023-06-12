@@ -2,38 +2,38 @@ import CustomError from "../services/errors/CustomError.js";
 import EErrors from "../services/errors/enums.js";
 import { isProductInCartService, getByIdService, updateService, updateManyService, deleteAllService, deleteByIdService, getPurchaseByEmailService, purchaseService } from "../services/carts.services.js";
 
-const getById = async(req, res) => {
+const getById = async(req, res, next) => {
 	const { cid } = req.params;
 	try {
 		const result = await getByIdService(cid);
 		res.send({ status: 'Success', payload: result });
     } catch (error) {
-        throw CustomError.createError(EErrors.SERVER_ERROR);
+        next(error);
     }
 };
 
-const addOneProduct = async(req, res) => {
+const addOneProduct = async(req, res, next) => {
     const { cid, pid, quantity } = req.params;
 	try {
 		const result = await updateService(cid, pid, quantity);
 		res.send({ status: 'Success', payload: result });
     } catch (error) {
-        throw CustomError.createError(EErrors.SERVER_ERROR);
+        next(error);
     }
 };
 
-const addOrUpdateManyProducts = async(req, res) => {
+const addOrUpdateManyProducts = async(req, res, next) => {
     const { cid } = req.params;
 	const productsToUpdate = req.body;
 	try {
         const result = await updateManyService(cid, productsToUpdate);
 		res.send({ status: 'Success', payload: result });
     } catch (error) {
-        throw CustomError.createError(EErrors.SERVER_ERROR);
+        next(error);
     }
 };
 
-const updateOneProduct = async(req, res) => {
+const updateOneProduct = async(req, res, next) => {
 	const { cid, pid } = req.params;
 	const quantity = req.body;
 	try {
@@ -46,31 +46,31 @@ const updateOneProduct = async(req, res) => {
             }
         );
     } catch (error) {
-        throw CustomError.createError(EErrors.SERVER_ERROR);
+        next(error);
     }
 };
 
-const removeAllProducts = async(req, res) => {
+const removeAllProducts = async(req, res, next) => {
 	const { cid } = req.params;
 	try {
 		const result = await deleteAllService(cid);
 		res.send({ status: 'Success', payload: result });
     } catch (error) {
-        throw CustomError.createError(EErrors.SERVER_ERROR);
+        next(error);
     }
 };
 
-const removeOneProduct = async(req, res) => {
+const removeOneProduct = async(req, res, next) => {
     const { cid, pid } = req.params;
 	try {
 		const result = await deleteByIdService(cid, pid);
 		res.send({ status: 'Success', payload: result });
     } catch (error) {
-        throw CustomError.createError(EErrors.SERVER_ERROR);
+        next(error);
     }
 };
 
-const purchase = async(req, res) => {
+const purchase = async(req, res, next) => {
 	const { cid } = req.params;
 	try {
 		const result = await purchaseService(cid, req.session.user);
@@ -81,17 +81,17 @@ const purchase = async(req, res) => {
 
 		res.send({ status: 'Success', payload: result });
     } catch (error) {
-        throw CustomError.createError(EErrors.SERVER_ERROR);
+        next(error);
     }
 };
 
-const getPurchaseByEmail = async(req, res) => {
+const getPurchaseByEmail = async(req, res, next) => {
 	const { email } = req.params;
 	try {
 		const result = await getPurchaseByEmailService(email);
 		res.send({ status: 'Success', payload: result });
     } catch (error) {
-        throw CustomError.createError(EErrors.SERVER_ERROR);
+        next(error);
     }
 };
 

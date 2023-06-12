@@ -1,4 +1,4 @@
-const test = async(req, res) => {
+const test = async(req, res, next) => {
     req.logger.fatal(`Logger Test, level fatal - ${new Date().toISOString()}`);
     req.logger.error(`Logger Test, level error - ${new Date().toISOString()}`);
     req.logger.warning(`Logger Test, level warning - ${new Date().toISOString()}`);

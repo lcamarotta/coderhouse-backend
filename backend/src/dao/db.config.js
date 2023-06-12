@@ -3,13 +3,16 @@ import MongoStore from 'connect-mongo';
 import session from 'express-session';
 import config from '../config/config.js';
 import { app, server } from '../app.js';
+import { logger } from '../utils/logger.js';
 
 export async function mongoConnect() {
 	try {
-		await mongoose.connect(config.mongoUrl);
-		console.info('Connected to mongoDBaaS');
+		logger.debug(`${new Date().toISOString()} -- conecting to mongoDBaaS...`)
+		mongoose.connect(config.mongoUrl);
+		logger.info(`${new Date().toISOString()} -- connected to mongoDBaaS`)
 	} catch (error) {
-		server.close(function() { console.warn('Closing Server please fix error on mongoConnect func'); });
+		logger.error(`${new Date().toISOString()} -- could not connect to mongoDBaaS`)
+		server.close();
 	}
 }
 

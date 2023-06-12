@@ -52,11 +52,13 @@ io.on('connection', async socket => {
 		io.emit('messageLog', storedMessages)
 	});
 });
+
 app.use(addLogger);
-app.use(errorHandler);
 
 app.use('/api/carts', cartsRouter);
 app.use('/api/products', productsRouter);
 app.use('/api/sessions', sessionsRouter);
 app.use('/api/loggerTest', loggerRouter);
 app.use('/api/mocking-products', mockingProductsRouter);
+
+app.use(errorHandler);
