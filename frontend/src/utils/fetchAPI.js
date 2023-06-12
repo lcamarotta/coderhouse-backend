@@ -69,7 +69,6 @@ const registerUser = async(formData) => {
       headers: {
         'Content-Type': 'application/json'
       }
-    
     })
     if (!response.ok) return response;
     response = await response.json();
@@ -77,6 +76,42 @@ const registerUser = async(formData) => {
     return response.payload;
   } catch (error) {
     console.error('There was an error registerUser API', error);
+    return -1;
+  }
+}
+
+const requestPasswordChange = async(email) => {
+  try {
+    let response = await fetch(`${backendURL}/api/sessions/reset-request/${email}`, {
+      method: 'GET',
+      credentials: 'include',
+    })
+    response = await response.json();
+    if(devMode) console.log('requestPasswordChangeAPI response:', response);
+    return response.payload;
+
+  } catch (error) {
+    console.error('There was an error requestPasswordChange API', error);
+    return -1;
+  }
+}
+
+const changePassword = async(email, token, formData) => {
+  try {
+    let response = await fetch(`${backendURL}/api/sessions/reset-password/${email}/${token}`, {
+      method: 'PUT',
+      credentials: 'include',
+      body: JSON.stringify(formData),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+    response = await response.json();
+    if(devMode) console.log('resetPasswordAPI response:', response);
+    return response.payload;
+
+  } catch (error) {
+    console.error('There was an error resetPassword API', error);
     return -1;
   }
 }
@@ -193,4 +228,4 @@ const checkout = async(cartId) => {
   }
 }
 
-export { getProducts, getUser, emailLogin, registerUser, logout, addToCart, getCart, deleteCart, deleteProductFromCart, checkout, getOrders };
+export { getProducts, getUser, emailLogin, registerUser, logout, addToCart, getCart, deleteCart, deleteProductFromCart, checkout, getOrders, requestPasswordChange, changePassword };

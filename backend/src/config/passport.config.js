@@ -65,7 +65,7 @@ const initializePassport = () => {
                 return done(null, false);
             };
             const user = await getUserService(username);
-            if(!checkPwd(user, password)){
+            if(!checkPwd(user.password, password)){
                 throw CustomError.createError(EErrors.BAD_PASSWORD);
                 return done(null, false);
             }

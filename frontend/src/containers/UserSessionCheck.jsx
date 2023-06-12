@@ -25,31 +25,31 @@ const UserSessionCheck = () => {
     function render(pageToRender){
         switch (pageToRender) {
             case 'profile':
-                if(userCtx.isUserLogged) return(<ProfilePage user={ userCtx } logout={ logout }/>)
-                return(<LoginPage user={ userCtx } emailLogin={ emailLogin }/>)
+                if(userCtx.isUserLogged) return(<ProfilePage user={ userCtx } logout={ logout } />)
+                return(<LoginPage user={ userCtx } emailLogin={ emailLogin } />)
 
             case 'login':
-                if(userCtx.isUserLogged) return(<ProfilePage user={ userCtx } logout={ logout }/>)
-                return(<LoginPage user={ userCtx } emailLogin={ emailLogin }/>)
+                if(userCtx.isUserLogged) return(<ProfilePage user={ userCtx } logout={ logout } />)
+                return(<LoginPage user={ userCtx } emailLogin={ emailLogin } />)
 
             case 'register':
-                if(userCtx.isUserLogged) return(<ProfilePage user={ userCtx } logout={ logout }/>)
-                return(<RegisterPage registerUser={ registerUser }/>)
+                if(userCtx.isUserLogged) return(<ProfilePage user={ userCtx } logout={ logout } />)
+                return(<RegisterPage registerUser={ registerUser } />)
 
             case 'cart':
-                if(userCtx.isUserLogged) return(<CartPage user={ userCtx.userSession } cart={ cartCtx }/>)
-                return(<LoginPage user={ userCtx } emailLogin={ emailLogin }/>)
+                if(userCtx.isUserLogged) return(<CartPage user={ userCtx.userSession } cart={ cartCtx } />)
+                return(<LoginPage user={ userCtx } emailLogin={ emailLogin } />)
 
             case 'chat':
-                if(userCtx.isUserLogged) return(<ChatPage username={ userCtx.userSession.name } socket={ socket }/>)
-                return(<LoginPage user={ userCtx } emailLogin={ emailLogin }/>)
+                if(userCtx.isUserLogged) return(<ChatPage username={ userCtx.userSession.name } socket={ socket } />)
+                return(<LoginPage user={ userCtx } emailLogin={ emailLogin } />)
 
             case 'orders':
-                if(userCtx.isUserLogged) return(<OrdersPageContainer user={ userCtx.userSession }/>)
-                return(<LoginPage user={ userCtx } emailLogin={ emailLogin }/>)
+                if(userCtx.isUserLogged) return(<OrdersPageContainer user={ userCtx.userSession } />)
+                return(<LoginPage user={ userCtx } emailLogin={ emailLogin } />)
 
             default:
-                return(<NotFound/>)
+                return(<NotFound />)
         }
     }
     return ( render(page) )

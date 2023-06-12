@@ -10,4 +10,4 @@ export const rootDir = (string) => path.join(filename_dir, '..',string);
 
 // --pwd hash
 export const createHash = pwd => bcrypt.hashSync(pwd, bcrypt.genSaltSync(10));
-export const checkPwd = (user, pwd) => bcrypt.compareSync(pwd, user.password);
+export const checkPwd = (stored_pwd, received_pwd) => bcrypt.compareSync(received_pwd, stored_pwd);

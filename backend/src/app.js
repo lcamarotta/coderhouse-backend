@@ -27,7 +27,7 @@ useMongoSession();
 app.use(express.json());
 app.use(express.urlencoded({ extended:true }));
 app.use(cors({
-  origin: config.frontendUrlCors,
+  origin: config.frontendUrl,
   credentials: true, // Enable credentials (cookies)
   })
 );
@@ -38,7 +38,7 @@ app.use(passport.session());
 
 const io = new Server(server, {
   cors: {
-    origin: config.frontendUrlCors,
+    origin: config.frontendUrl,
     credentials: true, // Enable credentials (cookies)
   }
 });
@@ -53,11 +53,10 @@ io.on('connection', async socket => {
 	});
 });
 app.use(addLogger);
+app.use(errorHandler);
 
 app.use('/api/carts', cartsRouter);
 app.use('/api/products', productsRouter);
 app.use('/api/sessions', sessionsRouter);
 app.use('/api/loggerTest', loggerRouter);
 app.use('/api/mocking-products', mockingProductsRouter);
-
-app.use(errorHandler);

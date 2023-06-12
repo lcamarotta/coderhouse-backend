@@ -2,7 +2,7 @@ import config from "../config/config.js";
 import winston from "winston";
 
 const ENVIRONMENT = config.environment;
-let logger;
+let loggerUtil;
 
 const customLevelOptions = {
 	levels: {
@@ -24,7 +24,7 @@ const customLevelOptions = {
 }
 
 if (ENVIRONMENT === 'production') {
-	logger = winston.createLogger({
+	loggerUtil = winston.createLogger({
 		levels: customLevelOptions.levels,
 		transports: [
 			new winston.transports.Console({
@@ -46,7 +46,7 @@ if (ENVIRONMENT === 'production') {
 );
 
 } else {
-		logger = winston.createLogger({
+		loggerUtil = winston.createLogger({
 			levels: customLevelOptions.levels,
 			transports: [
 				new winston.transports.Console({
@@ -69,6 +69,8 @@ if (ENVIRONMENT === 'production') {
 }
 
 export const addLogger = (req, res, next) => {
-	req.logger = logger;
+	req.logger = loggerUtil;
 	next();
 }
+
+export const logger = loggerUtil;

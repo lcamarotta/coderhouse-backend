@@ -74,6 +74,11 @@ const LoginPage = ({ user, emailLogin }) => {
               <Button variant='outline-info'>Sign up here!</Button>
             </Link>
           </Col>
+          <Col sm={3} className='text-center m-1'>                
+            <Link to={'/forgot-password'} className='text-decoration-none text-reset'>
+              <Button variant='outline-info'>Forgot Password?</Button>
+            </Link>
+          </Col>
         </Row>
         <ToastContainer
         position="top-center"

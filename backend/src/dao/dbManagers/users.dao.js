@@ -21,4 +21,8 @@ export default class MongoUserDao {
         return result;
     };
     
+    update = async (user) => {
+		const result = await userModel.updateOne({_id: user._id}, user);
+		return result;
+    };
 }
