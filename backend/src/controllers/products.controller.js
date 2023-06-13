@@ -27,8 +27,10 @@ const getById = async(req, res, next) => {
 
 const addOne = async(req, res, next) => {
     const product = req.body;
+    const user = req.session.user;
+    req.logger.debug(`Add Product endpoint, user:`, user)
 	try {
-		const result = await addOneService(product);
+		const result = await addOneService(product, user);
 		res.send({ status: 'success', payload: result });
     } catch (error) {
         next(error);
@@ -38,8 +40,9 @@ const addOne = async(req, res, next) => {
 const updateOneById = async(req, res, next) => {
     const pid = req.params.pid;
 	const product = req.body;
+    const user = req.session.user;
 	try {
-		const result = await updateOneByIdService(pid, product);
+		const result = await updateOneByIdService(pid, product, user);
 		res.send({ status: 'success', payload: result });
     } catch (error) {
         next(error);
@@ -48,8 +51,9 @@ const updateOneById = async(req, res, next) => {
 
 const deleteOneById = async(req, res, next) => {
     const id = req.params.pid;
+    const user = req.session.user;
 	try {
-		const result = await deleteOneByIdService(id);
+		const result = await deleteOneByIdService(id, user);
 		res.send({ status: 'success', payload: result });
     } catch (error) {
         next(error);

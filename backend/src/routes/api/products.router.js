@@ -7,10 +7,10 @@ const router = Router();
 router.get('/', auth('public'), getAll);
 router.get('/:pid', auth('public'), getById);
 
-router.post('/', auth('admin'), addOne);
+router.post('/', auth('any'), addOne);
 
-router.put('/:pid', auth('admin'), updateOneById);
+router.put('/:pid', auth('any'), updateOneById);
 
-router.delete('/:pid', auth('admin'), deleteOneById);
+router.delete('/:pid', auth('any'), deleteOneById);
 
 export default router;

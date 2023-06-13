@@ -13,13 +13,11 @@ const LocalStrategy = local.Strategy;
 
 const initializePassport = () => {
     passport.serializeUser((user, done) => {
-        logger.debug(`passport.serializeUser ${user}`)
         done(null, user._id);
     });
 
     passport.deserializeUser(async (id, done) => {
         const user = await findUserByIdService(id);
-        logger.debug(`passport.deserializeUser ${user}`)
         done(null, user);
     });
 

@@ -1,11 +1,12 @@
 import { Router } from 'express';
 import passport from "passport";
-import { getCurrentUser, logout, registerNewUser, loginByEmail, passwordResetRequest, passwordResetValidate } from "../../controllers/sessions.controller.js";
+import { getCurrentUser, logout, registerNewUser, loginByEmail, passwordResetRequest, passwordResetValidate, modifyUserRole } from "../../controllers/sessions.controller.js";
 import { auth } from "../../services/sessions.services.js";
 import config from '../../config/config.js';
 
 const router = Router();
 
+router.get('/premium/:uid', auth('any'), modifyUserRole);
 router.get('/current', auth('public'), getCurrentUser);
 router.get('/logout', auth('any'), logout);
 
@@ -16,7 +17,8 @@ router.get('/githubcallback', auth('public'), passport.authenticate('github'), (
         role: req.user.role,
         age: req.user.age,
         email: req.user.email,
-        cart: req.user.cart
+        cart: req.user.cart,
+        _id: req.user._id
     }
     const url = config.frontendUrl
     res.redirect(url)

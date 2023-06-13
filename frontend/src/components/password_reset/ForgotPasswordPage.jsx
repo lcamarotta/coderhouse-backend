@@ -35,7 +35,7 @@ const ForgotPasswordPage = ({ requestPasswordChange }) => {
 
     const response = await requestPasswordChange(formEmail.value);
     if(response.status != 200){
-      toast.error(`Error ${response.status}, email already sent`, {
+      toast.error(`Email already sent`, {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,

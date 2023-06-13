@@ -1,6 +1,9 @@
 import { mail_purchase_ticket } from "./mailer.services.js";
 import { getByIdService as getProductByIdService, updateOneByIdService as updateOneProductByIdService } from "./products.services.js";
 import { isProductInCartRepository, getByIdRepository, updateRepository, deleteAllRepository, deleteByIdRepository, createCartRepository, createPurchaseRepository, getPurchaseByEmailRepository } from "../repository/carts.repository.js";
+import CustomError from "./errors/CustomError.js";
+import EErrors from "./errors/enums.js";
+import { getUserService } from "./sessions.services.js";
 
 const createCartService = async() => await createCartRepository();
 
@@ -8,12 +11,20 @@ const isProductInCartService = async(cid, pid) => await isProductInCartRepositor
 
 const getByIdService = async(cid) => await getByIdRepository(cid);
 
-const updateService = async(cid, pid, quantity) => await updateRepository(cid, pid, quantity);
+const updateService = async(cid, pid, quantity, user) => {
+    const storedUser = await getUserService(user.email);
+    if(!storedUser || storedUser.role == undefined) throw CustomError.createError(EErrors.FORBIDDEN, 'Bad User Role')
+    if(storedUser.role == 'premium'){
+        const storedProduct = await getProductByIdService(pid);
+        if(storedProduct[0].owner == storedUser.email) throw CustomError.createError(EErrors.FORBIDDEN, 'You can not add your own products to cart');
+    }
+    return await updateRepository(cid, pid, quantity);
+}
 
-const updateManyService = async(cid, array) => {
+const updateManyService = async(cid, array, user) => {
     const result = [];
     for (const product of array) {
-        result.push(await updateRepository(cid, product.productId, product.quantity));
+        result.push(await updateService(cid, product.productId, product.quantity, user));
     }
     return result;
 };

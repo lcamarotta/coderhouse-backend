@@ -1,6 +1,6 @@
 import CustomError from "../services/errors/CustomError.js";
 import EErrors from "../services/errors/enums.js";
-import { requestPasswordResetToken, validatePasswordReset } from "../services/sessions.services.js";
+import { findUserByIdService, getUserService, requestPasswordResetToken, validatePasswordReset, modifyUserRoleService } from "../services/sessions.services.js";
 
 const getCurrentUser = async(req, res, next) => {
 	try {
@@ -9,6 +9,19 @@ const getCurrentUser = async(req, res, next) => {
 		}else {
 			res.send({ status: 'success', payload: req.session.user });
 		}
+	} catch (error) {
+		next(error);
+	}
+};
+
+const modifyUserRole = async(req, res, next) => {
+	const uid = req.params.uid;
+	try {
+		if(!uid || uid == ':uid') throw CustomError.createError(EErrors.BAD_REQUEST, 'Did not send user ID');
+		if(req.session.user.role != 'admin') throw CustomError.createError(EErrors.FORBIDDEN, 'Logged user (session) must be admin to switch other users roles by id');
+		const result = await modifyUserRoleService(uid);
+		if(req.session.user._id == uid) req.session.user.role = result;
+		res.send({ status: 'success', payload: `New role ${result}` });
 	} catch (error) {
 		next(error);
 	}
@@ -38,7 +51,8 @@ const loginByEmail = async(req, res, next) => {
 			age: req.user.age,
 			email: req.user.email,
 			cart: req.user.cart,
-			orders: req.user.orders
+			orders: req.user.orders,
+			_id: req.user._id
 		}
 		res.send({ status: 'success', payload: req.session.user });
 	} catch (error) {
@@ -78,5 +92,6 @@ export {
 	registerNewUser,
 	loginByEmail,
 	passwordResetRequest,
-	passwordResetValidate
+	passwordResetValidate,
+	modifyUserRole
 }

@@ -12,6 +12,7 @@ const EErrors = {
     FORBIDDEN: { name: 'FORBIDDEN', code: 403 },
     USER_NOT_LOGGED: { name: 'USER_NOT_LOGGED', code: 403 },
     USER_MUST_BE_ADMIN: { name: 'USER_MUST_BE_ADMIN', code: 403 },
+    USER_MUST_BE_PREMIUM: { name: 'USER_MUST_BE_PREMIUM', code: 403 },
 
     ITEM_NOT_FOUND: { name: 'ITEM_NOT_FOUND', code: 404 },
 

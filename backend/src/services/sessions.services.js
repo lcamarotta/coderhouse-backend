@@ -11,6 +11,24 @@ const existsUserService = async(username) => await existsUserRepository(username
 const getUserService = async(username) => await getUserRepository(username);
 const findUserByIdService = async(id) => await findUserByIdRepository(id);
 
+const modifyUserRoleService = async(id) => {
+	const user = await findUserByIdService(id);
+	if(!user) throw CustomError.createError(EErrors.BAD_REQUEST, 'User does not exist');
+	logger.debug(`modifyUserRoleService user: ${user}`)
+	if(user.role == 'admin'){
+		user.role = 'premium';
+		const result = await updateUser(user)
+		logger.debug(result);
+		return 'premium'
+	}
+	else{
+		user.role = 'admin';
+		const result = await updateUser(user)
+		logger.debug(result);
+		return 'admin'
+	}
+}
+
 const changeUserPasswordService = async(email, newPassword) => {
 	const user = await getUserService(email);
 	if(checkPwd(user.password, newPassword)) throw CustomError.createError(EErrors.BAD_PASSWORD, 'new password can not be the same as old password');
@@ -91,6 +109,13 @@ function auth(role) {
 				throw CustomError.createError(EErrors.USER_MUST_BE_ADMIN);
 			}
 
+		case 'premium':
+			return function(req, res, next){
+				if(!req.session.user) throw CustomError.createError(EErrors.USER_NOT_LOGGED);
+				if(req.session.user.role == 'premium') return next();
+				throw CustomError.createError(EErrors.USER_MUST_BE_PREMIUM);
+			}
+
 		default:
 			throw CustomError.createError(EErrors.SERVER_ERROR);
 	}
@@ -103,5 +128,6 @@ export {
 	getUserService,
 	findUserByIdService,
 	validatePasswordReset,
-	requestPasswordResetToken
+	requestPasswordResetToken,
+	modifyUserRoleService
 }

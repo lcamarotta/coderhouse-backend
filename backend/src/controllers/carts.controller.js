@@ -14,8 +14,9 @@ const getById = async(req, res, next) => {
 
 const addOneProduct = async(req, res, next) => {
     const { cid, pid, quantity } = req.params;
+    const user = req.session.user;
 	try {
-		const result = await updateService(cid, pid, quantity);
+		const result = await updateService(cid, pid, quantity, user);
 		res.send({ status: 'Success', payload: result });
     } catch (error) {
         next(error);
@@ -25,8 +26,9 @@ const addOneProduct = async(req, res, next) => {
 const addOrUpdateManyProducts = async(req, res, next) => {
     const { cid } = req.params;
 	const productsToUpdate = req.body;
+    const user = req.session.user;
 	try {
-        const result = await updateManyService(cid, productsToUpdate);
+        const result = await updateManyService(cid, productsToUpdate, user);
 		res.send({ status: 'Success', payload: result });
     } catch (error) {
         next(error);

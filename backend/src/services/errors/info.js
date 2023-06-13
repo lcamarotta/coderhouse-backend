@@ -20,6 +20,8 @@ const createErrorMessage = (errorType) => {
         case 'USER_NOT_LOGGED': return 'User must be logged in to access this resource';
         
         case 'USER_MUST_BE_ADMIN': return 'You do not have permission to access this resource. Must be admin';
+
+        case 'USER_MUST_BE_PREMIUM': return 'You do not have permission to access this resource. Must be premium';
         
         case 'ITEM_NOT_FOUND': return 'The requested resource was not found';
         
