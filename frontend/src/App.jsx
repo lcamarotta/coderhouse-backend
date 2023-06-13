@@ -24,7 +24,7 @@ const App = () => {
             <Route path="/product/:productId" element={<ProductDetailContainer/>} />
             <Route path="/user/:page" element={<UserSessionCheck/>} />
             <Route path="/forgot-password" element={<ResetPasswordContainer page={ 'forgot-password' } />}/>
-            <Route path="/pw-reset/:email/:token/set-pw" element={<ResetPasswordContainer page={ 'request-password-reset' } />}/>
+            <Route path="/pw/:token/reset" element={<ResetPasswordContainer page={ 'request-password-reset' } />}/>
           </Routes>
         </BrowserRouter>
       </UserContextProvider>

@@ -1,6 +1,6 @@
 import CustomError from "../services/errors/CustomError.js";
 import EErrors from "../services/errors/enums.js";
-import { existsUserService, requestPasswordResetToken, validatePasswordReset } from "../services/sessions.services.js";
+import { requestPasswordResetToken, validatePasswordReset } from "../services/sessions.services.js";
 
 const getCurrentUser = async(req, res, next) => {
 	try {
@@ -47,17 +47,10 @@ const loginByEmail = async(req, res, next) => {
 };
 
 const passwordResetRequest = async(req, res, next) => {
-	const { email } = req.params;
+	const { email } = req.body;
 	try {
-
 		if(!email) throw CustomError.createError(EErrors.BAD_REQUEST, 'Email not received');
-		const checkEmail = await existsUserService(email);
-
-		if(!checkEmail) throw CustomError.createError(EErrors.USER_NOT_EXIST);
 		await requestPasswordResetToken(email);
-		
-    req.logger.debug(`passwordRequest controller, email:${email} checkEmail: ${checkEmail}`);
-
 		res.send({ status: 'success', payload: { message: 'request sent, check your email' } })
 	} catch (error) {
 		next(error);
@@ -65,13 +58,14 @@ const passwordResetRequest = async(req, res, next) => {
 };
 
 const passwordResetValidate = async(req, res, next) => {
-	const { email, token } = req.params;
-	const newPassword = req.body;
+	const { token } = req.params;
+	const { newPassword } = req.body;
 
 	try {
-		if(!email || !token) throw CustomError.createError(EErrors.BAD_REQUEST, 'Email or token not received');
-		await validatePasswordReset(email, token, newPassword);
-		res.send({ status: 'success', payload: { message: 'password changed, now login' } })
+		if(!newPassword || !token) throw CustomError.createError(EErrors.BAD_REQUEST, 'password is empty or token not received');
+		const result = await validatePasswordReset(token, newPassword);
+		if(result == -1) throw CustomError.createError(EErrors.BAD_PASSWORD, 'new password can not be the same as old password');
+		res.send({ status: 'success', payload: { result } })
 	} catch (error) {
 		next(error);
 	}

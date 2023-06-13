@@ -12,11 +12,11 @@ const passwordResetSchema = new mongoose.Schema({
 		type: String,
 		unique: true
 	},
-	createdAt: {
-		type: Date,
-		expires: '60m',
-		default: Date.now
+	expireAfterSeconds: {
+    type: Date,
+    default: new Date(),
 	}
 });
+passwordResetSchema.set('timestamps', true);
 
 export const passwordResetModel = mongoose.model(passwordResetCollection, passwordResetSchema);

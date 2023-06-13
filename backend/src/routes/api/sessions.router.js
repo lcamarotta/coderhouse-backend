@@ -8,7 +8,6 @@ const router = Router();
 
 router.get('/current', auth('public'), getCurrentUser);
 router.get('/logout', auth('any'), logout);
-router.get('/reset-request/:email', auth('notloggedin'), passwordResetRequest);
 
 router.get('/github', auth('public'), passport.authenticate('github', { scope: ['user: email'] }), (req, res) => {});
 router.get('/githubcallback', auth('public'), passport.authenticate('github'), (req, res) => {
@@ -19,11 +18,12 @@ router.get('/githubcallback', auth('public'), passport.authenticate('github'), (
         email: req.user.email,
         cart: req.user.cart
     }
-    const url = config.frontendUrlCors
+    const url = config.frontendUrl
     res.redirect(url)
 });
 
-router.put('/reset-password/:email/:token', auth('notloggedin'), passwordResetValidate);
+router.put('/reset-request', auth('notloggedin'), passwordResetRequest);
+router.put('/reset-password/:token', auth('notloggedin'), passwordResetValidate);
 router.post('/login', auth('public'), passport.authenticate('login'), loginByEmail);
 router.post('/register', auth('public'), passport.authenticate('register'), registerNewUser);
 

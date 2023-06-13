@@ -62,6 +62,7 @@ const initializePassport = () => {
         try {
             if(!await existsUserService(username)) throw CustomError.createError(EErrors.USER_NOT_EXIST);
             const user = await getUserService(username);
+            console.log(username, password, user, user.password, typeof(password));
             if(!checkPwd(user.password, password)) throw CustomError.createError(EErrors.BAD_PASSWORD);
             return done(null, user);
         } catch (error) {

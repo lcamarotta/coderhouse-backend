@@ -11,7 +11,7 @@ export async function mongoConnect() {
 		mongoose.connect(config.mongoUrl);
 		logger.info(`${new Date().toISOString()} -- connected to mongoDBaaS`)
 	} catch (error) {
-		logger.error(`${new Date().toISOString()} -- could not connect to mongoDBaaS`)
+		logger.error(`${new Date().toISOString()}-- could not connect to mongoDBaaS  ${error} `)
 		server.close();
 	}
 }

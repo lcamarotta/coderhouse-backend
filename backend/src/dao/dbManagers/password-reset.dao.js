@@ -13,9 +13,15 @@ export default class MongoPw_ResetDao {
   };
 
 	create = async (email, token) => {
-    const result = await passwordResetModel.create({ email, token });
+    const expireAfterSeconds = Date.now() + (1000 * 60 * 60);
+    const result = await passwordResetModel.create({ email, token, expireAfterSeconds });
     logger.debug(`create token DAO result, ${result}`);
     return result;
   };
+
+	delete = async (email) => {
+		const result = await passwordResetModel.deleteOne({email});
+		return result;
+	}
     
 }

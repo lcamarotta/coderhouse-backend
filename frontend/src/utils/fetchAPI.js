@@ -82,9 +82,13 @@ const registerUser = async(formData) => {
 
 const requestPasswordChange = async(email) => {
   try {
-    let response = await fetch(`${backendURL}/api/sessions/reset-request/${email}`, {
-      method: 'GET',
+    let response = await fetch(`${backendURL}/api/sessions/reset-request`, {
+      method: 'PUT',
       credentials: 'include',
+      body: JSON.stringify({email}),
+      headers: {
+        'Content-Type': 'application/json'
+      }
     })
     response = await response.json();
     if(devMode) console.log('requestPasswordChangeAPI response:', response);
@@ -96,9 +100,9 @@ const requestPasswordChange = async(email) => {
   }
 }
 
-const changePassword = async(email, token, formData) => {
+const changePassword = async(token, formData) => {
   try {
-    let response = await fetch(`${backendURL}/api/sessions/reset-password/${email}/${token}`, {
+    let response = await fetch(`${backendURL}/api/sessions/reset-password/${token}`, {
       method: 'PUT',
       credentials: 'include',
       body: JSON.stringify(formData),

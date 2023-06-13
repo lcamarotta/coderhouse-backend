@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { Col, Container, Row, Button, Form } from 'react-bootstrap'
 import { ToastContainer, toast } from 'react-toastify';
 
-const PasswordChangePage = ({ changePassword, email, token }) => {
+const PasswordChangePage = ({ changePassword, token }) => {
   const [flag, setFlag] = useState(true);
 
   const renderForm = () => {
@@ -55,7 +55,7 @@ const PasswordChangePage = ({ changePassword, email, token }) => {
       newPassword: formPassword1.value
     }
 
-    const response =  await changePassword(email, token, formData);
+    const response =  await changePassword(token, formData);
     if(response.ok == false){
       toast.error(`There was some error`, {
         position: "top-right",

@@ -22,9 +22,8 @@ const ResetPasswordContainer = ({ page }) => {
       case 'request-password-reset':
         if(userCtx.isUserLogged) return(<ProfilePage user={ userCtx } logout={ logout } />)
         
-	      const { email, token } = useParams();
-        console.log(email, token)
-        return(<PasswordChangePage changePassword={ changePassword } email={ email } token={ token } />)
+	      const { token } = useParams();
+        return(<PasswordChangePage changePassword={ changePassword } token={ token } />)
         
       default:
         return(<NotFound />)

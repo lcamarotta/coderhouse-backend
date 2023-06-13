@@ -49,7 +49,7 @@ export const mail_password_reset = async(recipient, token) => {
 			`
 			<div>
 				<h1>Password Reset Request</h1>
-				<p>Click <a href='${config.frontendUrl}/pw-reset/${recipient}/${token}/set-pw'>HERE</a> to reset password.</p>
+				<p>Click <a href='${config.frontendUrl}/pw/${token}/reset'>HERE</a> to reset password.</p>
 				<p>Link is only valid for one hour</p>
 				
 				<p>If you did not request a password change call the FBI</p>

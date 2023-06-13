@@ -11,3 +11,16 @@ export const rootDir = (string) => path.join(filename_dir, '..',string);
 // --pwd hash
 export const createHash = pwd => bcrypt.hashSync(pwd, bcrypt.genSaltSync(10));
 export const checkPwd = (stored_pwd, received_pwd) => bcrypt.compareSync(received_pwd, stored_pwd);
+
+// --random custom token
+export function generateRandomToken(length) {
+  const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+  let token = '';
+
+  for (let i = 0; i < length; i++) {
+    const randomIndex = Math.floor(Math.random() * chars.length);
+    token += chars.charAt(randomIndex);
+  }
+
+  return token;
+}
