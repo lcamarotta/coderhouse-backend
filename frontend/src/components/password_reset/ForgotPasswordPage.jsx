@@ -32,21 +32,37 @@ const ForgotPasswordPage = ({ requestPasswordChange }) => {
   const formSubmit = async(event) => {
     event.preventDefault()
     if(!formEmail.value) return;
-    requestPasswordChange(formEmail.value);
 
-    toast.success(`Check your email`, {
-      position: "top-right",
-      autoClose: 15000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "colored",
+    const response = await requestPasswordChange(formEmail.value);
+    if(response.status != 200){
+      toast.error(`Error ${response.status}, email already sent`, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
       });
-
-    setFlag(false)
+      return
+    }
+    else{
+      toast.success(`Check your email`, {
+        position: "top-right",
+        autoClose: 15000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+        });
+      setFlag(false);
+      return
+    }
   }
+
 
   return (
     <Container className='mt-5'>

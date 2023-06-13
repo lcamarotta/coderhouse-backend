@@ -36,9 +36,11 @@ const PasswordChangePage = ({ changePassword, token }) => {
 
   const formSubmit = async(event) => {
     event.preventDefault()
+    const pwd1 = String(formPassword1.value);
+    const pwd2 = String(formPassword2.value);
     
-    if(formPassword1.value =! formPassword2.value){
-      toast.error(`Passwords do not match`, {
+    if(!(pwd1 === pwd2) || !pwd1 || !pwd2){
+      toast.error(`Passwords do not match or empty`, {
         position: "top-right",
         autoClose: 4000,
         hideProgressBar: false,
@@ -52,12 +54,12 @@ const PasswordChangePage = ({ changePassword, token }) => {
     }
 
     const formData = {
-      newPassword: formPassword1.value
+      newPassword: pwd1
     }
 
     const response =  await changePassword(token, formData);
-    if(response.ok == false){
-      toast.error(`There was some error`, {
+    if(response.status != 200){
+      toast.error(`Error ${response.status}, ${response.response.payload}`, {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,
@@ -67,7 +69,7 @@ const PasswordChangePage = ({ changePassword, token }) => {
         progress: undefined,
         theme: "colored",
       });
-      console.log(response)
+      return
     }
     else{
       toast.success(`Password changed`, {
@@ -80,8 +82,9 @@ const PasswordChangePage = ({ changePassword, token }) => {
         progress: undefined,
         theme: "colored",
       });
+      setFlag(false);
+      return
     }
-    setFlag(false);
   }
 
   return (

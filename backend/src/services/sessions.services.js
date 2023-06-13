@@ -13,8 +13,6 @@ const findUserByIdService = async(id) => await findUserByIdRepository(id);
 
 const changeUserPasswordService = async(email, newPassword) => {
 	const user = await getUserService(email);
-	console.log('oassss', newPassword)
-	console.log(email, newPassword, user, user.password, typeof(newPassword));
 	if(checkPwd(user.password, newPassword)) throw CustomError.createError(EErrors.BAD_PASSWORD, 'new password can not be the same as old password');
 	user.password = createHash(newPassword);
 	const result = await updateUser(user);

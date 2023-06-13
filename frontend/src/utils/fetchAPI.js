@@ -90,10 +90,10 @@ const requestPasswordChange = async(email) => {
         'Content-Type': 'application/json'
       }
     })
+    const status = response.status;
     response = await response.json();
     if(devMode) console.log('requestPasswordChangeAPI response:', response);
-    return response.payload;
-
+    return { status, response };
   } catch (error) {
     console.error('There was an error requestPasswordChange API', error);
     return -1;
@@ -110,9 +110,10 @@ const changePassword = async(token, formData) => {
         'Content-Type': 'application/json'
       }
     })
+    const status = response.status;
     response = await response.json();
     if(devMode) console.log('resetPasswordAPI response:', response);
-    return response.payload;
+    return { status, response };
 
   } catch (error) {
     console.error('There was an error resetPassword API', error);
