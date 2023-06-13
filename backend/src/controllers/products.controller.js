@@ -1,8 +1,6 @@
-import CustomError from "../services/errors/CustomError.js";
-import EErrors from "../services/errors/enums.js";
 import { getAllService, getByIdService, addOneService, updateOneByIdService, deleteOneByIdService } from "../services/products.services.js";
 
-const getAll = async(req, res) => {
+const getAll = async(req, res, next) => {
 	const { page = 1, limit = 10, sort, query} = req.query;
 	const options = {
 		page,
@@ -13,48 +11,48 @@ const getAll = async(req, res) => {
 		const result = await getAllService(query, options);
 		res.send({ status: 'success', ...result });
     } catch (error) {
-        throw CustomError.createError(EErrors.SERVER_ERROR);
+        next(error);
     }
 };
 
-const getById = async(req, res) => {
+const getById = async(req, res, next) => {
     const pid = req.params.pid;
 	try {
 		const result = await getByIdService(pid);
 		res.send({ status: 'success', payload: result });
     } catch (error) {
-        throw CustomError.createError(EErrors.SERVER_ERROR);
+        next(error);
     }
 };
 
-const addOne = async(req, res) => {
+const addOne = async(req, res, next) => {
     const product = req.body;
 	try {
 		const result = await addOneService(product);
 		res.send({ status: 'success', payload: result });
     } catch (error) {
-        throw CustomError.createError(EErrors.SERVER_ERROR);
+        next(error);
     }
 };
 
-const updateOneById = async(req, res) => {
+const updateOneById = async(req, res, next) => {
     const pid = req.params.pid;
 	const product = req.body;
 	try {
 		const result = await updateOneByIdService(pid, product);
 		res.send({ status: 'success', payload: result });
     } catch (error) {
-        throw CustomError.createError(EErrors.SERVER_ERROR);
+        next(error);
     }
 };
 
-const deleteOneById = async(req, res) => {
+const deleteOneById = async(req, res, next) => {
     const id = req.params.pid;
 	try {
 		const result = await deleteOneByIdService(id);
 		res.send({ status: 'success', payload: result });
     } catch (error) {
-        throw CustomError.createError(EErrors.SERVER_ERROR);
+        next(error);
     }
 };
 

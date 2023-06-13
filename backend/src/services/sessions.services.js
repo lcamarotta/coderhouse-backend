@@ -19,21 +19,19 @@ const changeUserPasswordService = async(email, newPassword) => {
 };
 
 const validatePasswordReset = async(email, token, newPassword) => {
-	logger.debug(`validatePasswordReset: ${email} ${token} ${newPassword}`);
 
 	const isTokenValid = await validateTokenRepository(email, token);
-	if(!isTokenValid) return -1;
+	if(!isTokenValid) throw CustomError.createError(EErrors.BAD_REQUEST, 'Invalid token');
 
 	const result = await changeUserPasswordService(email, newPassword);
-	
-	logger.debug(`changeUserPasswordService: ${result}`);
+	logger.debug(`changePassword Service: ${result}`);
 	return result
 };
 
 const requestPasswordResetToken = async(email) => {
 	const token = createHash(email);
 	logger.debug(`token: ${token}`);
-	await createTokenRepository(email, token);
+	createTokenRepository(email, token);
 	mail_password_reset(email, token)
 	return
 };

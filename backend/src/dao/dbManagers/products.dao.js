@@ -27,7 +27,7 @@ export default class MongoProductDao {
 
 		const result = await productModel.paginate(queryObject, options);
 
-		if(options.page > result.totalPages || options.page <= 0 || isNaN(options.page)) return CustomError.createError(EErrors.BAD_REQUEST);
+		if(options.page > result.totalPages || options.page <= 0 || isNaN(options.page)) return CustomError.createError(EErrors.BAD_REQUEST, 'Page invalid');
 		
 		let link = `?limit=${options.limit}`;
 		if(options.sort) link = `${link}&sort=${options.sort.price}`;

@@ -37,7 +37,7 @@ const updateOneProduct = async(req, res, next) => {
 	const { cid, pid } = req.params;
 	const quantity = req.body;
 	try {
-		if(await isProductInCartService(cid, pid) == -1) throw CustomError.createError(EErrors.BAD_REQUEST);
+		if(await isProductInCartService(cid, pid) == -1) throw CustomError.createError(EErrors.BAD_REQUEST, 'Product is not in cart');
 		const result = await updateService(cid, pid, quantity.quantity);
 		res.send(
             {

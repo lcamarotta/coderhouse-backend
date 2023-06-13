@@ -2,7 +2,7 @@ import CustomError from "../services/errors/CustomError.js";
 import EErrors from "../services/errors/enums.js";
 import { existsUserService, requestPasswordResetToken, validatePasswordReset } from "../services/sessions.services.js";
 
-const getCurrentUser = async(req, res) => {
+const getCurrentUser = async(req, res, next) => {
 	try {
 		if(!req.session.user){
 			res.send({ status: 'success', payload: { message: 'not logged in' } });
@@ -10,26 +10,26 @@ const getCurrentUser = async(req, res) => {
 			res.send({ status: 'success', payload: req.session.user });
 		}
 	} catch (error) {
-		throw CustomError.createError(EErrors.SERVER_ERROR);
+		next(error);
 	}
 };
 
-const logout = async(req, res) => {
+const logout = async(req, res, next) => {
 	try {
 		req.session.destroy(error => {
-			if (error) throw CustomError.createUnknownError(`${error}`);
+			if (error) throw CustomError.createUnknownError(`${error}`, 'Could not log out');
 			res.send({ status: 'success', payload: { message: 'logged out' } });
 		});
 	} catch (error) {
-		throw CustomError.createError(EErrors.SERVER_ERROR);
+		next(error);
 	}
 };
 
-const registerNewUser = (req, res) => {
+const registerNewUser = (req, res, next) => {
 	res.send({ status: 'success', payload: { message: 'user registered' } });
 };
 
-const loginByEmail = async(req, res) => {
+const loginByEmail = async(req, res, next) => {
 	try {
 		if(!req.user) throw CustomError.createError(EErrors.INVALID_CREDENTIALS);
 		req.session.user = {
@@ -42,41 +42,38 @@ const loginByEmail = async(req, res) => {
 		}
 		res.send({ status: 'success', payload: req.session.user });
 	} catch (error) {
-		throw CustomError.createError(EErrors.SERVER_ERROR);
+		next(error);
 	}
 };
 
-const passwordResetRequest = async(req, res) => {
+const passwordResetRequest = async(req, res, next) => {
 	const { email } = req.params;
 	try {
 
-		if(!email) throw CustomError.createError(EErrors.BAD_REQUEST);
+		if(!email) throw CustomError.createError(EErrors.BAD_REQUEST, 'Email not received');
 		const checkEmail = await existsUserService(email);
 
 		if(!checkEmail) throw CustomError.createError(EErrors.USER_NOT_EXIST);
-		const result = await requestPasswordResetToken(email);
+		await requestPasswordResetToken(email);
 		
     req.logger.debug(`passwordRequest controller, email:${email} checkEmail: ${checkEmail}`);
 
 		res.send({ status: 'success', payload: { message: 'request sent, check your email' } })
 	} catch (error) {
-		req.logger.error(error)
-		throw CustomError.createError(EErrors.SERVER_ERROR);
+		next(error);
 	}
 };
 
-const passwordResetValidate = async(req, res) => {
+const passwordResetValidate = async(req, res, next) => {
 	const { email, token } = req.params;
 	const newPassword = req.body;
 
 	try {
-		if(!email || !token) throw CustomError.createError(EErrors.BAD_REQUEST);
-		const result = validatePasswordReset(email, token, newPassword);
-		if(result = -1) throw CustomError.createError(EErrors.BAD_REQUEST);
+		if(!email || !token) throw CustomError.createError(EErrors.BAD_REQUEST, 'Email or token not received');
+		await validatePasswordReset(email, token, newPassword);
 		res.send({ status: 'success', payload: { message: 'password changed, now login' } })
 	} catch (error) {
-		req.logger.error(error)
-		throw CustomError.createError(EErrors.SERVER_ERROR);
+		next(error);
 	}
 
 };

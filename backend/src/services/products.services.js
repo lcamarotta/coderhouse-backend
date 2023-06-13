@@ -9,7 +9,7 @@ const getByIdService = async(pid) => await getByIdRepository(pid);
 const addOneService = async(product) => {
     const { title, category, price, stock, description, thumbnail, code } = product;
 	if(!title || !category || !price || !stock || !description || !thumbnail || !code){
-		throw CustomError.createError(EErrors.INVALID_PARAMETER);
+		throw CustomError.createError(EErrors.INVALID_PARAMETER, 'title, category, price, stock, description, thumbnail, code -> these fields are required');
 	}
     await addOneRepository(product);
 };
@@ -17,7 +17,7 @@ const addOneService = async(product) => {
 const updateOneByIdService = async(pid, product) => {
     const { title, category, price, stock, description, thumbnail, code } = product;
 	if(!title || !category || !price || !stock || !description || !thumbnail || !code){
-		throw CustomError.createError(EErrors.INVALID_PARAMETER);
+		throw CustomError.createError(EErrors.INVALID_PARAMETER, 'title, category, price, stock, description, thumbnail, code -> these fields are required');
 	}
     await updateOneByIdRepository(pid, product)
 };
