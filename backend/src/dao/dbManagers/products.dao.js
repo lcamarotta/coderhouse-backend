@@ -16,6 +16,10 @@ export default class MongoProductDao {
 				queryObject[queryArray[0]] = queryArray[1];
 			}
 		}
+
+		if(options.sort){
+			if(options.sort.price != 'asc' && options.sort.price != 'desc' ) return CustomError.createError(EErrors.BAD_REQUEST, 'Sort invalid');
+		}
 		
 		options = {
 			...options,
@@ -27,6 +31,7 @@ export default class MongoProductDao {
 
 		const result = await productModel.paginate(queryObject, options);
 
+		if(result.payload.length == 0) return CustomError.createError(EErrors.ITEM_NOT_FOUND);
 		if(options.page > result.totalPages || options.page <= 0 || isNaN(options.page)) return CustomError.createError(EErrors.BAD_REQUEST, 'Page invalid');
 		
 		let link = `?limit=${options.limit}`;
@@ -47,7 +52,9 @@ export default class MongoProductDao {
 	
 	getById = async (id) => {
 		const products = await productModel.find({ _id: id });
-		return products.map(product => product.toObject());
+		const result = products.map(product => product.toObject());
+		if(result.length == 0) return CustomError.createError(EErrors.ITEM_NOT_FOUND);
+		return result;
 	}
 
 	save = async (product) => {

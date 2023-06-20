@@ -1,0 +1,514 @@
+paths:
+  /api/carts/{cid}:
+    get:
+      summary: Fetch cart by its ID
+      tags:
+       - Carts
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          decription: cart ID
+          schema:
+            $type: String
+      responses: 
+        "200":
+          description: Fetch successful
+          content:
+            application/json:
+              schema:
+                $ref: '#components/responseBodies/cart'
+        "403":
+          description: Bad authentication
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#components/responseBodies/badAuth'
+                  - $ref: '#components/responseBodies/notLogged'
+        "404":
+          description: The cart was not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#components/responseBodies/itemNotFound'
+        "500":
+          description: Internal server error, probably database connection was unsuccessful.
+          content:
+            application/json:
+              schema:
+                $ref: '#components/responseBodies/serverError'
+    put:
+      summary: update or add manny products at once to the cart
+      tags:
+       - Carts
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          decription: cart ID
+          schema:
+            $type: String
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#components/requestBodies/product'
+      responses:
+        "200":
+          description: Operation successful
+        "403":
+          description: Bad authentication
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#components/responseBodies/badAuth'
+                  - $ref: '#components/responseBodies/notLogged'
+        "404":
+          description: Item was not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#components/responseBodies/itemNotFound'
+        "500":
+          description: Internal server error, probably database connection was unsuccessful.
+          content:
+            application/json:
+              schema:
+                $ref: '#components/responseBodies/serverError'
+    delete:
+      summary: Remove all products from cart
+      tags:
+       - Carts
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          decription: cart ID
+          schema:
+            $type: String
+      responses:
+        "200":
+          description: Fetch successful
+          content:
+            application/json:
+              schema:
+                $ref: '#components/responseBodies/mongoProductsArray'
+        "500":
+          description: Internal server error, either cartID is bad or database connection was unsuccessful.
+          content:
+            application/json:
+              schema:
+                $ref: '#components/responseBodies/serverError'
+  /api/carts/{cid}/purchase:
+    get:
+      summary: Purchase items on the cart
+      tags:
+       - Carts
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          decription: cart ID
+          schema:
+            $type: String
+      responses:
+        "200":
+          description: Operation successful
+        "403":
+          description: Bad authentication
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#components/responseBodies/badAuth'
+                  - $ref: '#components/responseBodies/notLogged'
+        "500":
+          description: Internal server error, probably database connection was unsuccessful.
+          content:
+            application/json:
+              schema:
+                $ref: '#components/responseBodies/serverError'
+  /api/carts/{cid}/products/{pid}:
+    put:
+      summary: Update quantity of a product already in cart
+      tags:
+       - Carts
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          decription: cart ID
+          schema:
+            $type: String
+        - name: pid
+          in: path
+          required: true
+          decription: product ID
+          schema:
+            $type: String
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#components/requestBodies/updateQuantity'
+      responses:
+        "200":
+          description: Operation successful
+        "403":
+          description: Bad authentication
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#components/responseBodies/badAuth'
+                  - $ref: '#components/responseBodies/notLogged'
+        "404":
+          description: The product is not in cart.
+          content:
+            application/json:
+              schema:
+                $ref: '#components/responseBodies/itemNotFound'
+        "500":
+          description: Internal server error, probably database connection was unsuccessful.
+          content:
+            application/json:
+              schema:
+                $ref: '#components/responseBodies/serverError'
+    delete:
+      summary: Remove one product from cart
+      tags:
+       - Carts
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          decription: cart ID
+          schema:
+            $type: String
+        - name: pid
+          in: path
+          required: true
+          decription: product ID
+          schema:
+            $type: String
+      responses:
+        "200":
+          description: Operation successful
+        "403":
+          description: Bad authentication
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#components/responseBodies/badAuth'
+                  - $ref: '#components/responseBodies/notLogged'
+        "404":
+          description: The product is not in cart.
+          content:
+            application/json:
+              schema:
+                $ref: '#components/responseBodies/itemNotFound'
+        "500":
+          description: Internal server error, probably database connection was unsuccessful.
+          content:
+            application/json:
+              schema:
+                $ref: '#components/responseBodies/serverError'
+  /api/carts/{cid}/product/{pid}/{quantity}:
+    post:
+      summary: Add one product to cart
+      tags:
+       - Carts
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          decription: cart ID
+          schema:
+            $type: String
+        - name: pid
+          in: path
+          required: true
+          decription: product ID
+          schema:
+            $type: String
+        - name: quantity
+          in: path
+          required: true
+          decription: quantity to add to cart
+          schema:
+            $type: String
+      responses:
+        "200":
+          description: Fetch successful
+          content:
+            application/json:
+              schema:
+                $ref: '#components/responseBodies/mongoProductsArray'
+        "403":
+          description: Bad authentication
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#components/responseBodies/badAuth'
+                  - $ref: '#components/responseBodies/notLogged'
+        "404":
+          description: The product is not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#components/responseBodies/itemNotFound'
+        "500":
+          description: Internal server error, probably database connection was unsuccessful.
+          content:
+            application/json:
+              schema:
+                $ref: '#components/responseBodies/serverError'
+  /api/carts/purchase/{email}:
+    get:
+      summary: Find purchases made by the email
+      tags:
+       - Carts
+      parameters:
+        - name: email
+          in: path
+          required: true
+          decription: purchaser email
+          schema:
+            $type: String
+      responses:
+        "200":
+          description: Fetch successful
+          content:
+            application/json:
+              schema:
+                $ref: '#components/responseBodies/purchase'
+        "403":
+          description: Bad authentication
+          content:
+            application/json:
+              schema:
+                $ref: '#components/responseBodies/notLogged'
+        "500":
+          description: Internal server error, probably database connection was unsuccessful.
+          content:
+            application/json:
+              schema:
+                $ref: '#components/responseBodies/serverError'
+
+components:
+  schemas:
+    Cart:
+      type: object
+      properties:
+        _id:
+          type: ObjectId
+          description: mongodb auto-ID
+        products:
+          type: array
+          description: Array of objects
+          items:
+            type: object
+            properties:
+              quantity:
+                type: number
+                description: Quantity of this product added to cart
+              product:
+                type: ObjectId
+                description: ID of the product added to cart
+      example:
+        _id: ObjectId("45689NSJKDFN345")
+        products:
+          [
+            {
+              quantity: 10,
+              product:
+                {
+                  _id: ObjectId("45689NSJKDFN345"),
+                  code: DFG43R,
+                  title: Alienware M17,
+                  category: Gaming,
+                  price: 9000,
+                  stock: 20,
+                  description: AMD R7 - RTX9080,
+                  thumbnail: ["https://images.start.com.ar/ALW3080.jpg","https://images.start.com.ar/ALW3080-3.jpg"],
+                  owner: admin,
+                  status: true
+                }
+            }
+          ]
+  requestBodies:
+    updateQuantity:
+      type: object
+      properties:
+        quantity:
+          type: number
+          description: quantity of product to add to cart
+      example:
+        quantity: 100
+    product:
+      type: object
+      properties:
+        code:
+          type: String
+          description: Product code
+        title:
+          type: String
+          description: Product name
+        category:
+          type: String
+          description: Product category
+        price:
+          type: Number
+          description: Product price
+        stock:
+          type: Number
+          description: Product stock quantity
+        description:
+          type: String
+          description: Product description
+        thumbnail:
+          type: Array
+          description: Array of urls of images of the product
+      example:
+        code: DFG43R
+        title: Alienware M17
+        category: Gaming
+        price: 9000
+        stock: 20
+        description: AMD R7 - RTX9080
+        thumbnail: ["https://images.start.com.ar/ALW3080.jpg","https://images.start.com.ar/ALW3080-3.jpg"]
+  responseBodies:
+    serverError:
+      type: object
+      properties:
+        status:
+          type: String
+          description: Error code - Error name
+        payload:
+          type: String
+          description: Error message
+      example:
+        status: Error 500 - SERVER ERROR
+        payload: SERVER ERROR
+    itemNotFound:
+      type: object
+      properties:
+        status:
+          type: String
+          description: Error code - Error name
+        payload:
+          type: String
+          description: Error message
+      example:
+        status: Error 404 - ITEM NOT FOUND
+        payload: No matching item found
+    notLogged:
+      type: object
+      properties:
+        status:
+          type: String
+          description: Error code - Error name
+        payload:
+          type: String
+          description: Error message
+      example:
+        status: Error 403 - NOT LOGGED IN
+        payload: User must be logged in to access this resource
+    badAuth:
+      type: object
+      properties:
+        status:
+          type: String
+          description: Error code - Error name
+        payload:
+          type: String
+          description: Error message
+      example:
+        status: Error 403 - FORBIDDEN
+        payload: User must be admin or premium
+    cart:
+      type: object
+      properties:
+        status:
+          type: String
+          description: Fetch status
+        payload:
+          type: array
+          items:
+            $ref: '#components/schemas/Cart'
+      example:
+        status: Success
+        payload:
+          [
+            {
+            _id: ObjectId("45689NSJKDFN345"),
+            code: DFG43R,
+            title: Alienware M17,
+            category: Gaming,
+            price: 9000,
+            stock: 20,
+            description: AMD R7 - RTX9080,
+            thumbnail: ["https://images.start.com.ar/ALW3080.jpg","https://images.start.com.ar/ALW3080-3.jpg"],
+            owner: admin,
+            status: true
+            }
+          ]
+    purchase:
+      type: object
+      properties:
+        _id:
+          type: ObjectId
+          description: mongodb auto-ID
+        purchaser:
+          type: string
+          description: purchaser email
+        amount:
+          type: number
+          description: total purchase amount
+        code:
+          type: string
+          description: purchase code
+        products:
+          type: array
+          description: Array of objects
+          items:
+            type: object
+            properties:
+              quantity:
+                type: number
+                description: Quantity of this product added to cart
+              product:
+                type: ObjectId
+                description: ID of the product added to cart
+      example:
+        _id: ObjectId("45689NSJKDFN345")
+        purchaser: email@example.com
+        amount: 9000
+        code: CODESDFSD09230CODE
+        products:
+          [
+            {
+              quantity: 10,
+              product:
+                {
+                  _id: ObjectId("45689NSJKDFN345"),
+                  code: DFG43R,
+                  title: Alienware M17,
+                  category: Gaming,
+                  price: 9000,
+                  stock: 20,
+                  description: AMD R7 - RTX9080,
+                  thumbnail: ["https://images.start.com.ar/ALW3080.jpg","https://images.start.com.ar/ALW3080-3.jpg"],
+                  owner: admin,
+                  status: true
+                }
+            }
+          ]

@@ -1,0 +1,409 @@
+paths:
+  /api/products:
+    get:
+      summary: Get a list of products
+      tags:
+        - Products
+      parameters: [  
+        {  
+          "name": "page",
+          "in": "query",
+          "description": "The page number that needs to be fetched. Default is 1",
+          "required": false,
+          "type": "number"
+        },
+        {  
+          "name": "limit",
+          "in": "query",
+          "description": "The maximum product quantity to fetch per page. Default is 10",
+          "required": false,
+          "type": "number"
+        },
+        {  
+          "name": "sort",
+          "in": "query",
+          "description": "Sort results by price. May be 'asc' or 'desc'.",
+          "required": false,
+          "type": "string"
+        },
+        {  
+          "name": "query",
+          "in": "query",
+          "description": "Filter by some parameter. Example: 'category:gaming'",
+          "required": false,
+          "type": "string"
+        }
+      ]
+      responses:
+        "200":
+          description: Fetch successful.
+          content:
+            application/json:
+              schema:
+                $ref: '#components/responseBodies/mongoProductsArray'
+        "400":
+          description: Sort query or page query were not valid
+          content:
+            application/json:
+              schema:
+                $ref: '#components/responseBodies/badValues'
+        "404":
+          description: No products found. Query returned empty.
+          content:
+            application/json:
+              schema:
+                $ref: '#components/responseBodies/itemNotFound'
+        "500":
+          description: Internal server error, probably database connection was unsuccessful.
+          content:
+            application/json:
+              schema:
+                $ref: '#components/responseBodies/serverError'
+    post:
+      summary: Add a new product. Must be authenticated as admin or premium user
+      tags:
+       - Products
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#components/requestBodies/updateProduct'
+      responses:
+        "200":
+          description: Product was successfuly added to database.
+          content:
+            application/json:
+              schema:
+                $ref: '#components/responseBodies/mongoProduct'
+        "400":
+          description: Some product field may be missing
+          content:
+            application/json:
+              schema:
+                $ref: '#components/responseBodies/incompleteValues'
+        "403":
+          description: Bad authentication
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#components/responseBodies/badAuth'
+                  - $ref: '#components/responseBodies/notLogged'
+        "500":
+          description: Internal server error, probably database connection was unsuccessful.
+          content:
+            application/json:
+              schema:
+                $ref: '#components/responseBodies/serverError'
+  /api/products/{pid}:
+    get:
+      summary: Fetch one product by its ID
+      tags:
+       - Products
+      parameters:
+        - name: pid
+          in: path
+          required: true
+          decription: product ID
+          schema:
+            $type: String
+      responses:
+        "200":
+          description: Fetch successful
+          content:
+            application/json:
+              schema:
+                $ref: '#components/responseBodies/mongoProductsArray'
+        "404":
+          description: No product found. Query returned empty.
+          content:
+            application/json:
+              schema:
+                $ref: '#components/responseBodies/itemNotFound'
+        "500":
+          description: Internal server error, probably database connection was unsuccessful.
+          content:
+            application/json:
+              schema:
+                $ref: '#components/responseBodies/serverError'
+    put:
+      summary: Update one product
+      tags:
+       - Products
+      parameters:
+        - name: pid
+          in: path
+          required: true
+          decription: product ID
+          schema:
+            $type: String
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#components/requestBodies/updateProduct'
+      responses:
+        "200":
+          description: Update successful
+          content:
+            application/json:
+              schema:
+                $ref: '#components/responseBodies/mongoProductsArray'
+        "400":
+          description: Some product field may be missing
+          content:
+            application/json:
+              schema:
+                $ref: '#components/responseBodies/incompleteValues'
+
+        "404":
+          description: The product to be modified was not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#components/responseBodies/itemNotFound'
+        "500":
+          description: Internal server error, probably database connection was unsuccessful.
+          content:
+            application/json:
+              schema:
+                $ref: '#components/responseBodies/serverError'
+    delete:
+      summary: Delete one product
+      tags:
+       - Products
+      parameters:
+        - name: pid
+          in: path
+          required: true
+          decription: product ID
+          schema:
+            $type: String
+      responses:
+        "200":
+          description: Delete successful
+        "403":
+          description: Bad authentication
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#components/responseBodies/badAuth'
+                  - $ref: '#components/responseBodies/notLogged'
+        "404":
+          description: The product to be deleted was not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#components/responseBodies/itemNotFound'
+        "500":
+          description: Internal server error, probably database connection was unsuccessful.
+          content:
+            application/json:
+              schema:
+                $ref: '#components/responseBodies/serverError'
+components:
+  schemas:
+    Product:
+      type: object
+      properties:
+        _id:
+          type: ObjectId
+          description: mongodb auto-ID
+        code:
+          type: String
+          description: Product code
+        title:
+          type: String
+          description: Product name
+        category:
+          type: String
+          description: Product category
+        price:
+          type: Number
+          description: Product price
+        stock:
+          type: Number
+          description: Product stock quantity
+        description:
+          type: String
+          description: Product description
+        thumbnail:
+          type: Array
+          description: Array of urls of images of the product
+        owner:
+          type: String
+          description: email of the user who owns the product, or "admin" if it is not owned by a user
+        status:
+          type: Boolean
+          description: False if product is not for sale at the moment
+      example:
+        _id: ObjectId("45689NSJKDFN345")
+        code: DFG43R
+        title: Alienware M17
+        category: Gaming
+        price: 9000
+        stock: 20
+        description: AMD R7 - RTX9080
+        thumbnail: ["https://images.start.com.ar/ALW3080.jpg","https://images.start.com.ar/ALW3080-3.jpg"]
+        owner: admin
+        status: true
+  requestBodies:
+    updateProduct:
+      type: object
+      properties:
+        code:
+          type: String
+          description: Product code
+        title:
+          type: String
+          description: Product name
+        category:
+          type: String
+          description: Product category
+        price:
+          type: Number
+          description: Product price
+        stock:
+          type: Number
+          description: Product stock quantity
+        description:
+          type: String
+          description: Product description
+        thumbnail:
+          type: Array
+          description: Array of urls of images of the product
+      example:
+        code: DFG43R
+        title: Alienware M17
+        category: Gaming
+        price: 9000
+        stock: 20
+        description: AMD R7 - RTX9080
+        thumbnail: ["https://images.start.com.ar/ALW3080.jpg","https://images.start.com.ar/ALW3080-3.jpg"]
+  responseBodies:
+    serverError:
+      type: object
+      properties:
+        status:
+          type: String
+          description: Error code - Error name
+        payload:
+          type: String
+          description: Error message
+      example:
+        status: Error 500 - SERVER ERROR
+        payload: SERVER ERROR
+    incompleteValues:
+      type: object
+      properties:
+        status:
+          type: String
+          description: Error code - Error name
+        payload:
+          type: String
+          description: Error message
+      example:
+        status: Error 400 - BAD REQUEST
+        payload: Incomplete values
+    badValues:
+      type: object
+      properties:
+        status:
+          type: String
+          description: Error code - Error name
+        payload:
+          type: String
+          description: Error message
+      example:
+        status: Error 400 - BAD REQUEST
+        payload: Bad values sent
+    itemNotFound:
+      type: object
+      properties:
+        status:
+          type: String
+          description: Error code - Error name
+        payload:
+          type: String
+          description: Error message
+      example:
+        status: Error 404 - ITEM NOT FOUND
+        payload: No matching item found
+    notLogged:
+      type: object
+      properties:
+        status:
+          type: String
+          description: Error code - Error name
+        payload:
+          type: String
+          description: Error message
+      example:
+        status: Error 403 - NOT LOGGED IN
+        payload: User must be logged in to access this resource
+    badAuth:
+      type: object
+      properties:
+        status:
+          type: String
+          description: Error code - Error name
+        payload:
+          type: String
+          description: Error message
+      example:
+        status: Error 403 - FORBIDDEN
+        payload: User must be admin or premium
+    mongoProduct:
+      type: object
+      properties:
+        status:
+          type: String
+          description: Fetch status
+        payload:
+          type: object
+          $ref: '#components/schemas/Product'
+      example:
+        status: Success
+        payload:
+          {
+          _id: ObjectId("45689NSJKDFN345"),
+          code: DFG43R,
+          title: Alienware M17,
+          category: Gaming,
+          price: 9000,
+          stock: 20,
+          description: AMD R7 - RTX9080,
+          thumbnail: ["https://images.start.com.ar/ALW3080.jpg","https://images.start.com.ar/ALW3080-3.jpg"],
+          owner: admin,
+          status: true
+          }
+    mongoProductsArray:
+      type: object
+      properties:
+        status:
+          type: String
+          description: Fetch status
+        payload:
+          type: array
+          items:
+            $ref: '#components/schemas/Product'
+      example:
+        status: Success
+        payload:
+          [
+            {
+            _id: ObjectId("45689NSJKDFN345"),
+            code: DFG43R,
+            title: Alienware M17,
+            category: Gaming,
+            price: 9000,
+            stock: 20,
+            description: AMD R7 - RTX9080,
+            thumbnail: ["https://images.start.com.ar/ALW3080.jpg","https://images.start.com.ar/ALW3080-3.jpg"],
+            owner: admin,
+            status: true
+            }
+          ]

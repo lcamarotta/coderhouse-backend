@@ -21,7 +21,7 @@ const addOneService = async(product, user) => {
             product.owner = user.email;
             break;
         default:
-            throw CustomError.createError(EErrors.BAD_REQUEST, 'User must be premium or admin');
+            throw CustomError.createError(EErrors.FORBIDDEN, 'User must be premium or admin');
     }
     logger.debug(`addOneProductService: product: `, product)
     return await addOneRepository(product);
@@ -37,14 +37,14 @@ const updateOneByIdService = async(pid, product, user) => {
     if(user.role == 'premium'){
         const storedProduct = await getByIdService(pid);
         if(storedProduct.length == 0) throw CustomError.createError(EErrors.BAD_REQUEST, 'Product does not exist');
-        if(storedProduct[0].owner == undefined) throw CustomError.createError(EErrors.BAD_REQUEST, 'You must be the owner of the product to be able to modify it.');
+        if(storedProduct[0].owner == undefined) throw CustomError.createError(EErrors.FORBIDDEN, 'You must be the owner of the product to be able to modify it.');
 
         if(storedProduct[0].owner == user.email){
             return await updateOneByIdRepository(pid, product);
-        }else throw CustomError.createError(EErrors.BAD_REQUEST, 'You must be the owner of the product to be able to modify it');
+        }else throw CustomError.createError(EErrors.FORBIDDEN, 'You must be the owner of the product to be able to modify it');
     }
 
-    throw CustomError.createError(EErrors.USER_MUST_BE_ADMIN, 'Must be admin or owner')
+    throw CustomError.createError(EErrors.FORBIDDEN, 'Must be admin or owner')
 };
 
 const deleteOneByIdService = async(id, user) => {
@@ -52,15 +52,15 @@ const deleteOneByIdService = async(id, user) => {
     if(user.role == 'admin') return await deleteOneByIdRepository(id);
     if(user.role == 'premium'){
         const storedProduct = await getByIdService(id);
-        if(storedProduct.length == 0) throw CustomError.createError(EErrors.BAD_REQUEST, 'Product does not exist');
+        if(storedProduct.length == 0) throw CustomError.createError(EErrors.ITEM_NOT_FOUND, 'Product does not exist');
         if(storedProduct[0].owner == undefined) return await deleteOneByIdRepository(id);
 
         if(storedProduct[0].owner == user.email){
             return await deleteOneByIdRepository(id);
-        }else throw CustomError.createError(EErrors.BAD_REQUEST, 'You must be the owner of the product to be able to delete it')
+        }else throw CustomError.createError(EErrors.FORBIDDEN, 'You must be the owner of the product to be able to delete it')
     }
 
-    throw CustomError.createError(EErrors.USER_MUST_BE_ADMIN, 'Must be admin or owner')
+    throw CustomError.createError(EErrors.FORBIDDEN, 'Must be admin or owner')
 };
 
 export {

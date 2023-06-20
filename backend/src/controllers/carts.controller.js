@@ -38,16 +38,13 @@ const addOrUpdateManyProducts = async(req, res, next) => {
 const updateOneProduct = async(req, res, next) => {
 	const { cid, pid } = req.params;
 	const quantity = req.body;
+    const user = req.session.user;
 	try {
-		if(await isProductInCartService(cid, pid) == -1) throw CustomError.createError(EErrors.BAD_REQUEST, 'Product is not in cart');
-		const result = await updateService(cid, pid, quantity.quantity);
-		res.send(
-            {
-                status: 'Success',
-                payload: result
-            }
-        );
+		if(await isProductInCartService(cid, pid) == -1) throw CustomError.createError(EErrors.ITEM_NOT_FOUND, 'Product is not in cart');
+		const result = await updateService(cid, pid, quantity.quantity, user);
+		res.send({ status: 'Success', payload: result });
     } catch (error) {
+        console.log(error);
         next(error);
     }
 };

@@ -3,13 +3,16 @@ import express from 'express';
 import passport from 'passport';
 import cors from 'cors';
 import { Server } from 'socket.io';
+import swaggerJsdoc from 'swagger-jsdoc';
+import swaggerUiExpress from 'swagger-ui-express';
 
 //files
+import { addLogger, logger } from './utils/logger.js';
+import { rootDir } from './utils/utils.js';
+import { mongoConnect, useMongoSession } from './dao/db.config.js';
 import config from './config/config.js';
-import { addLogger } from './utils/logger.js';
 import errorHandler from './middlewares/errorHandler.js';
 import initializePassport from './config/passport.config.js';
-import { mongoConnect, useMongoSession } from './dao/db.config.js';
 import cartsRouter from './routes/api/carts.router.js';
 import productsRouter from './routes/api/products.router.js';
 import sessionsRouter from './routes/api/sessions.router.js';
@@ -23,6 +26,19 @@ export const server = app.listen(port, () => console.log(`Server listening on po
 
 await mongoConnect();
 useMongoSession();
+
+const swaggerOptions = {
+  definition: {
+      openapi: '3.0.1',
+      info: {
+          title: 'Coderhouse backend ecommerce',
+          description: 'API'
+      }
+  },
+  apis: [`${rootDir('../docs/**/*.yaml')}`]
+}
+const specs = swaggerJsdoc(swaggerOptions);
+app.use('/apidocs', swaggerUiExpress.serve, swaggerUiExpress.setup(specs));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended:true }));
