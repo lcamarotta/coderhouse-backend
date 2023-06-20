@@ -447,20 +447,27 @@ components:
       example:
         status: Success
         payload:
-          [
-            {
-            _id: ObjectId("45689NSJKDFN345"),
-            code: DFG43R,
-            title: Alienware M17,
-            category: Gaming,
-            price: 9000,
-            stock: 20,
-            description: AMD R7 - RTX9080,
-            thumbnail: ["https://images.start.com.ar/ALW3080.jpg","https://images.start.com.ar/ALW3080-3.jpg"],
-            owner: admin,
-            status: true
-            }
-          ]
+          {
+            _id: ObjectId("4SDGESJKDFN345"),
+            products: [
+              {
+                quantity: 5,
+                product:
+                {
+                  _id: ObjectId("45689NSJKDFN345"),
+                  code: DFG43R,
+                  title: Alienware M17,
+                  category: Gaming,
+                  price: 9000,
+                  stock: 20,
+                  description: AMD R7 - RTX9080,
+                  thumbnail: ["https://images.start.com.ar/ALW3080.jpg","https://images.start.com.ar/ALW3080-3.jpg"],
+                  owner: admin,
+                  status: true
+                }
+              }
+            ]
+          }
     purchase:
       type: object
       properties:
