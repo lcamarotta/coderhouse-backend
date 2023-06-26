@@ -44,7 +44,6 @@ const updateOneProduct = async(req, res, next) => {
 		const result = await updateService(cid, pid, quantity.quantity, user);
 		res.send({ status: 'Success', payload: result });
     } catch (error) {
-        console.log(error);
         next(error);
     }
 };

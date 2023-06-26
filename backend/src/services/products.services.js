@@ -27,12 +27,13 @@ const addOneService = async(product, user) => {
     return await addOneRepository(product);
 };
 
-const updateOneByIdService = async(pid, product, user) => {
+const updateOneByIdService = async(pid, product, user, allowed = false) => {
     const { title, category, price, stock, description, thumbnail, code } = product;
 	if(!title || !category || !price || !stock || !description || !thumbnail || !code){
 		throw CustomError.createError(EErrors.INVALID_PARAMETER, 'title, category, price, stock, description, thumbnail, code -> these fields are required');
 	}
 
+    if(allowed) return await updateOneByIdRepository(pid, product);
     if(user.role == 'admin') return await updateOneByIdRepository(pid, product);
     if(user.role == 'premium'){
         const storedProduct = await getByIdService(pid);

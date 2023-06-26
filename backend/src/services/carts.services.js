@@ -64,7 +64,7 @@ const purchaseService = async(cid, user) => {
     for (const product of productsInStock) {
         const update = product.product;
         update.stock = update.stock - product.quantity;
-        await updateOneProductByIdService(product.product._id, update);
+        await updateOneProductByIdService(product.product._id, update, user, true);
     }
     
     return result;
