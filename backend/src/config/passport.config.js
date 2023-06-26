@@ -38,7 +38,7 @@ const initializePassport = () => {
             logger.debug(`passport createUser Result ${result}`)
             return done(null, result)
         } catch (error) {
-            return done(`Error getting user ${error}`);
+            return done(error);
         }
     }
     ))

@@ -32,7 +32,7 @@ export default class MongoCartDao {
 	isProductInCart = async (cartId, productId) => {
 		const cart = await cartModel.findOne({ _id: cartId });
 		if(!cart) return CustomError.createError(EErrors.ITEM_NOT_FOUND, 'Cart not found');
-		const index = cart.products.findIndex(product => product.product.toString() == productId);
+		const index = cart.products.findIndex(product => product.product == productId);
 		return index;
 
 	}

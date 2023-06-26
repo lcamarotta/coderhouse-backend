@@ -24,7 +24,7 @@ const updateService = async(cid, pid, quantity, user) => {
 const updateManyService = async(cid, array, user) => {
     const result = [];
     for (const product of array) {
-        result.push(await updateService(cid, product.productId, product.quantity, user));
+        result.push(await updateService(cid, product._id, product.quantity, user));
     }
     return result;
 };

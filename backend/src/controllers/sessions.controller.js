@@ -1,6 +1,6 @@
 import CustomError from "../services/errors/CustomError.js";
 import EErrors from "../services/errors/enums.js";
-import { findUserByIdService, getUserService, requestPasswordResetToken, validatePasswordReset, modifyUserRoleService } from "../services/sessions.services.js";
+import { requestPasswordResetToken, validatePasswordReset, modifyUserRoleService, deleteUserService } from "../services/sessions.services.js";
 
 const getCurrentUser = async(req, res, next) => {
 	try {
@@ -9,6 +9,15 @@ const getCurrentUser = async(req, res, next) => {
 		}else {
 			res.send({ status: 'success', payload: req.session.user });
 		}
+	} catch (error) {
+		next(error);
+	}
+};
+
+const deleteTestUser = async(req, res, next) => {
+	try {
+		const result = await deleteUserService('test@email.com')
+		res.send({ status: 'success', payload: result });
 	} catch (error) {
 		next(error);
 	}
@@ -93,5 +102,6 @@ export {
 	loginByEmail,
 	passwordResetRequest,
 	passwordResetValidate,
-	modifyUserRole
+	modifyUserRole,
+	deleteTestUser
 }

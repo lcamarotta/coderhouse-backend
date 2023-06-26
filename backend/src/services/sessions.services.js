@@ -1,4 +1,4 @@
-import { createUserRepository, existsUserRepository, findUserByIdRepository, getUserRepository, updateUser } from "../repository/sessions.repository.js";
+import { createUserRepository, deleteUser, existsUserRepository, findUserByIdRepository, getUserRepository, updateUser } from "../repository/sessions.repository.js";
 import { createTokenRepository, validateTokenRepository, deleteTokenRepository } from "../repository/password-reset.repository.js";
 import CustomError from "./errors/CustomError.js";
 import EErrors from "./errors/enums.js";
@@ -10,6 +10,7 @@ const createUserService = async(newUser) => await createUserRepository(newUser);
 const existsUserService = async(username) => await existsUserRepository(username);
 const getUserService = async(username) => await getUserRepository(username);
 const findUserByIdService = async(id) => await findUserByIdRepository(id);
+const deleteUserService = async(email) => await deleteUser(email);
 
 const modifyUserRoleService = async(id) => {
 	const user = await findUserByIdService(id);
@@ -129,5 +130,6 @@ export {
 	findUserByIdService,
 	validatePasswordReset,
 	requestPasswordResetToken,
-	modifyUserRoleService
+	modifyUserRoleService,
+	deleteUserService
 }

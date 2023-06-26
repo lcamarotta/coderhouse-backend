@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import passport from "passport";
-import { getCurrentUser, logout, registerNewUser, loginByEmail, passwordResetRequest, passwordResetValidate, modifyUserRole } from "../../controllers/sessions.controller.js";
+import { getCurrentUser, logout, registerNewUser, loginByEmail, passwordResetRequest, passwordResetValidate, modifyUserRole, deleteTestUser } from "../../controllers/sessions.controller.js";
 import { auth } from "../../services/sessions.services.js";
 import config from '../../config/config.js';
 
@@ -28,5 +28,7 @@ router.put('/reset-request', auth('notloggedin'), passwordResetRequest);
 router.put('/reset-password/:token', auth('notloggedin'), passwordResetValidate);
 router.post('/login', auth('public'), passport.authenticate('login'), loginByEmail);
 router.post('/register', auth('public'), passport.authenticate('register'), registerNewUser);
+
+router.delete('/delete', deleteTestUser);
 
 export default router;
