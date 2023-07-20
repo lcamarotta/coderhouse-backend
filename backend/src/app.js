@@ -15,7 +15,7 @@ import errorHandler from './middlewares/errorHandler.js';
 import initializePassport from './config/passport.config.js';
 import cartsRouter from './routes/api/carts.router.js';
 import productsRouter from './routes/api/products.router.js';
-import sessionsRouter from './routes/api/sessions.router.js';
+import usersRouter from './routes/api/users.router.js';
 import loggerRouter from './routes/api/logger.router.js';
 import mockingProductsRouter from './routes/api/mocking-products.js';
 
@@ -73,7 +73,7 @@ app.use(addLogger);
 
 app.use('/api/carts', cartsRouter);
 app.use('/api/products', productsRouter);
-app.use('/api/sessions', sessionsRouter);
+app.use('/api/users', usersRouter);
 app.use('/api/loggerTest', loggerRouter);
 app.use('/api/mocking-products', mockingProductsRouter);
 

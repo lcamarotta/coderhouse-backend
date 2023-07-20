@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import passport from "passport";
-import { getCurrentUser, logout, registerNewUser, loginByEmail, passwordResetRequest, passwordResetValidate, modifyUserRole, deleteTestUser } from "../../controllers/sessions.controller.js";
-import { auth } from "../../services/sessions.services.js";
+import { getCurrentUser, logout, registerNewUser, loginByEmail, passwordResetRequest, passwordResetValidate, modifyUserRole, deleteTestUser } from "../../controllers/users.controller.js";
+import { auth } from "../../services/users.services.js";
 import config from '../../config/config.js';
 
 const router = Router();

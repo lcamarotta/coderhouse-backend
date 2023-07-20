@@ -25,7 +25,7 @@ const getProducts = async(query, queryData, page) => {
 
 const getUser = async() => {
   try {
-    let response = await fetch(`${backendURL}/api/sessions/current`, {
+    let response = await fetch(`${backendURL}/api/users/current`, {
       method: 'GET',
       credentials: 'include',
     })
@@ -41,7 +41,7 @@ const getUser = async() => {
 
 const emailLogin = async(formData) => {
   try {
-    let response = await fetch(`${backendURL}/api/sessions/login`, {
+    let response = await fetch(`${backendURL}/api/users/login`, {
       method: 'POST',
       credentials: 'include',
       body: JSON.stringify(formData),
@@ -62,7 +62,7 @@ const emailLogin = async(formData) => {
 
 const registerUser = async(formData) => {
   try {
-    let response = await fetch(`${backendURL}/api/sessions/register`, {
+    let response = await fetch(`${backendURL}/api/users/register`, {
       method: 'POST',
       credentials: 'include',
       body: JSON.stringify(formData),
@@ -82,7 +82,7 @@ const registerUser = async(formData) => {
 
 const requestPasswordChange = async(email) => {
   try {
-    let response = await fetch(`${backendURL}/api/sessions/reset-request`, {
+    let response = await fetch(`${backendURL}/api/users/reset-request`, {
       method: 'PUT',
       credentials: 'include',
       body: JSON.stringify({email}),
@@ -102,7 +102,7 @@ const requestPasswordChange = async(email) => {
 
 const changePassword = async(token, formData) => {
   try {
-    let response = await fetch(`${backendURL}/api/sessions/reset-password/${token}`, {
+    let response = await fetch(`${backendURL}/api/users/reset-password/${token}`, {
       method: 'PUT',
       credentials: 'include',
       body: JSON.stringify(formData),
@@ -123,7 +123,7 @@ const changePassword = async(token, formData) => {
 
 const logout = async() => {
   try {
-    let response = await fetch(`${backendURL}/api/sessions/logout`, {
+    let response = await fetch(`${backendURL}/api/users/logout`, {
       method: 'GET',
       credentials: 'include',
     })

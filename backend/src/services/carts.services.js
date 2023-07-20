@@ -3,7 +3,7 @@ import { getByIdService as getProductByIdService, updateOneByIdService as update
 import { isProductInCartRepository, getByIdRepository, updateRepository, deleteAllRepository, deleteByIdRepository, createCartRepository, createPurchaseRepository, getPurchaseByEmailRepository } from "../repository/carts.repository.js";
 import CustomError from "./errors/CustomError.js";
 import EErrors from "./errors/enums.js";
-import { getUserService } from "./sessions.services.js";
+import { getUserService } from "./users.services.js";
 
 const createCartService = async() => await createCartRepository();
 

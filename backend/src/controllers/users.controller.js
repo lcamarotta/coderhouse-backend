@@ -1,6 +1,6 @@
 import CustomError from "../services/errors/CustomError.js";
 import EErrors from "../services/errors/enums.js";
-import { requestPasswordResetToken, validatePasswordReset, modifyUserRoleService, deleteUserService } from "../services/sessions.services.js";
+import { requestPasswordResetToken, validatePasswordReset, modifyUserRoleService, deleteUserService } from "../services/users.services.js";
 
 const getCurrentUser = async(req, res, next) => {
 	try {

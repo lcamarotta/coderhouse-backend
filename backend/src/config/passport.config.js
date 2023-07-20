@@ -3,7 +3,7 @@ import local from "passport-local";
 import GitHubStrategy from "passport-github2"
 import config from '../config/config.js';
 import { checkPwd, createHash } from "../utils/utils.js";
-import { createUserService, existsUserService, getUserService, findUserByIdService } from "../services/sessions.services.js";
+import { createUserService, existsUserService, getUserService, findUserByIdService } from "../services/users.services.js";
 import { createCartService } from "../services/carts.services.js";
 import CustomError from "../services/errors/CustomError.js";
 import EErrors from "../services/errors/enums.js";
@@ -72,7 +72,7 @@ const initializePassport = () => {
         clientID: config.githubClientId,
         clientSecret: config.githubClientSecret,
         scope: ['user:email'],
-        callbackURL:`http://localhost:${config.port}/api/sessions/githubcallback`
+        callbackURL:`http://localhost:${config.port}/api/users/githubcallback`
     }, async(accessToken, refreshToken, profile, done) => {
         try {
             let user = await getUserService(profile.emails[0].value);

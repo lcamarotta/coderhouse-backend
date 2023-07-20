@@ -15,7 +15,7 @@ describe('Products Testing', () => {
             password: config.adminPassword
         };
 
-        const { _body, headers } = await requester.post('/api/sessions/login').send(adminUser);
+        const { _body, headers } = await requester.post('/api/users/login').send(adminUser);
 
         const cookieResult = headers['set-cookie'][0];
         const cookieResultSplited = cookieResult.split('=');

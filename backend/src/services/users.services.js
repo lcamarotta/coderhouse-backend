@@ -1,4 +1,4 @@
-import { createUserRepository, deleteUser, existsUserRepository, findUserByIdRepository, getUserRepository, updateUser } from "../repository/sessions.repository.js";
+import { createUserRepository, deleteUser, existsUserRepository, findUserByIdRepository, getUserRepository, updateUser } from "../repository/users.repository.js";
 import { createTokenRepository, validateTokenRepository, deleteTokenRepository } from "../repository/password-reset.repository.js";
 import CustomError from "./errors/CustomError.js";
 import EErrors from "./errors/enums.js";

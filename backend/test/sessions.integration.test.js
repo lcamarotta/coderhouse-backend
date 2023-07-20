@@ -16,7 +16,7 @@ describe('Session Testing', () => {
             password: '1234',
         };
 
-        const { statusCode, _body } = await requester.post('/api/sessions/register').send(userMock);
+        const { statusCode, _body } = await requester.post('/api/users/register').send(userMock);
 
         expect(statusCode).to.be.eql(200);
         expect(_body.payload.message).to.be.eql('user registered');
@@ -28,7 +28,7 @@ describe('Session Testing', () => {
             password: '1234'
         };
 
-        const { _body, headers } = await requester.post('/api/sessions/login').send(userMock);
+        const { _body, headers } = await requester.post('/api/users/login').send(userMock);
         const cookieResult = headers['set-cookie'][0];
 
         expect(_body.payload.email).to.be.eql('test@email.com');
@@ -45,14 +45,14 @@ describe('Session Testing', () => {
     });
     
     it('Test /current endpoint to return TestUser info', async () => {
-        const { _body } = await requester.get('/api/sessions/current')
+        const { _body } = await requester.get('/api/users/current')
             .set('Cookie', [`${cookie.name}=${cookie.value}`]);
 
         expect(_body.payload.email).to.be.eql('test@email.com');
     });
 
     it('Delete TestUser from DB', async () => {
-        const result = await requester.delete('/api/sessions/delete')
+        const result = await requester.delete('/api/users/delete')
         expect(result).to.be.ok;
     });
 });

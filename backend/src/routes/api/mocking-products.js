@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { auth } from "../../services/sessions.services.js";
+import { auth } from "../../services/users.services.js";
 import { getMockProducts } from "../../controllers/mocking-products.controller.js";
 
 const router = Router();

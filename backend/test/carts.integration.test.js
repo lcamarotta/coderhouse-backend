@@ -18,7 +18,7 @@ describe('Cart Testing', () => {
             password: '1234',
         };
 
-        const { statusCode, _body } = await requester.post('/api/sessions/register').send(userMock);
+        const { statusCode, _body } = await requester.post('/api/users/register').send(userMock);
 
         expect(statusCode).to.be.eql(200);
         expect(_body.payload.message).to.be.eql('user registered');
@@ -30,7 +30,7 @@ describe('Cart Testing', () => {
             password: '1234'
         };
 
-        const { _body, headers } = await requester.post('/api/sessions/login').send(userMock);
+        const { _body, headers } = await requester.post('/api/users/login').send(userMock);
         const cookieResult = headers['set-cookie'][0];
         expect(_body.payload.email).to.be.eql('test@email.com');
         expect(cookieResult).to.be.ok;
@@ -114,7 +114,7 @@ describe('Cart Testing', () => {
     }).timeout(5000);
 
     it('Delete TestUser from DB', async () => {
-        const result = await requester.delete('/api/sessions/delete')
+        const result = await requester.delete('/api/users/delete')
         expect(result).to.be.ok;
     });
 });
