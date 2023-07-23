@@ -1,6 +1,7 @@
 import CustomError from "../services/errors/CustomError.js";
 import EErrors from "../services/errors/enums.js";
 import { requestPasswordResetToken, validatePasswordReset, modifyUserRoleService, deleteUserService } from "../services/users.services.js";
+import config from '../config/config.js';
 
 const getCurrentUser = async(req, res, next) => {
 	try {
@@ -95,7 +96,67 @@ const passwordResetValidate = async(req, res, next) => {
 
 };
 
+const githubCallback = (req, res) => {
+	req.session.user = {
+		name: req.user.first_name + ' ' + req.user.last_name,
+		role: req.user.role,
+		age: req.user.age,
+		email: req.user.email,
+		cart: req.user.cart,
+		_id: req.user._id
+	}
+	const url = config.frontendUrl
+	res.redirect(url)
+};
+
+function auth(role) {
+	switch (role) {
+		case 'public':
+			return function(req, res, next){
+				return next();
+			}
+
+		case 'notloggedin':
+			return function(req, res, next){
+				if(req.session.user) throw CustomError.createError(EErrors.USER_AREADY_LOGGED);
+				return next();
+			}
+
+		case 'any':
+			return function(req, res, next){
+				if(!req.session.user) throw CustomError.createError(EErrors.USER_NOT_LOGGED);
+				return next();
+			}
+
+		case 'user':
+			return function(req, res, next){
+				if(!req.session.user) throw CustomError.createError(EErrors.USER_NOT_LOGGED);
+				if(req.session.user.role == 'user') return next();
+				throw CustomError.createError(EErrors.FORBIDDEN);
+			}
+
+		case 'admin':
+			return function(req, res, next){
+				if(!req.session.user) throw CustomError.createError(EErrors.USER_NOT_LOGGED);
+				if(req.session.user.role == 'admin') return next();
+				throw CustomError.createError(EErrors.USER_MUST_BE_ADMIN);
+			}
+
+		case 'premium':
+			return function(req, res, next){
+				if(!req.session.user) throw CustomError.createError(EErrors.USER_NOT_LOGGED);
+				if(req.session.user.role == 'premium') return next();
+				throw CustomError.createError(EErrors.USER_MUST_BE_PREMIUM);
+			}
+
+		default:
+			throw CustomError.createError(EErrors.SERVER_ERROR);
+	}
+}
+
 export {
+	auth,
+	githubCallback,
 	getCurrentUser,
 	logout,
 	registerNewUser,

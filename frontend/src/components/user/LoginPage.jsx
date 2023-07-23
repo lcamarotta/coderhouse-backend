@@ -65,7 +65,7 @@ const LoginPage = ({ user, emailLogin }) => {
 
       <Row className="my-3 justify-content-center">
           <Col sm={3} className='text-center my-1'>
-                <a href='http://localhost:8080/api/sessions/github' className='text-decoration-none text-reset'>
+                <a href='http://localhost:8080/api/users/github' className='text-decoration-none text-reset'>
                   <Button variant='outline-info'>GitHub Log In</Button>
                 </a>
           </Col>

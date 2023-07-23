@@ -1,6 +1,6 @@
 import { Router } from "express";
-import { auth } from "../../services/users.services.js";
 import { getMockProducts } from "../../controllers/mocking-products.controller.js";
+import { auth } from "../../controllers/users.controller.js";
 
 const router = Router();
 
