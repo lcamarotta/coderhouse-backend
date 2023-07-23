@@ -3,7 +3,7 @@ import { createTokenRepository, validateTokenRepository, deleteTokenRepository }
 import CustomError from "./errors/CustomError.js";
 import EErrors from "./errors/enums.js";
 import { checkPwd, createHash, generateRandomToken } from "../utils/utils.js";
-import { mail_password_reset } from "./mailer.services.js";
+import { mail_password_reset, mail_account_deleted } from "./mailer.services.js";
 import { logger } from "../utils/logger.js";
 import { removeSensitiveData } from "../dao/DTOs/users.dto.js";
 
@@ -11,7 +11,35 @@ const createUserService = async(newUser) => await createUserRepository(newUser);
 const existsUserService = async(username) => await existsUserRepository(username);
 const getUserService = async(username) => await getUserRepository(username);
 const findUserByIdService = async(id) => await findUserByIdRepository(id);
-const deleteUserService = async(email) => await deleteUser(email);
+
+const updateUserLogin = async(user) => {
+	user.lastLogin = Date.now();
+	updateUser(user);
+}
+
+const deleteUserService = async(email) => {
+	if(email !== null) {
+		return await deleteUser(email);
+	}
+
+	const twoDaysInMilliseconds = 2 * 24 * 60 * 60 * 1000;
+	const presentTime = Date.now();
+
+	const users = await getAllUsersRepository();
+	const deletedUsers = [];
+
+	for (const user of users) {
+		const result = presentTime - user.lastLogin;
+		if(result > twoDaysInMilliseconds){
+			deletedUsers.push(removeSensitiveData(user));
+			mail_account_deleted(user.email);
+			await deleteUser(user.email);
+		};
+	};
+	
+	logger.debug(`delete old users: ${deletedUsers}`)
+	return deletedUsers;
+}
 
 const getAllUsersService = async() => {
 	const users = await getAllUsersRepository();
@@ -96,5 +124,6 @@ export {
 	requestPasswordResetToken,
 	modifyUserRoleService,
 	deleteUserService,
-	getAllUsersService
+	getAllUsersService,
+	updateUserLogin
 }

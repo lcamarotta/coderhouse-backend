@@ -59,3 +59,29 @@ export const mail_password_reset = async(recipient, token) => {
 	
 	return
 }
+
+export const mail_account_deleted = async(email) => {
+	const transport = nodemailer.createTransport({
+		service: 'gmail',
+		port: 587,
+		auth: {
+			user: config.mailingUser,
+			pass: config.mailingPass
+		}
+	})
+
+	await transport.sendMail({
+		from: `CoderBackend <${config.mailingUser}>`,
+		to: email,
+		subject: 'Coderhouse Backend Account Deleted',
+		html:
+			`
+			<div>
+				<h1>Account Deleted</h1>
+				<p>Your account has been deleted due to inactivity</p>
+			</div>
+			`
+	})
+	
+	return
+}

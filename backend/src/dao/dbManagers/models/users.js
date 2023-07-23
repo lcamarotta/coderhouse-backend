@@ -25,6 +25,10 @@ const userSchema = new mongoose.Schema({
         default: 'user'
     },
     password: String,
+    lastLogin: {
+        type: Date,
+        default: Date.now()
+    },
     cart: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'carts'

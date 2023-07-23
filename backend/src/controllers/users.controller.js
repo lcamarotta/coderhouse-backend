@@ -1,6 +1,6 @@
 import CustomError from "../services/errors/CustomError.js";
 import EErrors from "../services/errors/enums.js";
-import { requestPasswordResetToken, validatePasswordReset, modifyUserRoleService, deleteUserService, getAllUsersService } from "../services/users.services.js";
+import { requestPasswordResetToken, validatePasswordReset, modifyUserRoleService, deleteUserService, getAllUsersService, updateUserLogin } from "../services/users.services.js";
 import config from '../config/config.js';
 
 const getCurrentUser = async(req, res, next) => {
@@ -18,6 +18,15 @@ const getCurrentUser = async(req, res, next) => {
 const getAllUsers = async(req, res, next) => {
 	try {
 		const result = await getAllUsersService()
+		res.send({ status: 'success', payload: result });
+	} catch (error) {
+		next(error);
+	}
+};
+
+const deleteOldUsers = async(req, res, next) => {
+	try {
+		const result = await deleteUserService(null)
 		res.send({ status: 'success', payload: result });
 	} catch (error) {
 		next(error);
@@ -64,6 +73,7 @@ const registerNewUser = (req, res, next) => {
 const loginByEmail = async(req, res, next) => {
 	try {
 		if(!req.user) throw CustomError.createError(EErrors.INVALID_CREDENTIALS);
+		updateUserLogin(req.user);
 		req.session.user = {
 			name: req.user.first_name + ' ' + req.user.last_name,
 			role: req.user.role,
@@ -106,6 +116,7 @@ const passwordResetValidate = async(req, res, next) => {
 };
 
 const githubCallback = (req, res) => {
+	updateUserLogin(req.user);
 	req.session.user = {
 		name: req.user.first_name + ' ' + req.user.last_name,
 		role: req.user.role,
@@ -179,6 +190,7 @@ export {
 	passwordResetRequest,
 	passwordResetValidate,
 	modifyUserRole,
+	deleteOldUsers,
 	deleteTestUser,
 	getAllUsers
 }

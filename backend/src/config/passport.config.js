@@ -45,6 +45,7 @@ const initializePassport = () => {
 
     passport.use('login', new LocalStrategy({ usernameField: 'email' }, async(username, password, done) => {
         if (username === config.adminEmail && password === config.adminPassword) {
+            const date = Date.now();
             logger.info(`.env admin logged in`)
             return done(null, {
                 _id: "6450702c60b6860df4642777",
@@ -54,7 +55,8 @@ const initializePassport = () => {
                 age: '',
                 role: 'admin',
                 password: config.adminPassword,
-                cart: ''
+                cart: '6472bf65e9f06e79bbbebbeb',
+                lastLogin: date
             });
         }
         try {
