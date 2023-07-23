@@ -33,8 +33,8 @@ const NavWidget = () => {
     <div className="me-3">
       { userCtx.userSession ? showUsername() : showLoginButton() }
       <Link to={`${cartIconLink}`} className='text-decoration-none text-reset'>
-      <MdShoppingCart size="2em"/>
-      <span className="ms-1">{ cartCtx.totalProducts() || '' }</span>
+      { userCtx.userSession.role == 'admin' ? <></> : <MdShoppingCart size="2em"/> }
+      { userCtx.userSession ? <span className="ms-1">{ cartCtx.totalProducts() || '' }</span> : <></> }
       </Link>
     </div>
   )

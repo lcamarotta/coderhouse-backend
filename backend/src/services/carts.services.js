@@ -1,11 +1,13 @@
 import { mail_purchase_ticket } from "./mailer.services.js";
 import { getByIdService as getProductByIdService, updateOneByIdService as updateOneProductByIdService } from "./products.services.js";
-import { isProductInCartRepository, getByIdRepository, updateRepository, deleteAllRepository, deleteByIdRepository, createCartRepository, createPurchaseRepository, getPurchaseByEmailRepository } from "../repository/carts.repository.js";
+import { isProductInCartRepository, getByIdRepository, updateRepository, deleteAllRepository, deleteByIdRepository, createCartRepository, createPurchaseRepository, getPurchaseByEmailRepository, deleteCartRepository } from "../repository/carts.repository.js";
 import CustomError from "./errors/CustomError.js";
 import EErrors from "./errors/enums.js";
 import { getUserService } from "./users.services.js";
 
 const createCartService = async() => await createCartRepository();
+
+const deleteCartService = async(cid) => await deleteCartRepository(cid);
 
 const isProductInCartService = async(cid, pid) => await isProductInCartRepository(cid, pid);
 
@@ -79,5 +81,6 @@ export {
     deleteAllService,
     deleteByIdService,
     getPurchaseByEmailService,
-    purchaseService
+    purchaseService,
+    deleteCartService
 }

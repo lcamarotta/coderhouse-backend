@@ -44,6 +44,9 @@ const ProductDetail = ( product ) => {
     <Link to={'/all/1'} className='text-decoration-none text-reset mx-1'><Button variant='outline-success'>Home</Button></Link>
   </>;
 
+  const userIsNotAdmin = () => { return productWasAddedToCart ? checkoutButton : conditionalButton }
+  const userIsAdmin = () => { return <p>admin can not add products to cart</p> }
+  
   return (
     <Container fluid>
       <Row className='justify-content-center'>
@@ -59,7 +62,7 @@ const ProductDetail = ( product ) => {
                   <Card.Text>{ product.description }</Card.Text>
                 </Col>
               </Row>
-              { productWasAddedToCart ? checkoutButton : conditionalButton }
+              { userCtx.userSession.role == 'admin' ? userIsAdmin() : userIsNotAdmin() }
             </Card.Body>
             <Card.Footer className="text-muted">{ product.stock } IN STOCK</Card.Footer>
           </Card>

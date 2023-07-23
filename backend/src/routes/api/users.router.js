@@ -1,6 +1,6 @@
 import passport from "passport";
 import { Router } from 'express';
-import { getCurrentUser, logout, registerNewUser, loginByEmail, passwordResetRequest, passwordResetValidate, modifyUserRole, deleteOldUsers, deleteTestUser, githubCallback, auth, getAllUsers } from "../../controllers/users.controller.js";
+import { getCurrentUser, logout, registerNewUser, loginByEmail, passwordResetRequest, passwordResetValidate, modifyUserRole, deleteOldUsers, githubCallback, auth, getAllUsers, deleteUser } from "../../controllers/users.controller.js";
 
 const router = Router();
 
@@ -19,6 +19,6 @@ router.post('/login', auth('public'), passport.authenticate('login'), loginByEma
 router.post('/register', auth('public'), passport.authenticate('register'), registerNewUser);
 
 router.delete('/', auth('admin'), deleteOldUsers);
-router.delete('/delete', deleteTestUser);
+router.delete('/:email', auth('admin'), deleteUser);
 
 export default router;

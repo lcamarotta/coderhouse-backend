@@ -1,6 +1,7 @@
 import { CARTDAO, TICKETDAO } from "../dao/index.js";
 
 const createCartRepository = async() => await CARTDAO.create();
+const deleteCartRepository = async(cid) => await CARTDAO.delete(cid);
 const isProductInCartRepository = async(cid, pid) => await CARTDAO.isProductInCart(cid, pid);
 const getByIdRepository = async(cid) => await CARTDAO.getById(cid);
 const updateRepository = async(cid, pid, quantity) => await CARTDAO.update(cid, pid, quantity);
@@ -12,6 +13,7 @@ const getPurchaseByEmailRepository = async(email) => await TICKETDAO.getPurchase
 
 export {
     createCartRepository,
+    deleteCartRepository,
     isProductInCartRepository,
     getByIdRepository,
     updateRepository,

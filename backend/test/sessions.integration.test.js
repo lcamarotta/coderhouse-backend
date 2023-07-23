@@ -1,5 +1,6 @@
 import chai from 'chai';
 import supertest from 'supertest';
+import config from '../src/config/config.js';
 
 const expect = chai.expect;
 const requester = supertest('http://localhost:8080');
@@ -52,7 +53,24 @@ describe('Session Testing', () => {
     });
 
     it('Delete TestUser from DB', async () => {
-        const result = await requester.delete('/api/users/delete')
+        const adminUser = {
+            email: config.adminEmail,
+            password: config.adminPassword
+        };
+
+        const { _body, headers } = await requester.post('/api/users/login').send(adminUser);
+
+        const cookieResult = headers['set-cookie'][0];
+        const cookieResultSplited = cookieResult.split('=');
+
+        cookie = {
+            name: cookieResultSplited[0],
+            value: cookieResultSplited[1]
+        };
+
+        const result = await requester.delete('/api/users/test@email.com').set('Cookie', [`${cookie.name}=${cookie.value}`]);
+        
+        expect(result.statusCode).to.be.eql(200);
         expect(result).to.be.ok;
     });
 });

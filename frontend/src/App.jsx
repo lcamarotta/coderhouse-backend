@@ -10,6 +10,7 @@ import ProductListContainer from "./containers/ProductListContainer";
 import ProductDetailContainer from "./containers/ProductDetailContainer";
 import UserSessionCheck from "./containers/UserSessionCheck";
 import ResetPasswordContainer from "./containers/ResetPasswordContainer";
+import AdminPagesContainer from "./containers/AdminPagesContainer";
 
 const App = () => {
   return (
@@ -20,6 +21,7 @@ const App = () => {
           <Routes>
             <Route path="*" element={<NotFound/>}/>
             <Route path="/" element={<ProductListContainer/>}/>
+            <Route path="/admin/:page" element={<AdminPagesContainer/>}/>
             <Route path="/:category/:page" element={<ProductListContainer/>}/>
             <Route path="/product/:productId" element={<ProductDetailContainer/>} />
             <Route path="/user/:page" element={<UserSessionCheck/>} />

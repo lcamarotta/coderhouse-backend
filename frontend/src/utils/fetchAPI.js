@@ -233,4 +233,52 @@ const checkout = async(cartId) => {
   }
 }
 
-export { getProducts, getUser, emailLogin, registerUser, logout, addToCart, getCart, deleteCart, deleteProductFromCart, checkout, getOrders, requestPasswordChange, changePassword };
+const getAllUsers = async() => {
+  try {
+    let response = await fetch(`${backendURL}/api/users/`, {
+      method: 'GET',
+      credentials: 'include',
+    })
+    response = await response.json();
+    if(devMode) console.log('getAllUsersAPI response:', response);
+    return response.payload;
+
+  } catch (error) {
+    console.error('There was an error getAllUsers API', error);
+    return -1;
+  }
+}
+
+const changeRole = async(uid) => {
+  try {
+    let response = await fetch(`${backendURL}/api/users/premium/${uid}`, {
+      method: 'GET',
+      credentials: 'include',
+    })
+    response = await response.json();
+    if(devMode) console.log('changeRoleAPI response:', response);
+    return response.payload;
+
+  } catch (error) {
+    console.error('There was an error changeRole API', error);
+    return -1;
+  }
+}
+
+const deleteUser = async(email) => {
+  try {
+    let response = await fetch(`${backendURL}/api/users/${email}`, {
+      method: 'DELETE',
+      credentials: 'include',
+    })
+    response = await response.json();
+    if(devMode) console.log('deleteUserAPI response:', response);
+    return response.payload;
+
+  } catch (error) {
+    console.error('There was an error deleteUser API', error);
+    return -1;
+  }
+}
+
+export { changeRole, deleteUser, getProducts, getUser, emailLogin, registerUser, logout, addToCart, getCart, deleteCart, deleteProductFromCart, checkout, getOrders, requestPasswordChange, changePassword, getAllUsers };

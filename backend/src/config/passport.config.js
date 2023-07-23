@@ -52,10 +52,10 @@ const initializePassport = () => {
                 first_name: 'SUPER',
                 last_name: 'ADMIN',
                 email: config.adminEmail,
-                age: '',
+                age: '9000',
                 role: 'admin',
                 password: config.adminPassword,
-                cart: '6472bf65e9f06e79bbbebbeb',
+                cart: '64a32174825c4d80bc901983',
                 lastLogin: date
             });
         }

@@ -9,6 +9,11 @@ export default class MongoCartDao {
 		return await cartModel.create({ products: [] });
 	}
 
+	delete = async (cartId) => {
+    const result = await cartModel.deleteOne({ _id: cartId });
+    return result;
+  };
+
 	getById = async (cartId) => {
 		const result = await cartModel.findOne({ _id: cartId }).populate('products.product');
 		if(!result) return CustomError.createError(EErrors.ITEM_NOT_FOUND, 'Cart not found');

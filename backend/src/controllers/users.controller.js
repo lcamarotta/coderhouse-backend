@@ -33,9 +33,12 @@ const deleteOldUsers = async(req, res, next) => {
 	}
 };
 
-const deleteTestUser = async(req, res, next) => {
+const deleteUser = async(req, res, next) => {
+	const email = req.params.email;
 	try {
-		const result = await deleteUserService('test@email.com')
+		console.log(email);
+		if(!email || email == ':email') throw CustomError.createError(EErrors.BAD_REQUEST, 'Did not send user email');
+		const result = await deleteUserService(email)
 		res.send({ status: 'success', payload: result });
 	} catch (error) {
 		next(error);
@@ -191,6 +194,6 @@ export {
 	passwordResetValidate,
 	modifyUserRole,
 	deleteOldUsers,
-	deleteTestUser,
+	deleteUser,
 	getAllUsers
 }

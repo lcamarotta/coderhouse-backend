@@ -31,7 +31,8 @@ const LoginPage = ({ user, emailLogin }) => {
     else{
       user.setUserSession(response);
       user.setIsUserLogged(true);
-      navigate('/all/1');
+      console.log(response.role);
+      response.role == 'admin' ? navigate('/user/profile') : navigate('/all/1');
     }
   }
 
