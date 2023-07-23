@@ -1,9 +1,10 @@
 import passport from "passport";
 import { Router } from 'express';
-import { getCurrentUser, logout, registerNewUser, loginByEmail, passwordResetRequest, passwordResetValidate, modifyUserRole, deleteTestUser, githubCallback, auth } from "../../controllers/users.controller.js";
+import { getCurrentUser, logout, registerNewUser, loginByEmail, passwordResetRequest, passwordResetValidate, modifyUserRole, deleteTestUser, githubCallback, auth, getAllUsers } from "../../controllers/users.controller.js";
 
 const router = Router();
 
+router.get('/', auth('admin'), getAllUsers)
 router.get('/premium/:uid', auth('any'), modifyUserRole);
 router.get('/current', auth('public'), getCurrentUser);
 router.get('/logout', auth('any'), logout);

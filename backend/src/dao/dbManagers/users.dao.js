@@ -11,22 +11,26 @@ export default class MongoUserDao {
         return await userModel.findOne({ email });
     };
 
+	getAll = async () => {
+        return await userModel.find();
+    };
+
 	findById = async (id) => {
         return await userModel.findById(id);
     };
 
-  create = async (user) => {
-      const result = await userModel.create(user);
-      return result;
-  };
+    create = async (user) => {
+        const result = await userModel.create(user);
+        return result;
+    };
   
-  update = async (user) => {
-  const result = await userModel.updateOne({_id: user._id}, user);
-  return result;
-  };
+    update = async (user) => {
+    const result = await userModel.updateOne({_id: user._id}, user);
+    return result;
+    };
 
-  delete = async (email) => {
-  const result = await userModel.deleteOne({email});
-  return result;
-  };
+    delete = async (email) => {
+    const result = await userModel.deleteOne({email});
+    return result;
+    };
 }

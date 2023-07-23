@@ -1,6 +1,6 @@
 import CustomError from "../services/errors/CustomError.js";
 import EErrors from "../services/errors/enums.js";
-import { requestPasswordResetToken, validatePasswordReset, modifyUserRoleService, deleteUserService } from "../services/users.services.js";
+import { requestPasswordResetToken, validatePasswordReset, modifyUserRoleService, deleteUserService, getAllUsersService } from "../services/users.services.js";
 import config from '../config/config.js';
 
 const getCurrentUser = async(req, res, next) => {
@@ -10,6 +10,15 @@ const getCurrentUser = async(req, res, next) => {
 		}else {
 			res.send({ status: 'success', payload: req.session.user });
 		}
+	} catch (error) {
+		next(error);
+	}
+};
+
+const getAllUsers = async(req, res, next) => {
+	try {
+		const result = await getAllUsersService()
+		res.send({ status: 'success', payload: result });
 	} catch (error) {
 		next(error);
 	}
@@ -111,23 +120,27 @@ const githubCallback = (req, res) => {
 
 function auth(role) {
 	switch (role) {
+		//anyone can access endpoint
 		case 'public':
 			return function(req, res, next){
 				return next();
 			}
 
+		//to access endpoint user must not be logged in
 		case 'notloggedin':
 			return function(req, res, next){
 				if(req.session.user) throw CustomError.createError(EErrors.USER_AREADY_LOGGED);
 				return next();
 			}
 
+		//to access endpoint user must be logged in with any role
 		case 'any':
 			return function(req, res, next){
 				if(!req.session.user) throw CustomError.createError(EErrors.USER_NOT_LOGGED);
 				return next();
 			}
 
+		//to access endpoint user must be logged in with role 'user'
 		case 'user':
 			return function(req, res, next){
 				if(!req.session.user) throw CustomError.createError(EErrors.USER_NOT_LOGGED);
@@ -135,6 +148,7 @@ function auth(role) {
 				throw CustomError.createError(EErrors.FORBIDDEN);
 			}
 
+		//to access endpoint user must be logged in with role 'admin'
 		case 'admin':
 			return function(req, res, next){
 				if(!req.session.user) throw CustomError.createError(EErrors.USER_NOT_LOGGED);
@@ -142,6 +156,7 @@ function auth(role) {
 				throw CustomError.createError(EErrors.USER_MUST_BE_ADMIN);
 			}
 
+		//to access endpoint user must be logged in with role 'premium'
 		case 'premium':
 			return function(req, res, next){
 				if(!req.session.user) throw CustomError.createError(EErrors.USER_NOT_LOGGED);
@@ -164,5 +179,6 @@ export {
 	passwordResetRequest,
 	passwordResetValidate,
 	modifyUserRole,
-	deleteTestUser
+	deleteTestUser,
+	getAllUsers
 }

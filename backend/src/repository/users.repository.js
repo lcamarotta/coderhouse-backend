@@ -3,6 +3,7 @@ import { USERDAO } from "../dao/index.js";
 const createUserRepository = async(newUser) => await USERDAO.create(newUser);
 const existsUserRepository = async(username) => await USERDAO.exists(username);
 const getUserRepository = async(username) => await USERDAO.get(username);
+const getAllUsersRepository = async() => await USERDAO.getAll();
 const findUserByIdRepository = async(id) => await USERDAO.findById(id);
 const updateUser = async(user) => await USERDAO.update(user);
 const deleteUser = async(email) => await USERDAO.delete(email);
@@ -13,5 +14,6 @@ export {
     getUserRepository,
     findUserByIdRepository,
     updateUser,
-    deleteUser
+    deleteUser,
+    getAllUsersRepository
 }

@@ -1,16 +1,26 @@
-import { createUserRepository, deleteUser, existsUserRepository, findUserByIdRepository, getUserRepository, updateUser } from "../repository/users.repository.js";
+import { createUserRepository, deleteUser, existsUserRepository, findUserByIdRepository, getUserRepository, updateUser, getAllUsersRepository } from "../repository/users.repository.js";
 import { createTokenRepository, validateTokenRepository, deleteTokenRepository } from "../repository/password-reset.repository.js";
 import CustomError from "./errors/CustomError.js";
 import EErrors from "./errors/enums.js";
 import { checkPwd, createHash, generateRandomToken } from "../utils/utils.js";
 import { mail_password_reset } from "./mailer.services.js";
 import { logger } from "../utils/logger.js";
+import { removeSensitiveData } from "../dao/DTOs/users.dto.js";
 
 const createUserService = async(newUser) => await createUserRepository(newUser);
 const existsUserService = async(username) => await existsUserRepository(username);
 const getUserService = async(username) => await getUserRepository(username);
 const findUserByIdService = async(id) => await findUserByIdRepository(id);
 const deleteUserService = async(email) => await deleteUser(email);
+
+const getAllUsersService = async() => {
+	const users = await getAllUsersRepository();
+	const users_dto = [];
+	users.forEach(user => {
+		users_dto.push(removeSensitiveData(user));
+	});
+	return users_dto;
+}
 
 const modifyUserRoleService = async(id) => {
 	const user = await findUserByIdService(id);
@@ -85,5 +95,6 @@ export {
 	validatePasswordReset,
 	requestPasswordResetToken,
 	modifyUserRoleService,
-	deleteUserService
+	deleteUserService,
+	getAllUsersService
 }
