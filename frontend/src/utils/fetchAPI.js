@@ -281,4 +281,20 @@ const deleteUser = async(email) => {
   }
 }
 
-export { changeRole, deleteUser, getProducts, getUser, emailLogin, registerUser, logout, addToCart, getCart, deleteCart, deleteProductFromCart, checkout, getOrders, requestPasswordChange, changePassword, getAllUsers };
+const deleteProduct = async(pid) => {
+  try {
+    let response = await fetch(`${backendURL}/api/products/${pid}`, {
+      method: 'DELETE',
+      credentials: 'include',
+    })
+    response = await response.json();
+    if(devMode) console.log('deleteProductAPI response:', response);
+    return response.payload;
+
+  } catch (error) {
+    console.error('There was an error deleteProduct API', error);
+    return -1;
+  }
+}
+
+export { changeRole, deleteProduct, deleteUser, getProducts, getUser, emailLogin, registerUser, logout, addToCart, getCart, deleteCart, deleteProductFromCart, checkout, getOrders, requestPasswordChange, changePassword, getAllUsers };

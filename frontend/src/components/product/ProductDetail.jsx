@@ -2,8 +2,8 @@
 //  Includes fn AddCheckoutButton, ProductCount
 
 import { useState, useContext } from 'react';
-import { Link } from 'react-router-dom';
-import { Container, Row, Col, Card, Button } from 'react-bootstrap';
+import { Link, useNavigate } from 'react-router-dom';
+import { Container, Row, Col, Card, Button, ListGroup } from 'react-bootstrap';
 import { ToastContainer, toast } from 'react-toastify';
 
 import ProductCount from './ProductCount';
@@ -11,8 +11,8 @@ import ProductImageSlide from './ProductImageSlide';
 import { CartContext } from '../../context/CartContext';
 import { UserContext } from '../../context/UserContext';
 
-const ProductDetail = ( product ) => {
-  
+const ProductDetail = ({ product, deleteProduct }) => {
+  const navigate = useNavigate();
   const [productWasAddedToCart, setProductWasAddedToCart] = useState(false)
   
   const cartCtx = useContext(CartContext)
@@ -45,7 +45,16 @@ const ProductDetail = ( product ) => {
   </>;
 
   const userIsNotAdmin = () => { return productWasAddedToCart ? checkoutButton : conditionalButton }
-  const userIsAdmin = () => { return <p>admin can not add products to cart</p> }
+  const userIsAdmin = () => { 
+    return (
+      <Container>
+        <p>ADMIN CAN NOT ADD PRODUCTS TO CART</p>
+        <ListGroup>
+          <ListGroup.Item className='text-center' variant="danger" action onClick={  async() => { await deleteProduct(product._id); navigate('/all/1') } }>DELETE</ListGroup.Item>
+        </ListGroup>
+      </Container>
+    )
+  }
   
   return (
     <Container fluid>

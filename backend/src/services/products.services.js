@@ -1,4 +1,5 @@
 import { addOneRepository, deleteOneByIdRepository, getAllRepository, getByIdRepository, updateOneByIdRepository } from "../repository/products.repository.js";
+import { mail_product_deleted } from "./mailer.services.js";
 import { logger } from "../utils/logger.js";
 import CustomError from "./errors/CustomError.js";
 import EErrors from "./errors/enums.js";
@@ -50,13 +51,21 @@ const updateOneByIdService = async(pid, product, user, allowed = false) => {
 
 const deleteOneByIdService = async(id, user) => {
 
-    if(user.role == 'admin') return await deleteOneByIdRepository(id);
+    if(user.role == 'admin'){
+        const storedProduct = await getByIdService(id);
+        if(storedProduct.length == 0) throw CustomError.createError(EErrors.ITEM_NOT_FOUND, 'Product does not exist');
+        if(storedProduct[0].owner == undefined) return await deleteOneByIdRepository(id);
+        mail_product_deleted(storedProduct[0].owner, id);
+        return await deleteOneByIdRepository(id);
+    }
+
     if(user.role == 'premium'){
         const storedProduct = await getByIdService(id);
         if(storedProduct.length == 0) throw CustomError.createError(EErrors.ITEM_NOT_FOUND, 'Product does not exist');
         if(storedProduct[0].owner == undefined) return await deleteOneByIdRepository(id);
 
         if(storedProduct[0].owner == user.email){
+            mail_product_deleted(storedProduct[0].owner, id);
             return await deleteOneByIdRepository(id);
         }else throw CustomError.createError(EErrors.FORBIDDEN, 'You must be the owner of the product to be able to delete it')
     }

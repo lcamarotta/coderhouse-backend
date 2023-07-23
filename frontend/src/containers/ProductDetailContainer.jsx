@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 
-import { getProducts } from "../utils/fetchAPI";
+import { getProducts, deleteProduct } from "../utils/fetchAPI";
 import ProductDetail from "../components/product/ProductDetail";
 import LoadingScreen from "../components/LoadingScreen";
 
@@ -20,7 +20,7 @@ const ProductDetailContainer = () => {
 	}, [])
 	
   return (
-    productsToRender.length ? <ProductDetail {...productsToRender[0]} /> : <LoadingScreen variant={true}/>
+    productsToRender.length ? <ProductDetail product={ productsToRender[0] } deleteProduct={ deleteProduct } /> : <LoadingScreen variant={true}/>
   )
 }
 

@@ -85,3 +85,28 @@ export const mail_account_deleted = async(email) => {
 	
 	return
 }
+export const mail_product_deleted = async(email, id) => {
+	const transport = nodemailer.createTransport({
+		service: 'gmail',
+		port: 587,
+		auth: {
+			user: config.mailingUser,
+			pass: config.mailingPass
+		}
+	})
+
+	await transport.sendMail({
+		from: `CoderBackend <${config.mailingUser}>`,
+		to: email,
+		subject: 'Coderhouse Backend Product Deleted',
+		html:
+			`
+			<div>
+				<h1>Product Deleted</h1>
+				<p>Your product with ID ${id} has been deleted by you or an administrator</p>
+			</div>
+			`
+	})
+	
+	return
+}
